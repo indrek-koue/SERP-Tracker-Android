@@ -78,11 +78,20 @@ public class MainActivity extends Activity {
 		bindActivateButton();
 
 		bindAddProfileButton();
+		
+		
+		((Button)findViewById(R.id.settings)).setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+			startActivity(new Intent(getBaseContext(), SettingsActivity.class));	
+			}
+		});
 
 	}
 
 	public void bindAddProfileButton() {
-		Button btn = (Button) findViewById(R.id.button2);
+		Button btn = (Button) findViewById(R.id.addProfile);
 
 		btn.setOnClickListener(new View.OnClickListener() {
 

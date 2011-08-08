@@ -16,6 +16,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.inc.gparser.MainActivity;
 import com.inc.gparser.R;
+import com.inc.gparser.data.DbAdapter;
 import com.inc.gparser.data.Keyword;
 
 import dalvik.system.TemporaryDirectory;
@@ -34,6 +35,8 @@ public class AsyncDownloader extends
 	private Context con;
 	private ListView lv;
 	private final String searchable;
+	
+	int counterEnd;
 
 	// Params, the type of the parameters sent to the task upon execution.
 	// Progress, the type of the progress units published during the background
@@ -50,8 +53,6 @@ public class AsyncDownloader extends
 		searchable.replace("http://", "");
 		searchable.replace("www", "");
 
-		Log.d("MY", "remover" + searchable);
-
 		this.searchable = searchable;
 	}
 
@@ -64,11 +65,12 @@ public class AsyncDownloader extends
 		ArrayList<String> results = new ArrayList<String>();
 		String result = null;
 
-		ArrayList<Keyword> input = params[0];
+		//ArrayList<Keyword> input = params[0];
 
 		int counter = 1;
+		counterEnd = params[0].size();
 		
-		for (Keyword k : input) {
+		for (Keyword k : params[0]) {
 			try {
 				
 				publishProgress(counter);
@@ -138,19 +140,24 @@ public class AsyncDownloader extends
 			ArrayList<String> links = new GoogleParser().parse(s);
 
 			int rank = -1;
+			String keyword = null;
 
 			// search
 			for (int i = 0; i < links.size(); i++) {
-				Log.w("MY", links.get(i));
+				//Log.w("MY", links.get(i));
 				if (links.get(i).contains(searchable)) {
 					// hurray, found!
-					rank = i++;
+					rank = i;
 				}
 			}
 
 			Log.w("MY", "RANK NR:" + rank);
 
-			temp.add(Integer.toString(rank));
+			
+			
+			//keyword = keyword.substring(keyword.indexOf("q="), end)
+			
+			temp.add("[" + Integer.toString(rank) + "]");
 
 		}
 		ArrayAdapter<String> aa = new ArrayAdapter<String>(con,
@@ -165,7 +172,7 @@ public class AsyncDownloader extends
 	@Override
 	protected void onProgressUpdate(Integer... values) {
 
-		Log.w("MY", "onProgressUpdate: " + values[0]);
+		Log.w("MY", "PROGRESS: " + values[0] + "/" +counterEnd);
 
 		// TODO Auto-generated method stub
 		super.onProgressUpdate(values);

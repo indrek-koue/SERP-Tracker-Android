@@ -61,11 +61,6 @@ public class InsertProfileActivity extends Activity {
 
 				insertIntoIndernalDatabase(inputSite, keyword);
 
-				// ArrayList<UserProfile> data = new
-				// DbAdapter(getBaseContext()).loadAllProfiles();
-				//
-				// data.size();
-
 			}
 		});
 	}
@@ -89,10 +84,10 @@ public class InsertProfileActivity extends Activity {
 
 		if (new DbAdapter(getBaseContext()).insertProfile(profile))
 			Toast.makeText(getBaseContext(), "Profile insertion succesful",
-					Toast.LENGTH_SHORT);
+					Toast.LENGTH_SHORT).show();
 		else
 			Toast.makeText(getBaseContext(), "Profile insertion failed",
-					Toast.LENGTH_SHORT);
+					Toast.LENGTH_SHORT).show();
 	}
 
 }

@@ -2,17 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
-	
-	<Spinner android:layout_height="wrap_content"
-		android:layout_width="fill_parent" android:id="@+id/spinner1"></Spinner>
 
 
-	<Button android:id="@+id/button1" android:text="Tegutse"
+	<LinearLayout android:layout_width="fill_parent"
+		android:id="@+id/linearLayout1" android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		<Button android:background="@drawable/ic_menu_add" android:id="@+id/addProfile"
+			android:layout_width="50dip" android:layout_height="50dip"></Button>
+		<Spinner android:layout_height="50dip" android:id="@+id/spinner1"
+			android:layout_width="200dip"></Spinner>
+		<Button android:id="@+id/settings" android:background="@drawable/ic_menu_manage"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+
+
+
+	</LinearLayout>
+
+
+
+	<Button android:id="@+id/button1" android:text="Tegutse" android:layout_marginTop="100dip"
 		android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
-
-	<Button android:id="@+id/button2" android:text="Lisa profiil"
-		android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
-
 
 	<ListView android:layout_height="wrap_content" android:id="@+id/listView1"
 		android:layout_width="fill_parent"></ListView>
