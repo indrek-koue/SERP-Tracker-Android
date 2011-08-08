@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+
+
+	<EditText android:id="@+id/editText1" android:layout_height="wrap_content"
+		android:layout_width="fill_parent" android:inputType="textEmailAddress"
+		android:hint="Address of your website" android:text="www.carlocab.com">
+		<requestFocus></requestFocus>
+	</EditText>
+	<EditText android:id="@+id/editText2" android:layout_height="wrap_content"
+		android:layout_width="fill_parent" android:inputType="textMultiLine"
+		android:hint="keywords" android:maxLines="5" android:lines="5"
+		android:text="make money online"></EditText>
+	<Button android:id="@+id/button1" android:text="Insert profile"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
+	<Button android:text="Tagasi pealehele" android:id="@+id/button2"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
+
+
+</LinearLayout>
