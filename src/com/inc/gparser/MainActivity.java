@@ -29,6 +29,8 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -37,120 +39,117 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
 public class MainActivity extends Activity {
 
 	static String TAG = "MY";
-	int num = 10;
-	String query = "make money online";
-	String siteToLookFor = "www.carlocab.com";
+	// int num = 100;
 
 	String spinnerValue;
 
-	/** Called when the activity is first created. */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		getMenuInflater().inflate(R.menu.menu_main_activity, menu);
+
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch (item.getItemId()) {
+		case R.id.addnewprofile:
+			startActivity(new Intent(getBaseContext(),
+					InsertProfileActivity.class));
+			return true;
+		case R.id.settings:
+			startActivity(new Intent(getBaseContext(),
+					PreferencesActivity.class));
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+
+		}
+
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main_activity_layout);
 
-		setContentView(R.layout.main);
+		initSpinner();
+
+		bindSpinnerOnClickEvent();
+		bindActivateButton();
+		// bindAddProfileButton();
+		// bindSettingsButton();
+
+	}
+
+	public void initSpinner() {
+
+		// new DbAdapter(getBaseContext()).trunkTables();
 
 		ArrayList<UserProfile> data = new DbAdapter(getBaseContext())
 				.loadAllProfiles();
 
-		ArrayList<String> spinnerValues = new ArrayList<String>();
+		if (data != null) {
+			ArrayList<String> spinnerValues = new ArrayList<String>();
 
-		for (UserProfile u : data)
-			spinnerValues.add(u.url);
+			for (UserProfile u : data)
+				spinnerValues.add(u.url);
 
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				getBaseContext(), android.R.layout.simple_spinner_item,
-				spinnerValues);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+					getBaseContext(), android.R.layout.simple_spinner_item,
+					spinnerValues);
 
-		((Spinner) findViewById(R.id.spinner1)).setAdapter(adapter);
+			((Spinner) findViewById(R.id.spinner_profile)).setAdapter(adapter);
 
-		// startActivity(new Intent(MainActivity.this,
-		// InsertProfileActivity.class));
+		}
 
-		initSpinner();
-
-		bindActivateButton();
-
-		bindAddProfileButton();
-		
-		
-		((Button)findViewById(R.id.settings)).setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-			startActivity(new Intent(getBaseContext(), SettingsActivity.class));	
-			}
-		});
-
-	}
-
-	public void bindAddProfileButton() {
-		Button btn = (Button) findViewById(R.id.addProfile);
-
-		btn.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				startActivity(new Intent(getBaseContext(),
-						InsertProfileActivity.class));
-
-			}
-		});
 	}
 
 	private void bindActivateButton() {
 
-		Button btn = (Button) findViewById(R.id.button1);
+		Button btn = (Button) findViewById(R.id.button_run);
 
 		btn.setOnClickListener(new View.OnClickListener() {
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public void onClick(View v) {
 
 				ArrayList<UserProfile> data = new DbAdapter(getBaseContext())
 						.loadAllProfiles();
-
 				ArrayList<Keyword> keywords = null;
 
 				// find keywords by name
-				for (UserProfile u : data) {
+				for (UserProfile u : data)
 					if (u.url.equals(spinnerValue))
 						keywords = u.keywords;
 
-				}
-
 				AsyncDownloader downloader = new AsyncDownloader(
 						getBaseContext(),
-						(ListView) findViewById(R.id.listView1), spinnerValue);
+						(ListView) findViewById(R.id.listview_result),
+						(ProgressBar) findViewById(R.id.progressBar1),
+						spinnerValue);
 
 				if (keywords != null)
 					downloader.execute(keywords);
-
-				// load values from db
-
-				// load textView values
-				// String siteToLookFor2 = ((EditText)
-				// findViewById(R.id.editText1))
-				// .getText().toString();
-				// String keyword = ((EditText) findViewById(R.id.editText2))
-				// .getText().toString();
-				//
 
 			}
 		});
 	}
 
-	public void initSpinner() {
+	public void bindSpinnerOnClickEvent() {
 		// find spinner selected url
 
-		Spinner s = (Spinner) findViewById(R.id.spinner1);
+		Spinner s = (Spinner) findViewById(R.id.spinner_profile);
 
 		s.setOnItemSelectedListener(new OnItemSelectedListener() {
 
@@ -170,159 +169,5 @@ public class MainActivity extends Activity {
 			}
 		});
 	}
-
-	// private void doWork() {
-	// new Thread(new Runnable() {
-	//
-	// @Override
-	// public void run() {
-	//
-	// long start = System.currentTimeMillis();
-	//
-	// String sourceText = myRequest("http://www.google.ee/search?q="
-	// + URLEncoder.encode(query) + "&num=" + num);
-	//
-	// Log.w(TAG, "CHAR RECEIVED: " + sourceText.length());
-	//
-	// long downloadTime = System.currentTimeMillis() - start;
-	//
-	// Log.w(TAG, "DOWNLOAD TIME: " + downloadTime + "ms");
-	//
-	// final ArrayList<String> links = parse(sourceText);
-	//
-	// Log.w(TAG, "PARSE TIME: "
-	// + (System.currentTimeMillis() - start - downloadTime)
-	// + "ms");
-	//
-	// Log.w(TAG, "LINKS COUNT: " + links.size());
-	//
-	// runOnUiThread(new Runnable() {
-	//
-	// @Override
-	// public void run() {
-	// // TODO Auto-generated method stub
-	//
-	// bindListView(links);
-	//
-	// }
-	// });
-	//
-	// if (links.size() != 0)
-	// for (String s : links)
-	// Log.d(TAG, s);
-	//
-	// }
-	// }).run();
-	// }
-
-	// public static ArrayList<String> parse(String sourceText) {
-	//
-	// ArrayList<String> allLinks = new ArrayList<String>();
-	// String startTag = "<a href=";
-	// String endTag = "</a>";
-	//
-	// int i = sourceText.indexOf("<h3");
-	// // int j = sourceText.indexOf("</head>");
-	// // int k = sourceText.indexOf("</head>");
-	//
-	// // remove beginning
-	// String sourceText2 = sourceText.substring(i,
-	// sourceText.lastIndexOf("</h3>"));
-	//
-	// Log.w(TAG, "NEW CHAR AMOUNT: " + sourceText2.length());
-	//
-	// while (sourceText2.contains(startTag)) {
-	//
-	// int startIndex = sourceText2.indexOf(startTag);
-	// int endIndex = sourceText2.indexOf(endTag) + 4;
-	//
-	// if (startIndex < endIndex) {
-	// String link = sourceText2.substring(startIndex, endIndex);
-	//
-	// final boolean b = !link
-	// .contains("webcache.googleusercontent.com");
-	// final boolean c = !link.contains("<a href=\"/search");
-	// final boolean d = !link.contains("translate.google.");
-	// final boolean e = !link.contains("<a href=\"/url?q=");
-	// final boolean f = !link
-	// .contains("<a href=\"http://docs.google.com/viewer?");
-	//
-	// final boolean g = !link.contains("<a href=\"/aclk?sa=");
-	//
-	// if (b && c && d && e && f && g)
-	// allLinks.add(link);
-	// }
-	//
-	// sourceText2 = sourceText2.substring(endIndex);
-	// }
-	//
-	// return allLinks;
-	// }
-
-	// public String myRequest(String url) {
-	//
-	// BufferedReader in = null;
-	// HttpClient client = new DefaultHttpClient();
-	// HttpGet request = new HttpGet();
-	//
-	// try {
-	//
-	// URI uri = new URI(url);
-	//
-	// Log.e(TAG, uri.toString());
-	//
-	// request.setURI(uri);
-	//
-	// HttpResponse response;
-	//
-	// response = client.execute(request);
-	// in = new BufferedReader(new InputStreamReader(response.getEntity()
-	// .getContent()));
-	//
-	// } catch (URISyntaxException e) {
-	// Log.e(TAG, e.toString());
-	// } catch (ClientProtocolException e) {
-	// Log.e(TAG, e.toString());
-	// } catch (IOException e) {
-	// Log.e(TAG, e.toString());
-	// } catch (IllegalStateException e) {
-	// Log.e(TAG, e.toString());
-	// }
-	//
-	// StringBuffer sb = new StringBuffer("");
-	// String line = "";
-	// String NL = System.getProperty("line.separator");
-	//
-	// try {
-	// while ((line = in.readLine()) != null)
-	// sb.append(line + NL);
-	//
-	// in.close();
-	// } catch (IOException e) {
-	// Log.e(TAG, e.toString());
-	// }
-	//
-	// return sb.toString();
-	//
-	// }
-
-	// public void bindListView(final ArrayList<String> links) {
-	//
-	// Log.w("MY", "start bind");
-	//
-	// //Context con = getApplicationContext();
-	//
-	// Context con2 = MainActivity.this;
-	//
-	// ArrayAdapter<String> aa = new ArrayAdapter<String>(con2,
-	// android.R.layout.simple_list_item_1, links);
-	//
-	// ListView lv = (ListView) findViewById(R.id.listView1);
-	//
-	// Log.w("MY", Boolean.toString((lv == null)));
-	//
-	//
-	// lv.setAdapter(aa);
-	// }
 
 }

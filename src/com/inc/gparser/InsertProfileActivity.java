@@ -24,21 +24,11 @@ public class InsertProfileActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.insertprofile);
+		setContentView(R.layout.insertprofile_activity_layout);
 
 		// new DbAdapter(getBaseContext()).trunkTables();
 
 		bindAddButton();
-
-		((Button) findViewById(R.id.button2))
-				.setOnClickListener(new View.OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						startActivity(new Intent(getBaseContext(),
-								MainActivity.class));
-					}
-				});
 
 	}
 
@@ -60,6 +50,8 @@ public class InsertProfileActivity extends Activity {
 						.getText().toString();
 
 				insertIntoIndernalDatabase(inputSite, keyword);
+				
+				startActivity(new Intent(getBaseContext(), MainActivity.class));
 
 			}
 		});
@@ -83,10 +75,10 @@ public class InsertProfileActivity extends Activity {
 		UserProfile profile = new UserProfile(inputSite, keywordsArrayList);
 
 		if (new DbAdapter(getBaseContext()).insertProfile(profile))
-			Toast.makeText(getBaseContext(), "Profile insertion succesful",
+			Toast.makeText(getBaseContext(), "Profile added successfuly",
 					Toast.LENGTH_SHORT).show();
 		else
-			Toast.makeText(getBaseContext(), "Profile insertion failed",
+			Toast.makeText(getBaseContext(), "Profile adding failed",
 					Toast.LENGTH_SHORT).show();
 	}
 

@@ -7,6 +7,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -27,16 +28,21 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 public class AsyncDownloader extends
-		AsyncTask<ArrayList<Keyword>, Integer, ArrayList<String>> {
+		AsyncTask<ArrayList<Keyword>, Integer, ArrayList<Keyword>> {
 
 	String TAG = "MY";
 	private Context con;
-	private ListView lv;
+	public ListView lv;
+	private ProgressBar progressBar;
 	private final String searchable;
-	
-	int counterEnd;
+
+	int itemCount;
+
+	// int counterEnd;
 
 	// Params, the type of the parameters sent to the task upon execution.
 	// Progress, the type of the progress units published during the background
@@ -44,138 +50,172 @@ public class AsyncDownloader extends
 	// Result, the type of the result of the background computation.
 	//
 
-	public AsyncDownloader(Context con, ListView lv, String searchable) {
+	public AsyncDownloader(Context con, ListView lv, ProgressBar pb,
+			String searchable) {
 		this.con = con;
 		this.lv = lv;
-
-		// remove http:// and www
-
-		searchable.replace("http://", "");
-		searchable.replace("www", "");
-
-		this.searchable = searchable;
+		this.searchable = removePrefix(searchable);
+		this.progressBar = pb;
 	}
 
+	// public AsyncDownloader(Context con, ListView lv, int itemCount,
+	// String searchable) {
+	// this.con = con;
+	// this.lv = lv;
+	// this.searchable = removePrefix(searchable);
+	// this.itemCount = itemCount;
+	// }
+
 	@Override
-	protected ArrayList<String> doInBackground(ArrayList<Keyword>... params) {
+	protected ArrayList<Keyword> doInBackground(ArrayList<Keyword>... params) {
 
-		Log.w("MY", "doInBackground");
-		long start = System.currentTimeMillis();
+		itemCount = params[0].size();
 
-		ArrayList<String> results = new ArrayList<String>();
-		String result = null;
+		// Log.w("MY", "doInBackground");
+		// long start = System.currentTimeMillis();
 
-		//ArrayList<Keyword> input = params[0];
+		ArrayList<Keyword> allDownloadedKeywordsWithHtmlSource = new ArrayList<Keyword>();
 
-		int counter = 1;
-		counterEnd = params[0].size();
-		
-		for (Keyword k : params[0]) {
-			try {
+		// String result = null;
+
+		// ArrayList<Keyword> input = params[0];
+
+		int counter = 0;
+		if (params.length > 0)
+			for (Keyword k : params[0]) {
+
+				// publishProgress(counter);
+				// counter++;
+
 				
-				publishProgress(counter);
-				counter++;
+
+				Keyword keywordWithHtmlSource = manageDownload(k);
+
+				publishProgress(++counter);
 				
-				StringBuffer sb = new StringBuffer("");
-				// HttpClient client = new DefaultHttpClient();
-				HttpGet request = new HttpGet();
-				// URI uri = new URI(params[0]);
+				// Log.w(TAG, "DOWNLOAD TIME: " + (System.currentTimeMillis() -
+				// start)
+				// + "ms");
+				//
+				// Log.w("MY", "downloaded chars: " + result.length());
 
-				request.setURI(new URI("http://www.google.com/search?q=" + URLEncoder.encode(k.value)));
-
-				HttpResponse response;
-
-				response = new DefaultHttpClient().execute(request);
-				BufferedReader in = new BufferedReader(new InputStreamReader(
-						response.getEntity().getContent()));
-
-				String line = "";
-				String NL = System.getProperty("line.separator");
-
-				while ((line = in.readLine()) != null)
-					sb.append(line + NL);
-
-				in.close();
-
-				result = sb.toString();
-
-			} catch (Exception e) {
-				Log.e(TAG, e.toString());
+				allDownloadedKeywordsWithHtmlSource.add(keywordWithHtmlSource);
 			}
-			// catch (ClientProtocolException e) {
-			// Log.e(TAG, e.toString());
-			// } catch (IOException e) {
-			// Log.e(TAG, e.toString());
-			// } catch (IllegalStateException e) {
-			// Log.e(TAG, e.toString());
-			// }
-			
-
-			Log.w(TAG, "DOWNLOAD TIME: " + (System.currentTimeMillis() - start)
-					+ "ms");
-
-			Log.w("MY", "downloaded chars: " + result.length());
-
-			results.add(result);
-		}
-		return results;
+		return allDownloadedKeywordsWithHtmlSource;
 
 	}
 
 	@Override
-	protected void onPostExecute(ArrayList<String> input) {
+	protected void onPostExecute(ArrayList<Keyword> keywords) {
+
+		ArrayList<String> downloadAndParseResult = new ArrayList<String>();
+
 		// Log.w("MY", "onPostExecute");
 
-		long start = System.currentTimeMillis();
-		if (input == null) {
-			// TODO: show warning here
-			Log.w("MY", "download result is null");
-			return;
-		}
+		// long start = System.currentTimeMillis();
+		// if (input == null) {
+		// // TODO: show warning here
+		// Log.w("MY", "download result is null");
+		// return;
+		// }
 
-		ArrayList<String> temp = new ArrayList<String>();
+		// input of source codes
 
-		for (String s : input) {
+		for (Keyword keyword : keywords) {
 
-			ArrayList<String> links = new GoogleParser().parse(s);
+			ArrayList<String> links = new GoogleParser()
+					.parse(keyword.htmlSourceCode);
 
 			int rank = -1;
-			String keyword = null;
-
-			// search
-			for (int i = 0; i < links.size(); i++) {
-				//Log.w("MY", links.get(i));
-				if (links.get(i).contains(searchable)) {
-					// hurray, found!
+			for (int i = 0; i < links.size(); i++)
+				if (links.get(i).contains(searchable))
 					rank = i;
-				}
-			}
-
-			Log.w("MY", "RANK NR:" + rank);
-
-			
-			
-			//keyword = keyword.substring(keyword.indexOf("q="), end)
-			
-			temp.add("[" + Integer.toString(rank) + "]");
-
+			if (rank == -1)
+				downloadAndParseResult.add(keyword.value + " [not ranked]");
+			else
+				downloadAndParseResult.add(keyword.value + " ["
+						+ Integer.toString(rank) + "]");
 		}
-		ArrayAdapter<String> aa = new ArrayAdapter<String>(con,
-				android.R.layout.simple_list_item_1, temp);
 
-		lv.setAdapter(aa);
+		// search
+		// for (int i = 0; i < links.size(); i++) {
+		// // Log.w("MY", links.get(i));
+		// if (links.get(i).contains(searchable)) {
+		// // hurray, found!
+		// rank = i;
+		// }
+		// }
 
-		Log.w(TAG, "PARSE TIME: " + (System.currentTimeMillis() - start) + "ms");
+		// Log.w("MY", "RANK NR:" + rank);
+
+		// keyword = keyword.substring(keyword.indexOf("q="), end)
+
+		// ArrayAdapter<String> aa = new ArrayAdapter<String>(con,
+		// android.R.layout.simple_list_item_1, downloadAndParseResult);
+
+		lv.setAdapter(new ArrayAdapter<String>(con,
+				android.R.layout.simple_list_item_1, downloadAndParseResult));
+
+		// Log.w(TAG, "PARSE TIME: " + (System.currentTimeMillis() - start) +
+		// "ms");
 
 	}
 
 	@Override
 	protected void onProgressUpdate(Integer... values) {
 
-		Log.w("MY", "PROGRESS: " + values[0] + "/" +counterEnd);
+		// Log.w("MY", "PROGRESS: " + values[0] + "/" + counterEnd);
 
-		// TODO Auto-generated method stub
-		super.onProgressUpdate(values);
+		// super.onProgressUpdate(values);
+		// progressBar.setProgress(values[0]);
+
+		Toast.makeText(con, values[0] + "/" + itemCount + "processed",
+				Toast.LENGTH_SHORT).show();
+
+	}
+
+	public Keyword manageDownload(Keyword k) {
+
+		// String result = null;
+
+		try {
+			StringBuffer sb = new StringBuffer("");
+
+			HttpGet request = new HttpGet();
+			request.setURI(generateEscapedQuery(k));
+
+			HttpResponse response = new DefaultHttpClient().execute(request);
+			BufferedReader in = new BufferedReader(new InputStreamReader(
+					response.getEntity().getContent()));
+
+			String line = "";
+			String NL = System.getProperty("line.separator");
+
+			while ((line = in.readLine()) != null)
+				sb.append(line + NL);
+
+			in.close();
+
+			// attach source code to input item
+			k.htmlSourceCode = sb.toString();
+
+		} catch (Exception e) {
+			Log.e("MY", e.toString());
+		}
+
+		return k;
+	}
+
+	public URI generateEscapedQuery(Keyword k) throws URISyntaxException {
+		return new URI("http://www.google.com/search?num=100&q="
+				+ URLEncoder.encode(k.value));
+	}
+
+	public String removePrefix(String searchable) {
+		searchable.replace("http://", "");
+		searchable.replace("www", "");
+
+		return searchable;
 	}
 
 }

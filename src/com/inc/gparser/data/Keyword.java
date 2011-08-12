@@ -5,6 +5,7 @@ public class Keyword {
 	public int id;
 	public int rank;
 	public String value;
+	public String htmlSourceCode;
 
 	public Keyword(String value) {
 		this.value = value;

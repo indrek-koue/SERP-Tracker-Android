@@ -97,7 +97,7 @@ public class DbAdapter {
 
 	public ArrayList<UserProfile> loadAllProfiles() {
 
-		ArrayList<UserProfile> profiles = new ArrayList<UserProfile>();
+		ArrayList<UserProfile> profiles = null;
 
 		open();
 
@@ -107,39 +107,41 @@ public class DbAdapter {
 		Cursor profileHeaderCur = mDb.query(TABLE_PROFILE, null, null, null,
 				null, null, null);
 
-		if (profileHeaderCur != null)
+		if (profileHeaderCur != null && profileHeaderCur.getCount() != 0) {
 			profileHeaderCur.moveToFirst();
 
-		do {
-
-			int profileId = profileHeaderCur.getInt(profileHeaderCur
-					.getColumnIndex(KEY_PROFILE_TABLE_ID));
-			String profileUrl = profileHeaderCur.getString(profileHeaderCur
-					.getColumnIndex(KEY_PROFILE_TABLE_URL));
-
-			// we have name and ID now lets get the keywords
-			ArrayList<Keyword> keywords = new ArrayList<Keyword>();
-
-			Cursor keywordsCur = mDb.query(TABLE_KEYWORDS, null,
-					KEY_KEYWORDS_TABLE_PARENTID + " = " + profileId, null,
-					null, null, null);
-
-			if (keywordsCur != null)
-				keywordsCur.moveToFirst();
-
+			profiles = new ArrayList<UserProfile>();
+			
 			do {
 
-				String keyword = keywordsCur.getString(keywordsCur
-						.getColumnIndex(KEY_KEYWORDS_TABLE_KEYWORD));
+				int profileId = profileHeaderCur.getInt(profileHeaderCur
+						.getColumnIndex(KEY_PROFILE_TABLE_ID));
+				String profileUrl = profileHeaderCur.getString(profileHeaderCur
+						.getColumnIndex(KEY_PROFILE_TABLE_URL));
 
-				keywords.add(new Keyword(keyword));
-			} while (keywordsCur.moveToNext());
+				// we have name and ID now lets get the keywords
+				ArrayList<Keyword> keywords = new ArrayList<Keyword>();
 
-			// done - now repeat
-			profiles.add(new UserProfile(profileId, profileUrl, keywords));
+				Cursor keywordsCur = mDb.query(TABLE_KEYWORDS, null,
+						KEY_KEYWORDS_TABLE_PARENTID + " = " + profileId, null,
+						null, null, null);
 
-		} while (profileHeaderCur.moveToNext());
+				if (keywordsCur != null)
+					keywordsCur.moveToFirst();
 
+				do {
+
+					String keyword = keywordsCur.getString(keywordsCur
+							.getColumnIndex(KEY_KEYWORDS_TABLE_KEYWORD));
+
+					keywords.add(new Keyword(keyword));
+				} while (keywordsCur.moveToNext());
+
+				// done - now repeat
+				profiles.add(new UserProfile(profileId, profileUrl, keywords));
+
+			} while (profileHeaderCur.moveToNext());
+		}
 		return profiles;
 
 	}

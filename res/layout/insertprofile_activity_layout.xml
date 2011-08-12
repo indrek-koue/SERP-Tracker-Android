@@ -13,11 +13,11 @@
 	<EditText android:id="@+id/editText2" android:layout_height="wrap_content"
 		android:layout_width="fill_parent" android:inputType="textMultiLine"
 		android:hint="keywords" android:maxLines="5" android:lines="5"
-		android:text="make money online"></EditText>
+		android:text="make money online" android:gravity="top" ></EditText>
 	<Button android:id="@+id/button1" android:text="Insert profile"
 		android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
-	<Button android:text="Tagasi pealehele" android:id="@+id/button2"
+<!-- 	<Button android:text="Tagasi pealehele" android:id="@+id/button2"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
-
+ -->
 
 </LinearLayout>

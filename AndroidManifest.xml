@@ -25,6 +25,7 @@
 		</activity>
 
 		<activity android:name="InsertProfileActivity"></activity>
-		<activity android:name="SettingsActivity"></activity>
+		<activity android:name=".PreferencesActivity"></activity>
+		<activity android:name=".ManageProfilesActivity"></activity>
 	</application>
 </manifest>

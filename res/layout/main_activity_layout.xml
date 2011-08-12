@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+	<LinearLayout android:layout_width="fill_parent"
+		android:id="@+id/linearLayout1" android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		<Spinner android:layout_height="50dip" android:id="@+id/spinner_profile"
+			android:layout_width="fill_parent"></Spinner>
+	</LinearLayout>
+
+	<Button android:id="@+id/button_run" android:text="Request Search Engine Rankings"
+		android:layout_marginTop="100dip" android:layout_height="wrap_content"
+		android:layout_width="fill_parent"></Button>
+
+	<ListView android:layout_height="wrap_content" android:id="@+id/listview_result"
+		android:layout_width="fill_parent"></ListView>
+	<ProgressBar android:layout_width="wrap_content"
+		android:id="@+id/progressBar1" style="?android:attr/progressBarStyleHorizontal"
+		android:layout_height="wrap_content"></ProgressBar>
+
+
+</LinearLayout>
