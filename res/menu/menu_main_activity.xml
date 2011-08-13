@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:title="Add Profile"
-		android:icon="@android:drawable/ic_input_add" android:id="@+id/addnewprofile"></item>
-	<item android:id="@+id/settings" android:title="Settings"
-		android:icon="@android:drawable/ic_menu_manage"></item>
+	<group android:id="@+id/group1">
+		<item android:title="Add Profile" android:icon="@android:drawable/ic_menu_add"
+			android:id="@+id/addnewprofile"></item>
+		<item android:title="Manage profiles" android:id="@+id/manage_profiles_menu"
+			android:icon="@android:drawable/ic_menu_edit"></item>
+		<item android:id="@+id/settings" android:title="Settings"
+			android:icon="@android:drawable/ic_menu_manage"></item>
+	</group>
+	
+	
+	
 
 </menu>

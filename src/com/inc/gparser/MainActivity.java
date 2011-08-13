@@ -38,17 +38,20 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
 	static String TAG = "MY";
 	// int num = 100;
 
-	String spinnerValue;
+	private String spinnerValue;
+	private final String emptySpinnerSelection = "Select a profile...";
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -70,6 +73,10 @@ public class MainActivity extends Activity {
 			startActivity(new Intent(getBaseContext(),
 					PreferencesActivity.class));
 			return true;
+		case R.id.manage_profiles_menu:
+			startActivity(new Intent(getBaseContext(),
+					ManageProfilesActivity.class));
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 
@@ -89,6 +96,45 @@ public class MainActivity extends Activity {
 		// bindAddProfileButton();
 		// bindSettingsButton();
 
+		bindMenuBarButtons();
+
+	}
+
+	private void bindMenuBarButtons() {
+		((LinearLayout) findViewById(R.id.linearLayoutAddProfile))
+				.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View arg0) {
+						startActivity(new Intent(getBaseContext(),
+								InsertProfileActivity.class));
+
+					}
+				});
+
+		((LinearLayout) findViewById(R.id.linearLayoutManageProfiles))
+				.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View arg0) {
+
+						startActivity(new Intent(getBaseContext(),
+								ManageProfilesActivity.class));
+
+					}
+				});
+
+		((LinearLayout) findViewById(R.id.linearLayoutSettings))
+				.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View arg0) {
+
+						startActivity(new Intent(getBaseContext(),
+								PreferencesActivity.class));
+
+					}
+				});
 	}
 
 	public void initSpinner() {
@@ -98,19 +144,19 @@ public class MainActivity extends Activity {
 		ArrayList<UserProfile> data = new DbAdapter(getBaseContext())
 				.loadAllProfiles();
 
-		if (data != null) {
-			ArrayList<String> spinnerValues = new ArrayList<String>();
+		ArrayList<String> spinnerValues = new ArrayList<String>();
 
+		spinnerValues.add(emptySpinnerSelection);
+
+		if (data != null)
 			for (UserProfile u : data)
 				spinnerValues.add(u.url);
 
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-					getBaseContext(), android.R.layout.simple_spinner_item,
-					spinnerValues);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+				getBaseContext(), android.R.layout.simple_spinner_item,
+				spinnerValues);
 
-			((Spinner) findViewById(R.id.spinner_profile)).setAdapter(adapter);
-
-		}
+		((Spinner) findViewById(R.id.spinner_profile)).setAdapter(adapter);
 
 	}
 
@@ -124,24 +170,27 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 
-				ArrayList<UserProfile> data = new DbAdapter(getBaseContext())
-						.loadAllProfiles();
-				ArrayList<Keyword> keywords = null;
+				if (!spinnerValue.equals(emptySpinnerSelection)) {
+					ArrayList<UserProfile> data = new DbAdapter(
+							getBaseContext()).loadAllProfiles();
+					ArrayList<Keyword> keywords = null;
 
-				// find keywords by name
-				for (UserProfile u : data)
-					if (u.url.equals(spinnerValue))
-						keywords = u.keywords;
+					// find keywords by name
+					for (UserProfile u : data)
+						if (u.url.equals(spinnerValue))
+							keywords = u.keywords;
 
-				AsyncDownloader downloader = new AsyncDownloader(
-						getBaseContext(),
-						(ListView) findViewById(R.id.listview_result),
-						(ProgressBar) findViewById(R.id.progressBar1),
-						spinnerValue);
+					AsyncDownloader downloader = new AsyncDownloader(
+							getBaseContext(),
+							(ListView) findViewById(R.id.listview_result),
+							spinnerValue);
 
-				if (keywords != null)
-					downloader.execute(keywords);
-
+					if (keywords != null)
+						downloader.execute(keywords);
+				} else {
+					Toast.makeText(getBaseContext(), "Please select a profile",
+							Toast.LENGTH_LONG).show();
+				}
 			}
 		});
 	}

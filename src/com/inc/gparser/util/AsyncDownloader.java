@@ -50,12 +50,12 @@ public class AsyncDownloader extends
 	// Result, the type of the result of the background computation.
 	//
 
-	public AsyncDownloader(Context con, ListView lv, ProgressBar pb,
+	public AsyncDownloader(Context con, ListView lv,
 			String searchable) {
 		this.con = con;
 		this.lv = lv;
 		this.searchable = removePrefix(searchable);
-		this.progressBar = pb;
+		//this.progressBar = pb;
 	}
 
 	// public AsyncDownloader(Context con, ListView lv, int itemCount,
