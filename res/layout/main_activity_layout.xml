@@ -10,20 +10,22 @@
 			android:layout_width="fill_parent"></Spinner>
 	</LinearLayout>
 
+
+	<!-- RESULT START -->
+<ListView android:layout_height="wrap_content" android:id="@+id/listview_result"
+		android:layout_width="fill_parent"></ListView>
+
+
 	<Button android:id="@+id/button_run" android:text="Request Search Engine Rankings"
 		android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
 
-	<!-- RESULT START -->
-
-	<ListView android:layout_height="wrap_content" android:id="@+id/listview_result"
-		android:layout_width="fill_parent"></ListView>
 
 	<!-- MENU BAR STAT -->
 	<LinearLayout android:layout_height="wrap_content"
 		android:background="@android:color/darker_gray"
 		android:layout_gravity="bottom" android:layout_width="fill_parent"
 		android:id="@+id/linearLayout2" android:orientation="horizontal"
-		android:gravity="center">
+		android:gravity="center" android:layout_marginTop="100dip">
 
 
 		<!-- ADD PROFILE -->
@@ -33,17 +35,33 @@
 			android:layout_margin="1dip">
 
 			<ImageButton android:layout_height="wrap_content"
-				android:src="@android:drawable/ic_menu_add" android:id="@+id/imageButton3"
+				android:src="@android:drawable/ic_menu_add" android:id="@+id/imageButton1"
 				android:layout_width="wrap_content" android:background="@android:color/black"></ImageButton>
-			<TextView android:text="Add profile" android:id="@+id/textView1"
+			<TextView android:text="Add website" android:id="@+id/textView1"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:textColor="@android:color/white"></TextView>
+				android:textColor="@android:color/white" android:gravity="center"></TextView>
 
 		</LinearLayout>
 
 
 		<!-- MANAGE PROFILES -->
-		<LinearLayout android:layout_height="80dip" android:id="@+id/linearLayoutManageProfiles"
+				<LinearLayout android:layout_height="80dip" android:id="@+id/linearLayoutManageProfiles"
+			android:background="@android:color/black" android:layout_width="80dip"
+			android:orientation="vertical" android:gravity="center"
+			android:layout_margin="1dip">
+
+			<ImageButton android:layout_height="wrap_content"
+				android:src="@android:drawable/ic_menu_edit" android:id="@+id/imageButton2"
+				android:layout_width="wrap_content" android:background="@android:color/black"></ImageButton>
+			<TextView android:text="Manage websites" android:id="@+id/textView2"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:textColor="@android:color/white" android:gravity="center"></TextView>
+
+		</LinearLayout>
+		
+		
+		
+<!-- 		<LinearLayout android:layout_height="80dip" android:id="@+id/linearLayoutManageProfiles"
 			android:background="@android:color/black" android:layout_width="80dip"
 			android:orientation="vertical" android:gravity="center"
 			android:layout_margin="1dip">
@@ -55,7 +73,7 @@
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:textColor="@android:color/white"></TextView>
 
-		</LinearLayout>
+		</LinearLayout> -->
 
 
 		<!-- SETTINGS -->
@@ -65,11 +83,11 @@
 			android:layout_margin="1dip">
 
 			<ImageButton android:layout_height="wrap_content"
-				android:src="@android:drawable/ic_menu_manage" android:id="@+id/imageButton1"
+				android:src="@android:drawable/ic_menu_manage" android:id="@+id/imageButton3"
 				android:background="@android:color/black" android:layout_width="wrap_content"></ImageButton>
-			<TextView android:text="Settings" android:id="@+id/textView2"
+			<TextView android:text="Settings" android:id="@+id/textView3"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:textColor="@android:color/white"></TextView>
+				android:textColor="@android:color/white" android:gravity="center"></TextView>
 
 		</LinearLayout>
 
