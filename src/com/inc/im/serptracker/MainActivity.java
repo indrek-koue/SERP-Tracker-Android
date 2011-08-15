@@ -23,6 +23,7 @@ import com.inc.im.serptracker.util.AsyncDownloader;
 
 import android.app.Activity;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -107,7 +108,7 @@ public class MainActivity extends Activity {
 
 		// insert website
 		((LinearLayout) findViewById(R.id.linearLayoutAddProfile))
-				.setOnClickListener(insertProfileListener());	
+				.setOnClickListener(insertProfileListener());
 		((ImageButton) findViewById(R.id.imageButton1))
 				.setOnClickListener(insertProfileListener());
 		((TextView) findViewById(R.id.textView1))
@@ -173,7 +174,7 @@ public class MainActivity extends Activity {
 
 		// new DbAdapter(getBaseContext()).trunkTables();
 
-		ArrayList<UserProfile> data = new DbAdapter(getBaseContext())
+		final ArrayList<UserProfile> data = new DbAdapter(getBaseContext())
 				.loadAllProfiles();
 
 		ArrayList<String> spinnerValues = new ArrayList<String>();
@@ -190,6 +191,49 @@ public class MainActivity extends Activity {
 
 		((Spinner) findViewById(R.id.spinner_profile)).setAdapter(adapter);
 
+		spinnerOnItemSelectedBind(data);
+	}
+
+	public void spinnerOnItemSelectedBind(final ArrayList<UserProfile> data) {
+
+		((Spinner) findViewById(R.id.spinner_profile))
+				.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+					@Override
+					public void onItemSelected(AdapterView<?> arg0, View arg1,
+							int arg2, long arg3) {
+
+						Object o = arg0.getItemAtPosition(arg2);
+						String selected = o.toString();
+
+						ArrayList<Keyword> keywords = null;
+
+						// find keywords by name
+						for (UserProfile u : data)
+							if (u.url.equals(selected))
+								keywords = u.keywords;
+
+						ArrayList<String> keywordsToBind = new ArrayList<String>();
+
+						for (Keyword k : keywords)
+							keywordsToBind.add(k.value);
+
+						ArrayAdapter<String> a = new ArrayAdapter<String>(
+								getBaseContext(),
+								android.R.layout.simple_list_item_1,
+								keywordsToBind);
+
+						((ListView) findViewById(R.id.listview_result))
+								.setAdapter(a);
+
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> arg0) {
+						// TODO Auto-generated method stub
+
+					}
+				});
 	}
 
 	private void bindActivateButton() {
@@ -212,13 +256,23 @@ public class MainActivity extends Activity {
 						if (u.url.equals(spinnerValue))
 							keywords = u.keywords;
 
-					AsyncDownloader downloader = new AsyncDownloader(
-							getBaseContext(),
-							(ListView) findViewById(R.id.listview_result),
-							spinnerValue);
+					if (keywords != null) {
 
-					if (keywords != null)
+						// start dialog
+						ProgressDialog dialog = ProgressDialog
+								.show(MainActivity.this,
+										"Inspecting keywords",
+										"Starting service, please wait. \n (press back to cancel)",
+										true, true);
+						// dialog.setCancelable(true);
+
+						AsyncDownloader downloader = new AsyncDownloader(
+								getBaseContext(),
+								(ListView) findViewById(R.id.listview_result),
+								spinnerValue, dialog);
+
 						downloader.execute(keywords);
+					}
 				} else {
 					Toast.makeText(getBaseContext(), "Please select a profile",
 							Toast.LENGTH_LONG).show();

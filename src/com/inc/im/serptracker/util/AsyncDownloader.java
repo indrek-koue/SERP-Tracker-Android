@@ -23,6 +23,7 @@ import com.inc.im.serptracker.data.Keyword;
 import dalvik.system.TemporaryDirectory;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -37,8 +38,9 @@ public class AsyncDownloader extends
 	String TAG = "MY";
 	private Context con;
 	public ListView lv;
-	private ProgressBar progressBar;
+//	private ProgressBar progressBar;
 	private final String searchable;
+	private ProgressDialog progressDialog;
 
 	int itemCount;
 
@@ -58,6 +60,15 @@ public class AsyncDownloader extends
 		//this.progressBar = pb;
 	}
 
+	public AsyncDownloader(Context con, ListView lv,
+			String searchable, ProgressDialog progress) {
+		this.con = con;
+		this.lv = lv;
+		this.searchable = removePrefix(searchable);
+		this.progressDialog = progress;
+	}
+	
+	
 	// public AsyncDownloader(Context con, ListView lv, int itemCount,
 	// String searchable) {
 	// this.con = con;
@@ -69,6 +80,10 @@ public class AsyncDownloader extends
 	@Override
 	protected ArrayList<Keyword> doInBackground(ArrayList<Keyword>... params) {
 
+		//create progress
+		//progressDialog = ProgressDialog.show(con, "pealkiri", "msg");
+		
+		
 		itemCount = params[0].size();
 
 		// Log.w("MY", "doInBackground");
@@ -136,6 +151,9 @@ public class AsyncDownloader extends
 				downloadAndParseResult.add(keyword.value + " ["
 						+ Integer.toString(rank+1) + "]");
 		}
+		
+		lv.setAdapter(new ArrayAdapter<String>(con,
+				android.R.layout.simple_list_item_1, downloadAndParseResult));
 
 		// search
 		// for (int i = 0; i < links.size(); i++) {
@@ -153,12 +171,13 @@ public class AsyncDownloader extends
 		// ArrayAdapter<String> aa = new ArrayAdapter<String>(con,
 		// android.R.layout.simple_list_item_1, downloadAndParseResult);
 
-		lv.setAdapter(new ArrayAdapter<String>(con,
-				android.R.layout.simple_list_item_1, downloadAndParseResult));
+
 
 		// Log.w(TAG, "PARSE TIME: " + (System.currentTimeMillis() - start) +
 		// "ms");
 
+		progressDialog.dismiss();
+		
 	}
 
 	@Override
@@ -169,8 +188,13 @@ public class AsyncDownloader extends
 		// super.onProgressUpdate(values);
 		// progressBar.setProgress(values[0]);
 
-		Toast.makeText(con, values[0] + "/" + itemCount + "processed",
-				Toast.LENGTH_SHORT).show();
+		String loaderValue = "Keyword " + values[0] + "/" + itemCount + "\n (press back to cancel)";
+
+		progressDialog.setMessage(loaderValue);
+		
+		
+//		Toast.makeText(con, loaderValue,
+//				Toast.LENGTH_SHORT).show();
 
 	}
 

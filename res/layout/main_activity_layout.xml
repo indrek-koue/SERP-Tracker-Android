@@ -22,10 +22,9 @@
 
 	<!-- MENU BAR STAT -->
 	<LinearLayout android:layout_height="wrap_content"
-		android:background="@android:color/darker_gray"
-		android:layout_gravity="bottom" android:layout_width="fill_parent"
+		android:background="@android:color/darker_gray" android:layout_width="fill_parent"
 		android:id="@+id/linearLayout2" android:orientation="horizontal"
-		android:gravity="center" android:layout_marginTop="100dip">
+		android:gravity="center">
 
 
 		<!-- ADD PROFILE -->
