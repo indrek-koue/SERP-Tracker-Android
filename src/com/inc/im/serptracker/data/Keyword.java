@@ -4,6 +4,7 @@ public class Keyword {
 
 	public int id;
 	public int rank;
+	public int lastRank;
 	public String value;
 	public String htmlSourceCode;
 
