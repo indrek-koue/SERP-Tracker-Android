@@ -58,6 +58,19 @@ public class MainActivity extends Activity {
 	private final String emptySpinnerSelection = "Select a profile...";
 
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main_activity_layout);
+
+		initSpinner();
+
+		bindSpinnerItemOnSelectEvent();
+		bindActivateButton();
+		bindMenuBarButtons();
+
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		getMenuInflater().inflate(R.menu.menu_main_activity, menu);
@@ -88,65 +101,28 @@ public class MainActivity extends Activity {
 
 	}
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main_activity_layout);
-
-		initSpinner();
-
-		bindSpinnerOnClickEvent();
-		bindActivateButton();
-		// bindAddProfileButton();
-		// bindSettingsButton();
-
-		bindMenuBarButtons();
-
-	}
-
 	private void bindMenuBarButtons() {
 
 		// insert website
-		((LinearLayout) findViewById(R.id.linearLayoutAddProfile))
-				.setOnClickListener(insertProfileListener());
-		((ImageButton) findViewById(R.id.imageButton1))
-				.setOnClickListener(insertProfileListener());
-		((TextView) findViewById(R.id.textView1))
-				.setOnClickListener(insertProfileListener());
-
-		// manage websites
-		((LinearLayout) findViewById(R.id.linearLayoutManageProfiles))
-				.setOnClickListener(manageProfilesListener());
-		((ImageButton) findViewById(R.id.imageButton2))
-				.setOnClickListener(manageProfilesListener());
-		((TextView) findViewById(R.id.textView2))
-				.setOnClickListener(manageProfilesListener());
-
-		// settings
-		((LinearLayout) findViewById(R.id.linearLayoutSettings))
-				.setOnClickListener(settingsListener());
-		((ImageButton) findViewById(R.id.imageButton3))
-				.setOnClickListener(settingsListener());
-		((TextView) findViewById(R.id.textView3))
-				.setOnClickListener(settingsListener());
-
-	}
-
-	private OnClickListener settingsListener() {
-		return new View.OnClickListener() {
+		View.OnClickListener insertProfileListener = new View.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-
 				startActivity(new Intent(getBaseContext(),
-						PreferencesActivity.class));
+						InsertWebsiteActivity.class));
 
 			}
 		};
-	}
 
-	private OnClickListener manageProfilesListener() {
-		return new View.OnClickListener() {
+		((LinearLayout) findViewById(R.id.linearLayoutAddProfile))
+				.setOnClickListener(insertProfileListener);
+		((ImageButton) findViewById(R.id.imageButton1))
+				.setOnClickListener(insertProfileListener);
+		((TextView) findViewById(R.id.textView1))
+				.setOnClickListener(insertProfileListener);
+
+		// manage websites
+		View.OnClickListener manageProfilesListener = new View.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
@@ -156,18 +132,33 @@ public class MainActivity extends Activity {
 
 			}
 		};
-	}
 
-	private OnClickListener insertProfileListener() {
-		return new View.OnClickListener() {
+		((LinearLayout) findViewById(R.id.linearLayoutManageProfiles))
+				.setOnClickListener(manageProfilesListener);
+		((ImageButton) findViewById(R.id.imageButton2))
+				.setOnClickListener(manageProfilesListener);
+		((TextView) findViewById(R.id.textView2))
+				.setOnClickListener(manageProfilesListener);
+
+		// settings
+		View.OnClickListener settingsListener = new View.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
+
 				startActivity(new Intent(getBaseContext(),
-						InsertWebsiteActivity.class));
+						PreferencesActivity.class));
 
 			}
 		};
+
+		((LinearLayout) findViewById(R.id.linearLayoutSettings))
+				.setOnClickListener(settingsListener);
+		((ImageButton) findViewById(R.id.imageButton3))
+				.setOnClickListener(settingsListener);
+		((TextView) findViewById(R.id.textView3))
+				.setOnClickListener(settingsListener);
+
 	}
 
 	public void initSpinner() {
@@ -191,49 +182,6 @@ public class MainActivity extends Activity {
 
 		((Spinner) findViewById(R.id.spinner_profile)).setAdapter(adapter);
 
-		spinnerOnItemSelectedBind(data);
-	}
-
-	public void spinnerOnItemSelectedBind(final ArrayList<UserProfile> data) {
-
-		((Spinner) findViewById(R.id.spinner_profile))
-				.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-					@Override
-					public void onItemSelected(AdapterView<?> arg0, View arg1,
-							int arg2, long arg3) {
-
-						Object o = arg0.getItemAtPosition(arg2);
-						String selected = o.toString();
-
-						ArrayList<Keyword> keywords = null;
-
-						// find keywords by name
-						for (UserProfile u : data)
-							if (u.url.equals(selected))
-								keywords = u.keywords;
-
-						ArrayList<String> keywordsToBind = new ArrayList<String>();
-
-						for (Keyword k : keywords)
-							keywordsToBind.add(k.value);
-
-						ArrayAdapter<String> a = new ArrayAdapter<String>(
-								getBaseContext(),
-								android.R.layout.simple_list_item_1,
-								keywordsToBind);
-
-						((ListView) findViewById(R.id.listview_result))
-								.setAdapter(a);
-
-					}
-
-					@Override
-					public void onNothingSelected(AdapterView<?> arg0) {
-						// TODO Auto-generated method stub
-
-					}
-				});
 	}
 
 	private void bindActivateButton() {
@@ -281,7 +229,7 @@ public class MainActivity extends Activity {
 		});
 	}
 
-	public void bindSpinnerOnClickEvent() {
+	public void bindSpinnerItemOnSelectEvent() {
 		// find spinner selected url
 
 		Spinner s = (Spinner) findViewById(R.id.spinner_profile);
@@ -291,10 +239,36 @@ public class MainActivity extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
-				Object o = arg0.getItemAtPosition(arg2);
 
-				spinnerValue = o.toString();
-				Log.w("MY", o.toString());
+				final ArrayList<UserProfile> data = new DbAdapter(
+						getBaseContext()).loadAllProfiles();
+
+				spinnerValue = arg0.getItemAtPosition(arg2).toString();
+
+				if (!spinnerValue.equals(emptySpinnerSelection)) {
+
+					ArrayList<Keyword> keywords = null;
+
+					// find keywords by name
+					for (UserProfile u : data)
+						if (u.url.equals(spinnerValue))
+							keywords = u.keywords;
+
+					ArrayList<String> keywordsToBind = new ArrayList<String>();
+
+					if (keywords != null) {
+						for (Keyword k : keywords)
+							keywordsToBind.add(k.value);
+
+						ArrayAdapter<String> a = new ArrayAdapter<String>(
+								getBaseContext(),
+								android.R.layout.simple_list_item_1,
+								keywordsToBind);
+
+						((ListView) findViewById(R.id.listview_result))
+								.setAdapter(a);
+					}
+				}
 			}
 
 			@Override
