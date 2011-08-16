@@ -30,6 +30,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,11 +56,13 @@ public class MainActivity extends Activity {
 	// int num = 100;
 
 	private String spinnerValue;
-	private final String emptySpinnerSelection = "Select a profile...";
+	private final String emptySpinnerSelection = "Select a website...";
+	private Boolean menuBarIsVisible = true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.main_activity_layout);
 
 		initSpinner();
@@ -70,35 +73,75 @@ public class MainActivity extends Activity {
 
 	}
 
+	// @Override
+	// protected void onResume() {
+	//
+	// // user is back - load fresh data to spinner
+	// initSpinner();
+	//
+	// }
+
+	// @Override
+	// public boolean onCreateOptionsMenu(Menu menu) {
+	//
+	// LinearLayout lv = (LinearLayout) findViewById(R.id.linearLayout2);
+	//
+	// if (menuBarIsVisible) {
+	// lv.setVisibility(View.GONE);
+	// menuBarIsVisible = false;
+	// } else {
+	// lv.setVisibility(View.VISIBLE);
+	// menuBarIsVisible = true;
+	// }
+	// // getMenuInflater().inflate(R.menu.menu_main_activity, menu);
+	//
+	// return false;
+	//
+	// }
+
+	//
+	// @Override
+	// public boolean onOptionsItemSelected(MenuItem item) {
+	//
+	// switch (item.getItemId()) {
+	// case R.id.addnewprofile:
+	// startActivity(new Intent(getBaseContext(),
+	// InsertWebsiteActivity.class));
+	// return true;
+	// case R.id.settings:
+	// startActivity(new Intent(getBaseContext(),
+	// PreferencesActivity.class));
+	// return true;
+	// case R.id.manage_profiles_menu:
+	// startActivity(new Intent(getBaseContext(),
+	// ManageWebsitesActivity.class));
+	// return true;
+	// default:
+	// return super.onOptionsItemSelected(item);
+	//
+	// }
+	//
+	// }
+
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-		getMenuInflater().inflate(R.menu.menu_main_activity, menu);
+		LinearLayout lv = (LinearLayout) findViewById(R.id.linearLayout2);
 
-		return true;
-	}
+		if (keyCode == 82)
+			if (menuBarIsVisible) {
+				lv.setVisibility(View.GONE);
+				menuBarIsVisible = false;
+			} else {
+				lv.setVisibility(View.VISIBLE);
+				menuBarIsVisible = true;
+			}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+		// KeyEvent myKeyEvent = event;
+		// int myKeyCode = keyCode;
 
-		switch (item.getItemId()) {
-		case R.id.addnewprofile:
-			startActivity(new Intent(getBaseContext(),
-					InsertWebsiteActivity.class));
-			return true;
-		case R.id.settings:
-			startActivity(new Intent(getBaseContext(),
-					PreferencesActivity.class));
-			return true;
-		case R.id.manage_profiles_menu:
-			startActivity(new Intent(getBaseContext(),
-					ManageWebsitesActivity.class));
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-
-		}
-
+		// TODO Auto-generated method stub
+		return super.onKeyDown(keyCode, event);
 	}
 
 	private void bindMenuBarButtons() {
@@ -177,8 +220,8 @@ public class MainActivity extends Activity {
 				spinnerValues.add(u.url);
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				getBaseContext(), android.R.layout.simple_spinner_item,
-				spinnerValues);
+				getBaseContext(), R.layout.main_activity_spinner_item,
+				R.id.textView1, spinnerValues);
 
 		((Spinner) findViewById(R.id.spinner_profile)).setAdapter(adapter);
 
@@ -207,11 +250,9 @@ public class MainActivity extends Activity {
 					if (keywords != null) {
 
 						// start dialog
-						ProgressDialog dialog = ProgressDialog
-								.show(MainActivity.this,
-										"Inspecting keywords",
-										"Starting service, please wait. \n (press back to cancel)",
-										true, true);
+						ProgressDialog dialog = ProgressDialog.show(
+								MainActivity.this, "Inspecting keywords",
+								"Starting, please wait.", true, true);
 						// dialog.setCancelable(true);
 
 						AsyncDownloader downloader = new AsyncDownloader(
@@ -240,35 +281,7 @@ public class MainActivity extends Activity {
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
 
-				final ArrayList<UserProfile> data = new DbAdapter(
-						getBaseContext()).loadAllProfiles();
-
-				spinnerValue = arg0.getItemAtPosition(arg2).toString();
-
-				if (!spinnerValue.equals(emptySpinnerSelection)) {
-
-					ArrayList<Keyword> keywords = null;
-
-					// find keywords by name
-					for (UserProfile u : data)
-						if (u.url.equals(spinnerValue))
-							keywords = u.keywords;
-
-					ArrayList<String> keywordsToBind = new ArrayList<String>();
-
-					if (keywords != null) {
-						for (Keyword k : keywords)
-							keywordsToBind.add(k.value);
-
-						ArrayAdapter<String> a = new ArrayAdapter<String>(
-								getBaseContext(),
-								android.R.layout.simple_list_item_1,
-								keywordsToBind);
-
-						((ListView) findViewById(R.id.listview_result))
-								.setAdapter(a);
-					}
-				}
+				bindListViewItems(arg0, arg2);
 			}
 
 			@Override
@@ -277,6 +290,37 @@ public class MainActivity extends Activity {
 				Log.w("MY", "NOTHING SELECTED");
 			}
 		});
+	}
+
+	public void bindListViewItems(AdapterView<?> arg0, int arg2) {
+
+		final ArrayList<UserProfile> data = new DbAdapter(getBaseContext())
+				.loadAllProfiles();
+
+		spinnerValue = arg0.getItemAtPosition(arg2).toString();
+
+		if (!spinnerValue.equals(emptySpinnerSelection)) {
+
+			ArrayList<Keyword> keywords = null;
+
+			// find keywords by name
+			for (UserProfile u : data)
+				if (u.url.equals(spinnerValue))
+					keywords = u.keywords;
+
+			ArrayList<String> keywordsToBind = new ArrayList<String>();
+
+			if (keywords != null) {
+				for (Keyword k : keywords)
+					keywordsToBind.add(k.value + " [ - ] ");
+
+				ArrayAdapter<String> a = new ArrayAdapter<String>(
+						getBaseContext(), R.layout.main_activity_listview_item,
+						R.id.textView1, keywordsToBind);
+
+				((ListView) findViewById(R.id.listview_result)).setAdapter(a);
+			}
+		}
 	}
 
 }

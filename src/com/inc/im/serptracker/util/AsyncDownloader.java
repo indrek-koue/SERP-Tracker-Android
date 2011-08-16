@@ -38,7 +38,7 @@ public class AsyncDownloader extends
 	String TAG = "MY";
 	private Context con;
 	public ListView lv;
-//	private ProgressBar progressBar;
+	// private ProgressBar progressBar;
 	private final String searchable;
 	private ProgressDialog progressDialog;
 
@@ -52,23 +52,21 @@ public class AsyncDownloader extends
 	// Result, the type of the result of the background computation.
 	//
 
-	public AsyncDownloader(Context con, ListView lv,
-			String searchable) {
+	public AsyncDownloader(Context con, ListView lv, String searchable) {
 		this.con = con;
 		this.lv = lv;
 		this.searchable = removePrefix(searchable);
-		//this.progressBar = pb;
+		// this.progressBar = pb;
 	}
 
-	public AsyncDownloader(Context con, ListView lv,
-			String searchable, ProgressDialog progress) {
+	public AsyncDownloader(Context con, ListView lv, String searchable,
+			ProgressDialog progress) {
 		this.con = con;
 		this.lv = lv;
 		this.searchable = removePrefix(searchable);
 		this.progressDialog = progress;
 	}
-	
-	
+
 	// public AsyncDownloader(Context con, ListView lv, int itemCount,
 	// String searchable) {
 	// this.con = con;
@@ -80,10 +78,9 @@ public class AsyncDownloader extends
 	@Override
 	protected ArrayList<Keyword> doInBackground(ArrayList<Keyword>... params) {
 
-		//create progress
-		//progressDialog = ProgressDialog.show(con, "pealkiri", "msg");
-		
-		
+		// create progress
+		// progressDialog = ProgressDialog.show(con, "pealkiri", "msg");
+
 		itemCount = params[0].size();
 
 		// Log.w("MY", "doInBackground");
@@ -102,12 +99,10 @@ public class AsyncDownloader extends
 				// publishProgress(counter);
 				// counter++;
 
-				
-
 				Keyword keywordWithHtmlSource = manageDownload(k);
 
 				publishProgress(++counter);
-				
+
 				// Log.w(TAG, "DOWNLOAD TIME: " + (System.currentTimeMillis() -
 				// start)
 				// + "ms");
@@ -149,9 +144,9 @@ public class AsyncDownloader extends
 				downloadAndParseResult.add(keyword.value + " [not ranked]");
 			else
 				downloadAndParseResult.add(keyword.value + " ["
-						+ Integer.toString(rank+1) + "]");
+						+ Integer.toString(rank + 1) + "]");
 		}
-		
+
 		lv.setAdapter(new ArrayAdapter<String>(con,
 				android.R.layout.simple_list_item_1, downloadAndParseResult));
 
@@ -171,13 +166,11 @@ public class AsyncDownloader extends
 		// ArrayAdapter<String> aa = new ArrayAdapter<String>(con,
 		// android.R.layout.simple_list_item_1, downloadAndParseResult);
 
-
-
 		// Log.w(TAG, "PARSE TIME: " + (System.currentTimeMillis() - start) +
 		// "ms");
 
 		progressDialog.dismiss();
-		
+
 	}
 
 	@Override
@@ -188,29 +181,41 @@ public class AsyncDownloader extends
 		// super.onProgressUpdate(values);
 		// progressBar.setProgress(values[0]);
 
-		String loaderValue = "Keyword " + values[0] + "/" + itemCount + "\n (press back to cancel)";
+		String loaderValue = "Keyword " + values[0] + "/" + itemCount;
 
 		progressDialog.setMessage(loaderValue);
-		
-		
-//		Toast.makeText(con, loaderValue,
-//				Toast.LENGTH_SHORT).show();
+
+		// Toast.makeText(con, loaderValue,
+		// Toast.LENGTH_SHORT).show();
 
 	}
 
 	public Keyword manageDownload(Keyword k) {
 
 		// String result = null;
-
 		try {
 			StringBuffer sb = new StringBuffer("");
 
 			HttpGet request = new HttpGet();
 			request.setURI(generateEscapedQuery(k));
 
+			// logging
+			long start = System.currentTimeMillis();
+
 			HttpResponse response = new DefaultHttpClient().execute(request);
+
+			// logging
+			long responseTime = (System.currentTimeMillis() - start);
+			Log.d(TAG, "DefaultHttpClient().execute(request): " + responseTime
+					+ "ms");
+
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					response.getEntity().getContent()));
+
+			// logging
+			long buffReaderTime = (System.currentTimeMillis() - start - responseTime);
+			Log.d(TAG, "response.getEntity().getContent(): " + buffReaderTime
+					+ "ms");
 
 			String line = "";
 			String NL = System.getProperty("line.separator");
@@ -219,6 +224,13 @@ public class AsyncDownloader extends
 				sb.append(line + NL);
 
 			in.close();
+
+			// logging
+			Log.d(TAG,
+					"BufferedReader fetch time: "
+							+ (System.currentTimeMillis() - start - responseTime - buffReaderTime)
+							+ "ms");
+			Log.d(TAG, "total: " + (System.currentTimeMillis() - start) + "ms");
 
 			// attach source code to input item
 			k.htmlSourceCode = sb.toString();

@@ -2,4 +2,6 @@
 <resources>
     <string name="hello">Hello World, MinuActivity!</string>
     <string name="app_name">SERP tracker Alpha</string>
+    <color name="menu_bar_background">#212121</color>
+    <color name="debug">#FF12C0</color>
 </resources>

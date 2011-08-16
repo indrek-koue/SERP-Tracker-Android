@@ -12,26 +12,26 @@
 
 
 	<!-- RESULT START -->
-<ListView android:layout_height="wrap_content" android:id="@+id/listview_result"
-		android:layout_width="fill_parent"></ListView>
+	<ListView android:layout_height="wrap_content" android:id="@+id/listview_result"
+		android:layout_width="fill_parent" android:layout_weight="1"></ListView>
 
-
+	<!-- RUN BUTTON -->
 	<Button android:id="@+id/button_run" android:text="Request Search Engine Rankings"
 		android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
 
 
 	<!-- MENU BAR STAT -->
 	<LinearLayout android:layout_height="wrap_content"
-		android:background="@android:color/darker_gray" android:layout_width="fill_parent"
+		android:background="@color/menu_bar_background" android:layout_width="fill_parent"
 		android:id="@+id/linearLayout2" android:orientation="horizontal"
 		android:gravity="center">
 
 
 		<!-- ADD PROFILE -->
-		<LinearLayout android:layout_height="80dip" android:id="@+id/linearLayoutAddProfile"
-			android:background="@android:color/black" android:layout_width="80dip"
-			android:orientation="vertical" android:gravity="center"
-			android:layout_margin="1dip">
+		<LinearLayout android:layout_height="80dip"
+			android:id="@+id/linearLayoutAddProfile" android:background="@android:color/black"
+			android:layout_width="80dip" android:orientation="vertical"
+			android:gravity="center" android:layout_margin="1dip">
 
 			<ImageButton android:layout_height="wrap_content"
 				android:src="@android:drawable/ic_menu_add" android:id="@+id/imageButton1"
@@ -44,10 +44,10 @@
 
 
 		<!-- MANAGE PROFILES -->
-				<LinearLayout android:layout_height="80dip" android:id="@+id/linearLayoutManageProfiles"
-			android:background="@android:color/black" android:layout_width="80dip"
-			android:orientation="vertical" android:gravity="center"
-			android:layout_margin="1dip">
+		<LinearLayout android:layout_height="80dip"
+			android:id="@+id/linearLayoutManageProfiles" android:background="@android:color/black"
+			android:layout_width="80dip" android:orientation="vertical"
+			android:gravity="center" android:layout_margin="1dip">
 
 			<ImageButton android:layout_height="wrap_content"
 				android:src="@android:drawable/ic_menu_edit" android:id="@+id/imageButton2"
@@ -57,29 +57,24 @@
 				android:textColor="@android:color/white" android:gravity="center"></TextView>
 
 		</LinearLayout>
-		
-		
-		
-<!-- 		<LinearLayout android:layout_height="80dip" android:id="@+id/linearLayoutManageProfiles"
-			android:background="@android:color/black" android:layout_width="80dip"
-			android:orientation="vertical" android:gravity="center"
-			android:layout_margin="1dip">
 
-			<ImageButton android:layout_height="wrap_content"
-				android:src="@android:drawable/ic_menu_edit" android:id="@+id/imageButton2"
-				android:layout_width="wrap_content" android:background="@android:color/black"></ImageButton>
-			<TextView android:text="Manage profiles" android:id="@+id/textView2"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:textColor="@android:color/white"></TextView>
 
-		</LinearLayout> -->
+
+		<!-- <LinearLayout android:layout_height="80dip" android:id="@+id/linearLayoutManageProfiles" 
+			android:background="@android:color/black" android:layout_width="80dip" android:orientation="vertical" 
+			android:gravity="center" android:layout_margin="1dip"> <ImageButton android:layout_height="wrap_content" 
+			android:src="@android:drawable/ic_menu_edit" android:id="@+id/imageButton2" 
+			android:layout_width="wrap_content" android:background="@android:color/black"></ImageButton> 
+			<TextView android:text="Manage profiles" android:id="@+id/textView2" android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" android:textColor="@android:color/white"></TextView> 
+			</LinearLayout> -->
 
 
 		<!-- SETTINGS -->
-		<LinearLayout android:layout_height="80dip" android:id="@+id/linearLayoutSettings"
-			android:layout_width="80dip" android:orientation="vertical"
-			android:background="@android:color/black" android:gravity="center"
-			android:layout_margin="1dip">
+		<LinearLayout android:layout_height="80dip"
+			android:id="@+id/linearLayoutSettings" android:layout_width="80dip"
+			android:orientation="vertical" android:background="@android:color/black"
+			android:gravity="center" android:layout_margin="1dip">
 
 			<ImageButton android:layout_height="wrap_content"
 				android:src="@android:drawable/ic_menu_manage" android:id="@+id/imageButton3"
