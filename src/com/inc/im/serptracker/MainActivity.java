@@ -55,7 +55,9 @@ public class MainActivity extends Activity {
 	static String TAG = "MY";
 	// int num = 100;
 
-	private String spinnerValue;
+	ArrayList<UserProfile> data;
+
+	// private String spinnerValue;
 	private final String emptySpinnerSelection = "Select a website...";
 	private Boolean menuBarIsVisible = true;
 
@@ -73,55 +75,13 @@ public class MainActivity extends Activity {
 
 	}
 
-	// @Override
-	// protected void onResume() {
-	//
-	// // user is back - load fresh data to spinner
-	// initSpinner();
-	//
-	// }
+	@Override
+	protected void onResume() {
+		super.onResume();
 
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	//
-	// LinearLayout lv = (LinearLayout) findViewById(R.id.linearLayout2);
-	//
-	// if (menuBarIsVisible) {
-	// lv.setVisibility(View.GONE);
-	// menuBarIsVisible = false;
-	// } else {
-	// lv.setVisibility(View.VISIBLE);
-	// menuBarIsVisible = true;
-	// }
-	// // getMenuInflater().inflate(R.menu.menu_main_activity, menu);
-	//
-	// return false;
-	//
-	// }
+		initSpinner();
 
-	//
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	//
-	// switch (item.getItemId()) {
-	// case R.id.addnewprofile:
-	// startActivity(new Intent(getBaseContext(),
-	// InsertWebsiteActivity.class));
-	// return true;
-	// case R.id.settings:
-	// startActivity(new Intent(getBaseContext(),
-	// PreferencesActivity.class));
-	// return true;
-	// case R.id.manage_profiles_menu:
-	// startActivity(new Intent(getBaseContext(),
-	// ManageWebsitesActivity.class));
-	// return true;
-	// default:
-	// return super.onOptionsItemSelected(item);
-	//
-	// }
-	//
-	// }
+	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -206,10 +166,7 @@ public class MainActivity extends Activity {
 
 	public void initSpinner() {
 
-		// new DbAdapter(getBaseContext()).trunkTables();
-
-		final ArrayList<UserProfile> data = new DbAdapter(getBaseContext())
-				.loadAllProfiles();
+		data = new DbAdapter(getBaseContext()).loadAllProfiles();
 
 		ArrayList<String> spinnerValues = new ArrayList<String>();
 
@@ -237,14 +194,19 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 
-				if (!spinnerValue.equals(emptySpinnerSelection)) {
-					ArrayList<UserProfile> data = new DbAdapter(
-							getBaseContext()).loadAllProfiles();
+				String spinnerSelectedValue = getSpinnerSelectedValue();
+
+				if (!spinnerSelectedValue.equals(emptySpinnerSelection)) {
+
 					ArrayList<Keyword> keywords = null;
+
+					int selectedItemIndex = ((Spinner) findViewById(R.id.spinner_profile))
+							.getSelectedItemPosition();
 
 					// find keywords by name
 					for (UserProfile u : data)
-						if (u.url.equals(spinnerValue))
+						if (u.url.equals(spinnerSelectedValue)
+								&& u.id == data.get(selectedItemIndex - 1).id)
 							keywords = u.keywords;
 
 					if (keywords != null) {
@@ -253,18 +215,28 @@ public class MainActivity extends Activity {
 						ProgressDialog dialog = ProgressDialog.show(
 								MainActivity.this, "Inspecting keywords",
 								"Starting, please wait.", true, true);
-						// dialog.setCancelable(true);
 
+						// start download
 						AsyncDownloader downloader = new AsyncDownloader(
 								getBaseContext(),
 								(ListView) findViewById(R.id.listview_result),
-								spinnerValue, dialog);
+								spinnerSelectedValue, dialog);
 
 						downloader.execute(keywords);
 					}
+
+					else {
+						Toast.makeText(
+								getBaseContext(),
+								"Profile keywords are missing - how's thats possible?",
+								Toast.LENGTH_LONG).show();
+					}
+
 				} else {
+
 					Toast.makeText(getBaseContext(), "Please select a profile",
 							Toast.LENGTH_LONG).show();
+
 				}
 			}
 		});
@@ -278,10 +250,10 @@ public class MainActivity extends Activity {
 		s.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
+			public void onItemSelected(AdapterView<?> adapter, View arg1,
+					int index, long arg3) {
 
-				bindListViewItems(arg0, arg2);
+				bindListViewItems(adapter, index);
 			}
 
 			@Override
@@ -292,26 +264,18 @@ public class MainActivity extends Activity {
 		});
 	}
 
-	public void bindListViewItems(AdapterView<?> arg0, int arg2) {
+	public void bindListViewItems(AdapterView<?> adapter, int index) {
 
-		final ArrayList<UserProfile> data = new DbAdapter(getBaseContext())
-				.loadAllProfiles();
+		// spinnerValue = adapter.getItemAtPosition(index).toString();
+		UserProfile selectedUser = null;
 
-		spinnerValue = arg0.getItemAtPosition(arg2).toString();
-
-		if (!spinnerValue.equals(emptySpinnerSelection)) {
-
-			ArrayList<Keyword> keywords = null;
-
-			// find keywords by name
-			for (UserProfile u : data)
-				if (u.url.equals(spinnerValue))
-					keywords = u.keywords;
+		if (index > 0) {
+			selectedUser = data.get(index - 1);
 
 			ArrayList<String> keywordsToBind = new ArrayList<String>();
 
-			if (keywords != null) {
-				for (Keyword k : keywords)
+			if (selectedUser.keywords != null) {
+				for (Keyword k : selectedUser.keywords)
 					keywordsToBind.add(k.value + " [ - ] ");
 
 				ArrayAdapter<String> a = new ArrayAdapter<String>(
@@ -321,6 +285,12 @@ public class MainActivity extends Activity {
 				((ListView) findViewById(R.id.listview_result)).setAdapter(a);
 			}
 		}
+	}
+
+	public String getSpinnerSelectedValue() {
+		String selectedItem = ((Spinner) findViewById(R.id.spinner_profile))
+				.getSelectedItem().toString();
+		return selectedItem;
 	}
 
 }
