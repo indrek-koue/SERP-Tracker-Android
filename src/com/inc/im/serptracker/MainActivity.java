@@ -26,6 +26,8 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -52,12 +54,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-	static String TAG = "MY";
-	// int num = 100;
-
-	ArrayList<UserProfile> data;
-
-	// private String spinnerValue;
+	private ArrayList<UserProfile> data;
 	private final String emptySpinnerSelection = "Select a website...";
 	private Boolean menuBarIsVisible = true;
 
@@ -172,6 +169,7 @@ public class MainActivity extends Activity {
 
 		spinnerValues.add(emptySpinnerSelection);
 
+		// generate spinner values
 		if (data != null)
 			for (UserProfile u : data)
 				spinnerValues.add(u.url);
@@ -194,19 +192,30 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 
+				if (!internetConnectionExists()) {
+					Toast.makeText(
+							getBaseContext(),
+							"No active internet connection. Please check your settings",
+							Toast.LENGTH_LONG).show();
+
+					return;
+				}
+
 				String spinnerSelectedValue = getSpinnerSelectedValue();
 
 				if (!spinnerSelectedValue.equals(emptySpinnerSelection)) {
 
 					ArrayList<Keyword> keywords = null;
 
-					int selectedItemIndex = ((Spinner) findViewById(R.id.spinner_profile))
-							.getSelectedItemPosition();
+					// int selectedItemIndex = ((Spinner)
+					// findViewById(R.id.spinner_profile))
+					// .getSelectedItemPosition();
 
 					// find keywords by name
 					for (UserProfile u : data)
 						if (u.url.equals(spinnerSelectedValue)
-								&& u.id == data.get(selectedItemIndex - 1).id)
+								&& u.id == data
+										.get(getSpinnerSelectedIndex() - 1).id)
 							keywords = u.keywords;
 
 					if (keywords != null) {
@@ -229,13 +238,13 @@ public class MainActivity extends Activity {
 						Toast.makeText(
 								getBaseContext(),
 								"Profile keywords are missing - how's thats possible?",
-								Toast.LENGTH_LONG).show();
+								Toast.LENGTH_SHORT).show();
 					}
 
 				} else {
 
 					Toast.makeText(getBaseContext(), "Please select a profile",
-							Toast.LENGTH_LONG).show();
+							Toast.LENGTH_SHORT).show();
 
 				}
 			}
@@ -253,7 +262,7 @@ public class MainActivity extends Activity {
 			public void onItemSelected(AdapterView<?> adapter, View arg1,
 					int index, long arg3) {
 
-				bindListViewItems(adapter, index);
+				bindListViewItems(index);
 			}
 
 			@Override
@@ -264,13 +273,11 @@ public class MainActivity extends Activity {
 		});
 	}
 
-	public void bindListViewItems(AdapterView<?> adapter, int index) {
+	public void bindListViewItems(int spinnerSelectedItemIndex) {
 
-		// spinnerValue = adapter.getItemAtPosition(index).toString();
-		UserProfile selectedUser = null;
-
-		if (index > 0) {
-			selectedUser = data.get(index - 1);
+		// index 0 is reserved for "Select a item..."
+		if (spinnerSelectedItemIndex > 0) {
+			UserProfile selectedUser = data.get(spinnerSelectedItemIndex - 1);
 
 			ArrayList<String> keywordsToBind = new ArrayList<String>();
 
@@ -288,9 +295,29 @@ public class MainActivity extends Activity {
 	}
 
 	public String getSpinnerSelectedValue() {
-		String selectedItem = ((Spinner) findViewById(R.id.spinner_profile))
-				.getSelectedItem().toString();
-		return selectedItem;
+		return ((Spinner) findViewById(R.id.spinner_profile)).getSelectedItem()
+				.toString();
+
+	}
+
+	public int getSpinnerSelectedIndex() {
+		return ((Spinner) findViewById(R.id.spinner_profile))
+				.getSelectedItemPosition();
+
+	}
+
+	public boolean internetConnectionExists() {
+
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+		NetworkInfo netInfo = cm.getActiveNetworkInfo();
+
+		if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 }
