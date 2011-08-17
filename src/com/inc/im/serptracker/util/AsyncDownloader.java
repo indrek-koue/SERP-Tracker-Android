@@ -84,7 +84,7 @@ public class AsyncDownloader extends
 		itemCount = params[0].size();
 
 		// Log.w("MY", "doInBackground");
-		// long start = System.currentTimeMillis();
+		long start = System.currentTimeMillis();
 
 		ArrayList<Keyword> allDownloadedKeywordsWithHtmlSource = new ArrayList<Keyword>();
 
@@ -111,6 +111,8 @@ public class AsyncDownloader extends
 
 				allDownloadedKeywordsWithHtmlSource.add(keywordWithHtmlSource);
 			}
+
+		Log.d("MY", "TOTAL TIME: " + (System.currentTimeMillis() - start));
 		return allDownloadedKeywordsWithHtmlSource;
 
 	}
@@ -148,7 +150,8 @@ public class AsyncDownloader extends
 		}
 
 		lv.setAdapter(new ArrayAdapter<String>(con,
-				android.R.layout.simple_list_item_1, downloadAndParseResult));
+				R.layout.main_activity_listview_item, R.id.textView1,
+				downloadAndParseResult));
 
 		// search
 		// for (int i = 0; i < links.size(); i++) {
@@ -228,8 +231,8 @@ public class AsyncDownloader extends
 			// logging
 			Log.d(TAG,
 					"BufferedReader fetch time: "
-							+ (System.currentTimeMillis() - start - responseTime - buffReaderTime)
-							+ "ms");
+							+ (System.currentTimeMillis() - start
+									- responseTime - buffReaderTime) + "ms");
 			Log.d(TAG, "total: " + (System.currentTimeMillis() - start) + "ms");
 
 			// attach source code to input item

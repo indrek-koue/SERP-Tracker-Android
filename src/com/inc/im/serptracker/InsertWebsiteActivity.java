@@ -30,7 +30,6 @@ public class InsertWebsiteActivity extends Activity {
 		// new DbAdapter(getBaseContext()).trunkTables();
 
 		bindAddButton();
-		
 
 	}
 
@@ -51,21 +50,40 @@ public class InsertWebsiteActivity extends Activity {
 				String keyword = ((EditText) findViewById(R.id.editText2))
 						.getText().toString();
 
-				insertIntoIndernalDatabase(inputSite, keyword);
-				
-				startActivity(new Intent(getBaseContext(), MainActivity.class));
+				if (insertIntoIndernalDatabase(inputSite, keyword))
+					startActivity(new Intent(getBaseContext(),
+							MainActivity.class));
 
 			}
 		});
 	}
 
-	public void insertIntoIndernalDatabase(String inputSite, String keyword) {
-		String[] keywords = null;
+	public Boolean insertIntoIndernalDatabase(String inputSite, String keyword) {
 
+		// stress test
+		// keyword = "";
+		// for(int i = 0; i < 100; i++)
+		// keyword = keyword+"a\n";
+
+		if (keyword == null || keyword.length() < 1) {
+			Toast.makeText(getBaseContext(), "Please enter some keywords",
+					Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		
+		if (inputSite == null || inputSite.length() < 5) {
+			Toast.makeText(getBaseContext(), "Website address is too short or invalid",
+					Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		
+		String[] keywords = null;
 		if (keyword.contains("\n"))
 			keywords = keyword.split("\\n");
 		else if (keyword.contains(","))
 			keywords = keyword.split(",");
+		else if (keyword.contains(";"))
+			keywords = keyword.split(";");
 		else
 			keywords = new String[] { keyword };
 
@@ -76,12 +94,15 @@ public class InsertWebsiteActivity extends Activity {
 
 		UserProfile profile = new UserProfile(inputSite, keywordsArrayList);
 
-		if (new DbAdapter(getBaseContext()).insertProfile(profile))
-			Toast.makeText(getBaseContext(), "Profile added successfuly",
+		if (new DbAdapter(getBaseContext()).insertProfile(profile)) {
+			Toast.makeText(getBaseContext(), "Website added successfuly",
 					Toast.LENGTH_SHORT).show();
-		else
-			Toast.makeText(getBaseContext(), "Profile adding failed",
+			return true;
+		} else {
+			Toast.makeText(getBaseContext(), "Website add failure",
 					Toast.LENGTH_SHORT).show();
+			return false;
+		}
 	}
 
 }

@@ -78,6 +78,12 @@ public class MainActivity extends Activity {
 
 		initSpinner();
 
+		// clear listview
+		if (data == null)
+			((ListView) findViewById(R.id.listview_result))
+					.setAdapter(new ArrayAdapter<String>(getBaseContext(),
+							R.layout.main_activity_listview_item));
+
 	}
 
 	@Override
