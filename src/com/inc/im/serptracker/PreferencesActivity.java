@@ -3,11 +3,9 @@ package com.inc.im.serptracker;
 import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.DbAdapter;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.widget.Button;
 import android.widget.Toast;
 
 public class PreferencesActivity extends PreferenceActivity {

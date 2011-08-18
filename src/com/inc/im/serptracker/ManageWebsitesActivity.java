@@ -1,19 +1,8 @@
 package com.inc.im.serptracker;
 
-import java.util.ArrayList;
-
 import com.inc.im.serptracker.R;
-import com.inc.im.serptracker.data.DbAdapter;
-import com.inc.im.serptracker.data.UserProfile;
-
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ExpandableListView;
-import android.widget.ListAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class ManageWebsitesActivity extends Activity {
 

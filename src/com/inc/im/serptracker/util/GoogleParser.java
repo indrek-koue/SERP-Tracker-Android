@@ -2,9 +2,6 @@ package com.inc.im.serptracker.util;
 
 import java.util.ArrayList;
 
-import android.provider.Contacts.PresenceColumns;
-import android.util.Log;
-
 //TODO: remove dublicate
 
 public class GoogleParser {

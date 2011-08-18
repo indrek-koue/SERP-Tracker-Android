@@ -1,36 +1,24 @@
 package com.inc.im.serptracker.util;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.inc.im.serptracker.R;
-import com.inc.im.serptracker.MainActivity;
-import com.inc.im.serptracker.data.DbAdapter;
 import com.inc.im.serptracker.data.Keyword;
 
-import dalvik.system.TemporaryDirectory;
-
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 public class AsyncDownloader extends
 		AsyncTask<ArrayList<Keyword>, Integer, ArrayList<Keyword>> {
@@ -120,6 +108,10 @@ public class AsyncDownloader extends
 	@Override
 	protected void onPostExecute(ArrayList<Keyword> keywords) {
 
+		//if progressdialog is canceled, dont show results
+		if(!progressDialog.isShowing())
+			return;
+		
 		ArrayList<String> downloadAndParseResult = new ArrayList<String>();
 
 		// Log.w("MY", "onPostExecute");

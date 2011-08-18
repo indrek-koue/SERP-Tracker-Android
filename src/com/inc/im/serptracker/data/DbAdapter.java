@@ -19,7 +19,7 @@ public class DbAdapter {
 
 	private static final String DATABASE_NAME = "appdata";
 
-	private static final int DATABASE_VERSION = 2;
+	//private static final int DATABASE_VERSION = 2;
 	private static final String TABLE_PROFILE = "profile";
 	private static final String KEY_PROFILE_TABLE_ID = "_id";
 	private static final String KEY_PROFILE_TABLE_URL = "url";

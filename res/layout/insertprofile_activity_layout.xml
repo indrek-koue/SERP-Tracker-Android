@@ -3,22 +3,32 @@
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 
-
-
+	<!-- WEBSITE ADDRESS -->
+	<TextView android:text="Address of your website" android:id="@+id/textView1"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:textSize="18dip"></TextView>
 	<EditText android:id="@+id/editText1" android:layout_height="wrap_content"
 		android:layout_width="fill_parent" android:inputType="textEmailAddress"
-		android:hint="Address of your website" android:text="www.carlocab.com"
-		android:singleLine="true">
+		android:hint="www.example.com" android:singleLine="true">
 		<requestFocus></requestFocus>
 	</EditText>
+
+	<!-- WEBSITE KEYWORDS -->
+	<TextView android:text="Keywords to track" android:id="@+id/textView2"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:textSize="18dip"></TextView>
 	<EditText android:id="@+id/editText2" android:layout_height="wrap_content"
-		android:layout_width="fill_parent" android:hint="Keyword 1 \nKeyword2 \nKeyword3"
-		android:maxLines="5" android:lines="5" android:text="make money online"
-		android:gravity="top"></EditText>
-	<Button android:id="@+id/button1" android:text="Insert profile"
-		android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
-	<!-- <Button android:text="Tagasi pealehele" android:id="@+id/button2" android:layout_width="fill_parent" 
-		android:layout_height="wrap_content"></Button> -->
+		android:layout_width="fill_parent" android:inputType="textMultiLine"
+		android:hint="example keyword 1\nexample keyword 2" android:maxLines="7"
+		android:lines="5" android:gravity="top"></EditText>
+
+	<!-- BUTTON -->
+	<Button android:id="@+id/button1" android:text="Insert website and keywords"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"
+		android:layout_marginTop="10dip"></Button>
+	<Button android:text="Back" android:id="@+id/button2"
+		android:layout_marginTop="10dip" android:layout_width="fill_parent"
+		android:layout_height="wrap_content"></Button>
 
 </LinearLayout>
 
