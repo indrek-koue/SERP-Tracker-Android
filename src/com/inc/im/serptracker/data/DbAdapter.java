@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 public class DbAdapter {
 
@@ -19,7 +20,7 @@ public class DbAdapter {
 
 	private static final String DATABASE_NAME = "appdata";
 
-	//private static final int DATABASE_VERSION = 2;
+	// private static final int DATABASE_VERSION = 2;
 	private static final String TABLE_PROFILE = "profile";
 	private static final String KEY_PROFILE_TABLE_ID = "_id";
 	private static final String KEY_PROFILE_TABLE_URL = "url";
@@ -53,6 +54,69 @@ public class DbAdapter {
 
 	public void close() {
 		mDbHelper.close();
+	}
+
+	public Boolean updateProfile(UserProfile profile) {
+
+		if (profile == null || profile.url == null || profile.id == 0
+				|| profile.keywords.size() <= 0)
+			return false;
+
+		Boolean headerUpdateIsSuccess = false;
+		Boolean keywordUpdateIsSuccess = false;
+
+		int idToUpdate = profile.id;
+
+		open();
+
+		// insert header
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(KEY_PROFILE_TABLE_URL, profile.url);
+		int numOfRowsAf = mDb.update(TABLE_PROFILE, initialValues,
+				KEY_PROFILE_TABLE_ID + " = " + idToUpdate, null);
+
+		headerUpdateIsSuccess = numOfRowsAf != 1 ? false : true;
+
+		// delete old keywords
+		numOfRowsAf = mDb.delete(TABLE_KEYWORDS, KEY_KEYWORDS_TABLE_PARENTID
+				+ " = " + idToUpdate, null);
+
+		// insert keywords
+		for (Keyword keyword : profile.keywords) {
+
+			ContentValues initialValuesKeywords = new ContentValues();
+			initialValuesKeywords
+					.put(KEY_KEYWORDS_TABLE_KEYWORD, keyword.value);
+			initialValuesKeywords.put(KEY_KEYWORDS_TABLE_PARENTID, idToUpdate);
+
+			Long l = mDb.insert(TABLE_KEYWORDS, null, initialValuesKeywords);
+
+			keywordUpdateIsSuccess = l == -1 ? false : true;
+
+		}
+
+		// // update keywords
+		// for (Keyword keyword : profile.keywords) {
+		//
+		// ContentValues initialValuesKeywords = new ContentValues();
+		// initialValuesKeywords
+		// .put(KEY_KEYWORDS_TABLE_KEYWORD, keyword.value);
+		// // initialValuesKeywords.put(KEY_KEYWORDS_TABLE_PARENTID,
+		// // idToUpdate);
+		//
+		// int numOfRowsAf2 = mDb.update(TABLE_KEYWORDS,
+		// initialValuesKeywords, KEY_KEYWORDS_TABLE_PARENTID + " = "
+		// + idToUpdate + " AND " + keyword.id + " = "
+		// + KEY_KEYWORDS_TABLE_ID, null);
+		//
+		// keywordUpdateIsSuccess = numOfRowsAf2 == 0 ? false : true;
+		//
+		// }
+
+		close();
+
+		return (headerUpdateIsSuccess && keywordUpdateIsSuccess);
+
 	}
 
 	public Boolean insertProfile(UserProfile profile) {
@@ -111,7 +175,7 @@ public class DbAdapter {
 			profileHeaderCur.moveToFirst();
 
 			profiles = new ArrayList<UserProfile>();
-			
+
 			do {
 
 				int profileId = profileHeaderCur.getInt(profileHeaderCur
@@ -157,6 +221,36 @@ public class DbAdapter {
 		mDb.execSQL(KEYWORDS_TABLE_CREATE);
 
 		close();
+
+	}
+
+	public Boolean insertOrUpdate(String inputSite, String keyword, int id) {
+
+		String[] keywords = null;
+
+		if (keyword.contains("\n"))
+			keywords = keyword.split("\\n");
+		else if (keyword.contains(","))
+			keywords = keyword.split(",");
+		else if (keyword.contains(";"))
+			keywords = keyword.split(";");
+		else
+			keywords = new String[] { keyword };
+
+		// generate array list
+		ArrayList<Keyword> keywordsArrayList = new ArrayList<Keyword>();
+		for (String s : keywords)
+			keywordsArrayList.add(new Keyword(s));
+
+		Boolean result = false;
+
+		if (id == 0)
+			result = insertProfile(new UserProfile(inputSite, keywordsArrayList));
+		else
+			result = updateProfile(new UserProfile(id, inputSite,
+					keywordsArrayList));
+
+		return result;
 
 	}
 

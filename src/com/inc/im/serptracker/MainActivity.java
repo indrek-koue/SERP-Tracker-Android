@@ -31,7 +31,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
 	private ArrayList<UserProfile> data;
-	private final String emptySpinnerSelection = "Select a website...";
+	public final static String emptySpinnerSelection = "Select a website...";
 	private Boolean menuBarIsVisible = true;
 	private AsyncDownloader downloader;
 
