@@ -31,7 +31,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
 	private ArrayList<UserProfile> data;
-	public final static String emptySpinnerSelection = "Select a website...";
+	public final static String EMPTY_SPINNER_TEXT = "Select a website...";
 	private Boolean menuBarIsVisible = true;
 	private AsyncDownloader downloader;
 
@@ -40,10 +40,11 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity_layout);
 
+		//init spinner + loads data form db
 		initSpinner();
 
 		bindSpinnerItemOnSelectEvent();
-		bindActivateButton();
+		bindRunButton();
 		bindMenuBarButtons();
 
 	}
@@ -151,7 +152,7 @@ public class MainActivity extends Activity {
 
 		ArrayList<String> spinnerValues = new ArrayList<String>();
 
-		spinnerValues.add(emptySpinnerSelection);
+		spinnerValues.add(EMPTY_SPINNER_TEXT);
 
 		// generate spinner values
 		if (data != null)
@@ -166,7 +167,7 @@ public class MainActivity extends Activity {
 
 	}
 
-	private void bindActivateButton() {
+	private void bindRunButton() {
 
 		Button btn = (Button) findViewById(R.id.button_run);
 
@@ -186,7 +187,7 @@ public class MainActivity extends Activity {
 				}
 
 				// default not selected
-				if (!getSpinnerSelectedValue().equals(emptySpinnerSelection)) {
+				if (!getSpinnerSelectedValue().equals(EMPTY_SPINNER_TEXT)) {
 
 					ArrayList<Keyword> keywords = null;
 

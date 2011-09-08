@@ -1,12 +1,14 @@
 package com.inc.im.serptracker.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Keyword {
 
 	public int id;
 	public int rank;
-	public int lastRank;
 	public String value;
-	public String htmlSourceCode;
+	public List<String> searchEngineResults = new ArrayList<String>();
 
 	public Keyword(String value) {
 		this.value = value;
@@ -19,8 +21,8 @@ public class Keyword {
 
 	public Keyword(int id, String value, int rank) {
 		this.id = id;
-		this.rank = rank;
 		this.value = value;
+		this.rank = rank;
 	}
 
 }
