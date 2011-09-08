@@ -18,7 +18,7 @@ public class DbAdapter {
 	private static Context mCtx;
 	private DatabaseHelper mDbHelper;
 
-	private static final String DATABASE_NAME = "appdata2";
+	private static final String DATABASE_NAME = "appdata";
 
 	// private static final int DATABASE_VERSION = 2;
 	private static final String TABLE_PROFILE = "profile";
@@ -66,6 +66,7 @@ public class DbAdapter {
 
 		Boolean headerUpdateIsSuccess = false;
 		Boolean keywordUpdateIsSuccess = false;
+		Boolean keywordRankResetIsSuccess = false;
 
 		int idToUpdate = profile.id;
 
@@ -92,14 +93,21 @@ public class DbAdapter {
 			initialValuesKeywords.put(KEY_KEYWORDS_TABLE_PARENTID, idToUpdate);
 
 			Long l = mDb.insert(TABLE_KEYWORDS, null, initialValuesKeywords);
-
 			keywordUpdateIsSuccess = l == -1 ? false : true;
+
+			// reset keyword ranking values
+			ContentValues val = new ContentValues();
+			val.put(KEY_KEYWORDS_TABLE_POSTION, -1);
+
+			int rowsAff = mDb.update(TABLE_KEYWORDS, val, profile.id + " = "
+					+ KEY_KEYWORDS_TABLE_PARENTID, null);
+			keywordRankResetIsSuccess = rowsAff != 0 ? true : false;
 
 		}
 
 		close();
 
-		return (headerUpdateIsSuccess && keywordUpdateIsSuccess);
+		return (headerUpdateIsSuccess && keywordUpdateIsSuccess && keywordRankResetIsSuccess);
 
 	}
 
@@ -173,6 +181,50 @@ public class DbAdapter {
 		return (profileDeleteSuccess && keywordDeleteSuccess);
 	}
 
+	public Boolean updateKeywordRank(Keyword k, int newRank) {
+
+		if (k == null)
+			return false;
+
+		open();
+
+		ContentValues val = new ContentValues();
+		val.put(KEY_KEYWORDS_TABLE_POSTION, newRank);
+
+		int numOfRowsAf = mDb.update(TABLE_KEYWORDS, val, KEY_KEYWORDS_TABLE_ID
+				+ " = " + k.id, null);
+
+		close();
+
+		return numOfRowsAf != 0 ? true : false;
+
+	}
+
+	// public int getKeywordRank(Keyword k) {
+	//
+	// if (k == null)
+	// return 0;
+	//
+	// int result = 0;
+	//
+	// open();
+	//
+	// Cursor cur = mDb.query(TABLE_KEYWORDS,
+	// new String[] { KEY_KEYWORDS_TABLE_POSTION },
+	// KEY_KEYWORDS_TABLE_ID + " = " + k.id, null, null, null, null);
+	//
+	// if (cur.getCount() != 1)
+	// Log.e("MY", "getKeywordRank returned not 1");
+	//
+	// if (cur.moveToFirst())
+	// result = cur.getInt(cur.getColumnIndex(KEY_KEYWORDS_TABLE_POSTION));
+	//
+	// close();
+	//
+	// return result;
+	//
+	// }
+
 	public ArrayList<UserProfile> loadAllProfiles() {
 
 		ArrayList<UserProfile> profiles = null;
@@ -206,13 +258,17 @@ public class DbAdapter {
 
 				do {
 
+					int id = keywordsCur.getInt(keywordsCur
+							.getColumnIndex(KEY_KEYWORDS_TABLE_ID));
+
 					String keyword = keywordsCur.getString(keywordsCur
 							.getColumnIndex(KEY_KEYWORDS_TABLE_KEYWORD));
 
 					int rank = keywordsCur.getInt(keywordsCur
 							.getColumnIndex(KEY_KEYWORDS_TABLE_POSTION));
 
-					keywords.add(new Keyword(keyword, rank));
+					keywords.add(new Keyword(id, keyword, rank));
+
 				} while (keywordsCur.moveToNext());
 
 				// done - now repeat
