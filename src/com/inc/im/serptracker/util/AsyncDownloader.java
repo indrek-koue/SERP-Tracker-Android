@@ -108,10 +108,10 @@ public class AsyncDownloader extends
 	@Override
 	protected void onPostExecute(ArrayList<Keyword> keywords) {
 
-		//if progressdialog is canceled, dont show results
-		if(!progressDialog.isShowing())
+		// if progressdialog is canceled, dont show results
+		if (!progressDialog.isShowing())
 			return;
-		
+
 		ArrayList<String> downloadAndParseResult = new ArrayList<String>();
 
 		// Log.w("MY", "onPostExecute");
@@ -125,6 +125,7 @@ public class AsyncDownloader extends
 
 		// input of source codes
 
+		// parse html into link list - find on which place is my link
 		for (Keyword keyword : keywords) {
 
 			ArrayList<String> links = new GoogleParser()
@@ -134,11 +135,13 @@ public class AsyncDownloader extends
 			for (int i = 0; i < links.size(); i++)
 				if (links.get(i).contains(searchable))
 					rank = i;
-			if (rank == -1)
+			if (rank == -1) {
 				downloadAndParseResult.add(keyword.value + " [not ranked]");
-			else
+
+			} else {
 				downloadAndParseResult.add(keyword.value + " ["
 						+ Integer.toString(rank + 1) + "]");
+			}
 		}
 
 		lv.setAdapter(new ArrayAdapter<String>(con,
