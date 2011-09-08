@@ -31,22 +31,76 @@ public class ManageWebsitesActivity extends Activity {
 		setContentView(R.layout.manage_profiles_layout);
 
 		initSpinner();
-		bindSpinnerItemOnSelectEvent();
+		// bindSpinnerItemOnSelectEvent();
 
-		bindAddButton();
+		bindSaveButton();
 		bindBackButton();
+		bindDeleteButton();
 
+	}
+
+	private void bindDeleteButton() {
+		((Button) findViewById(R.id.button3))
+				.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+
+						// get spinner selected value
+						int selectedPosInSpinner = ((Spinner) findViewById(R.id.spinner1))
+								.getSelectedItemPosition();
+
+						if (data == null || selectedPosInSpinner > data.size())
+							return;
+
+						UserProfile u = data.get(selectedPosInSpinner);
+
+						if (u == null)
+							return;
+
+						Boolean success = new DbAdapter(getBaseContext())
+								.deleteProfile(u);
+
+						if (success) {
+
+							Toast.makeText(
+									getBaseContext(),
+									"Website " + u.url.toUpperCase()
+											+ " succesfully deleted",
+									Toast.LENGTH_LONG).show();
+
+							// if there aren't any profiles to edit > direct to
+							// mainpage
+							if (new DbAdapter(getBaseContext())
+									.loadAllProfiles() == null) {
+								startActivity(new Intent(getBaseContext(),
+										MainActivity.class));
+							} else {
+
+								initSpinner();
+
+							}
+
+						} else {
+							Toast.makeText(getBaseContext(), "Delete failed",
+									Toast.LENGTH_LONG).show();
+						}
+
+					}
+				});
 	}
 
 	public void initSpinner() {
 
 		data = new DbAdapter(getBaseContext()).loadAllProfiles();
-
 		ArrayList<String> spinnerValues = new ArrayList<String>();
+		Spinner spinner = (Spinner) findViewById(R.id.spinner1);
 
-		//spinnerValues.add(MainActivity.emptySpinnerSelection);
+		// on init clear editText
+		((EditText) findViewById(R.id.editText1)).setText("");
+		((EditText) findViewById(R.id.editText2)).setText("");
 
-		// generate spinner values
+		// generate spinner values to show user
 		if (data != null)
 			for (UserProfile u : data)
 				spinnerValues.add(u.url + "[" + u.keywords.size() + "]");
@@ -55,7 +109,23 @@ public class ManageWebsitesActivity extends Activity {
 				getBaseContext(), R.layout.main_activity_spinner_item,
 				R.id.textView1, spinnerValues);
 
-		((Spinner) findViewById(R.id.spinner1)).setAdapter(adapter);
+		spinner.setAdapter(adapter);
+
+		// onItemSelect populate edit text fields
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> adapter, View arg1,
+					int index, long arg3) {
+
+				populateEditTexts(index);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+
+			}
+		});
 
 	}
 
@@ -72,7 +142,7 @@ public class ManageWebsitesActivity extends Activity {
 				});
 	}
 
-	private void bindAddButton() {
+	private void bindSaveButton() {
 
 		((Button) findViewById(R.id.button1))
 				.setOnClickListener(new View.OnClickListener() {
@@ -121,27 +191,6 @@ public class ManageWebsitesActivity extends Activity {
 
 					}
 				});
-	}
-
-	public void bindSpinnerItemOnSelectEvent() {
-		// populate EditTexts
-
-		Spinner s = (Spinner) findViewById(R.id.spinner1);
-
-		s.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> adapter, View arg1,
-					int index, long arg3) {
-
-				populateEditTexts(index);
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-
-			}
-		});
 	}
 
 	private void populateEditTexts(int index) {

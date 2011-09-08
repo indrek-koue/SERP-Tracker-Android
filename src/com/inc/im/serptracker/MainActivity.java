@@ -38,7 +38,6 @@ public class MainActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.main_activity_layout);
 
 		initSpinner();
@@ -62,20 +61,6 @@ public class MainActivity extends Activity {
 							R.layout.main_activity_listview_item));
 
 	}
-
-	
-	
-	
-//	@Override
-//	public boolean dispatchKeyEvent(KeyEvent event) {
-//
-//		if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && downloader != null) {
-//			downloader.cancel(true);
-//		}
-//
-//		// TODO Auto-generated method stub
-//		return super.dispatchKeyEvent(event);
-//	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -120,8 +105,14 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 
-				startActivity(new Intent(getBaseContext(),
-						ManageWebsitesActivity.class));
+				if (new DbAdapter(getBaseContext()).loadAllProfiles() == null) {
+					Toast.makeText(getBaseContext(),
+							"No websites to manage. Please add a website",
+							Toast.LENGTH_SHORT).show();
+				} else {
+					startActivity(new Intent(getBaseContext(),
+							ManageWebsitesActivity.class));
+				}
 
 			}
 		};
@@ -194,20 +185,22 @@ public class MainActivity extends Activity {
 					return;
 				}
 
-				// String spinnerSelectedValue = getSpinnerSelectedValue();
-
+				// default not selected
 				if (!getSpinnerSelectedValue().equals(emptySpinnerSelection)) {
 
 					ArrayList<Keyword> keywords = null;
 
-					// find keywords by name
-					for (UserProfile u : data)
-						if (u.url.equals(data
-								.get(getSpinnerSelectedIndex() - 1).url)
-								&& u.id == data
-										.get(getSpinnerSelectedIndex() - 1).id)
-							keywords = u.keywords;
+					int spinnerSelectedValueNr = getSpinnerSelectedIndex() - 1;
 
+					// find keywords by name
+					for (UserProfile u : data){
+					
+						if (u.url.equals(data.get(spinnerSelectedValueNr).url)
+								&& u.id == data.get(spinnerSelectedValueNr).id)
+							keywords = u.keywords;
+					}
+					
+					
 					if (keywords != null) {
 
 						// start dialog
@@ -218,8 +211,7 @@ public class MainActivity extends Activity {
 						// start download
 						downloader = new AsyncDownloader(getBaseContext(),
 								(ListView) findViewById(R.id.listview_result),
-								data.get(getSpinnerSelectedIndex() - 1).url,
-								dialog);
+								data.get(spinnerSelectedValueNr).url, dialog);
 
 						downloader.execute(keywords);
 					}

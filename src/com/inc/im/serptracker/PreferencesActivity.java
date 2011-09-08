@@ -3,6 +3,7 @@ package com.inc.im.serptracker;
 import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.DbAdapter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -28,6 +29,9 @@ public class PreferencesActivity extends PreferenceActivity {
 								Toast.makeText(getBaseContext(),
 										"All user data deleted",
 										Toast.LENGTH_SHORT).show();
+
+								startActivity(new Intent(getBaseContext(),
+										MainActivity.class));
 
 								return false;
 							}

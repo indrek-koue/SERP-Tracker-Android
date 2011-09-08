@@ -18,7 +18,7 @@ public class DbAdapter {
 	private static Context mCtx;
 	private DatabaseHelper mDbHelper;
 
-	private static final String DATABASE_NAME = "appdata";
+	private static final String DATABASE_NAME = "appdata2";
 
 	// private static final int DATABASE_VERSION = 2;
 	private static final String TABLE_PROFILE = "profile";
@@ -62,6 +62,8 @@ public class DbAdapter {
 				|| profile.keywords.size() <= 0)
 			return false;
 
+		Log.i("MY", "UPDATE PROFILE " + profile.url);
+
 		Boolean headerUpdateIsSuccess = false;
 		Boolean keywordUpdateIsSuccess = false;
 
@@ -95,24 +97,6 @@ public class DbAdapter {
 
 		}
 
-		// // update keywords
-		// for (Keyword keyword : profile.keywords) {
-		//
-		// ContentValues initialValuesKeywords = new ContentValues();
-		// initialValuesKeywords
-		// .put(KEY_KEYWORDS_TABLE_KEYWORD, keyword.value);
-		// // initialValuesKeywords.put(KEY_KEYWORDS_TABLE_PARENTID,
-		// // idToUpdate);
-		//
-		// int numOfRowsAf2 = mDb.update(TABLE_KEYWORDS,
-		// initialValuesKeywords, KEY_KEYWORDS_TABLE_PARENTID + " = "
-		// + idToUpdate + " AND " + keyword.id + " = "
-		// + KEY_KEYWORDS_TABLE_ID, null);
-		//
-		// keywordUpdateIsSuccess = numOfRowsAf2 == 0 ? false : true;
-		//
-		// }
-
 		close();
 
 		return (headerUpdateIsSuccess && keywordUpdateIsSuccess);
@@ -120,6 +104,11 @@ public class DbAdapter {
 	}
 
 	public Boolean insertProfile(UserProfile profile) {
+
+		if (profile == null)
+			return false;
+
+		Log.i("MY", "INSERT PROFILE " + profile.url);
 
 		Boolean headerInsertIsSuccess = false;
 		Boolean keywordInsertIsSuccess = false;
@@ -159,14 +148,36 @@ public class DbAdapter {
 		return (headerInsertIsSuccess && keywordInsertIsSuccess);
 	}
 
+	public Boolean deleteProfile(UserProfile profile) {
+
+		if (profile == null)
+			return false;
+
+		Log.i("MY", "DELETE PROFILE " + profile.url);
+
+		open();
+
+		// delete profile
+		int numOfRowsAfProfile = mDb.delete(TABLE_PROFILE, KEY_PROFILE_TABLE_ID
+				+ " = " + profile.id, null);
+
+		// delete all keywords
+		int numOfRowsAfKeywords = mDb.delete(TABLE_KEYWORDS,
+				KEY_KEYWORDS_TABLE_PARENTID + " = " + profile.id, null);
+
+		close();
+
+		Boolean profileDeleteSuccess = numOfRowsAfProfile != 0 ? true : false;
+		Boolean keywordDeleteSuccess = numOfRowsAfKeywords != 0 ? true : false;
+
+		return (profileDeleteSuccess && keywordDeleteSuccess);
+	}
+
 	public ArrayList<UserProfile> loadAllProfiles() {
 
 		ArrayList<UserProfile> profiles = null;
 
 		open();
-
-		// query from headers
-		// String[] columns = { KEY_PROFILE_TABLE_ID, KEY_PROFILE_TABLE_URL };
 
 		Cursor profileHeaderCur = mDb.query(TABLE_PROFILE, null, null, null,
 				null, null, null);
@@ -198,7 +209,10 @@ public class DbAdapter {
 					String keyword = keywordsCur.getString(keywordsCur
 							.getColumnIndex(KEY_KEYWORDS_TABLE_KEYWORD));
 
-					keywords.add(new Keyword(keyword));
+					int rank = keywordsCur.getInt(keywordsCur
+							.getColumnIndex(KEY_KEYWORDS_TABLE_POSTION));
+
+					keywords.add(new Keyword(keyword, rank));
 				} while (keywordsCur.moveToNext());
 
 				// done - now repeat
@@ -263,7 +277,6 @@ public class DbAdapter {
 		public DatabaseHelper(Context context, String name,
 				CursorFactory factory, int version) {
 			super(context, name, factory, version);
-			// TODO Auto-generated constructor stub
 		}
 
 		@Override
@@ -272,8 +285,7 @@ public class DbAdapter {
 			// where the creation of tables and the initial population of the
 			// tables should happen.
 
-			Log.i("MY", "PROFILE TABLE CREATE: " + PROFILE_TABLE_CREATE
-					+ " KEYWORDS TABLE CREATE " + KEYWORDS_TABLE_CREATE);
+			Log.i("MY", "PROFILE TABLE CREATE + KEYWORDS TABLE CREATE");
 			db.execSQL(PROFILE_TABLE_CREATE);
 			db.execSQL(KEYWORDS_TABLE_CREATE);
 
@@ -287,6 +299,9 @@ public class DbAdapter {
 
 			db.execSQL("drop table if exists " + TABLE_PROFILE);
 			db.execSQL("drop table if exists " + TABLE_KEYWORDS);
+
+			db.execSQL(PROFILE_TABLE_CREATE);
+			db.execSQL(KEYWORDS_TABLE_CREATE);
 
 		}
 
