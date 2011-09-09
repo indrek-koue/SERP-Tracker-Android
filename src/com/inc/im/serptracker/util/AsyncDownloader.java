@@ -50,7 +50,7 @@ public class AsyncDownloader extends
 		if (keywords == null || keywords.length == 0)
 			return null;
 
-		ArrayList<Keyword> result = new ArrayList<Keyword>();
+		// ArrayList<Keyword> result = new ArrayList<Keyword>();
 
 		long start = System.currentTimeMillis();
 
@@ -61,45 +61,23 @@ public class AsyncDownloader extends
 
 		for (Keyword k : keywords[0]) {
 
-			try {
-				Document doc = Jsoup.connect(generateEscapedQueryString(k))
-						.get();
+			String html = manageDownload(k);
+			
+			Document doc = Jsoup.parse(html);
 
-				Log.d("MY", "downloading: " + generateEscapedQueryString(k));
+			Log.d("MY", "downloading: " + generateEscapedQueryString(k));
 
-				// Element divSearch = doc.select("div#search").first();
+			// Element divSearch = doc.select("div#search").first();
 
-				Log.d("MY", "downloaded chars: " + doc.html().length());
+			Log.d("MY", "downloaded chars: " + doc.html().length());
 
-				Elements allResults = doc.select("h3 > a");
+			Elements allResults = doc.select("h3 > a");
 
-				Log.d("MY",
-						"results downloaded:"
-								+ Integer.toString(allResults.size()));
+			Log.d("MY",
+					"results downloaded:" + Integer.toString(allResults.size()));
 
-				Log.d("MY",
-						"results downloaded:"
-								+ Integer.toString(doc.getElementsByTag("h3")
-										.size()));
-
-				Log.d("MY",
-						"all links: "
-								+ Integer.toString(doc.getElementsByTag("a")
-										.size()));
-
-				for (Element e : allResults) {
-					k.searchEngineResults.add(e.attr("href"));
-
-				}
-
-				// result.add(k);
-
-			} catch (IOException e) {
-				Log.d("MY", "download error");
-			}
-
-			// Keyword keywordWithHtmlSource = manageDownload(k);
-			// result.add(keywordWithHtmlSource);
+			for (Element e : allResults)
+				k.searchEngineResults.add(e.attr("href"));
 
 			publishProgress(++counter);
 
@@ -164,6 +142,58 @@ public class AsyncDownloader extends
 
 	}
 
+	public String manageDownload(Keyword k) {
+
+		String result = null;
+		try {
+			StringBuffer sb = new StringBuffer("");
+
+			HttpGet request = new HttpGet();
+			request.setURI(generateEscapedQuery(k));
+
+			// logging
+			long start = System.currentTimeMillis();
+
+			HttpResponse response = new DefaultHttpClient().execute(request);
+
+			// logging
+			long responseTime = (System.currentTimeMillis() - start);
+			Log.d("MY", "DefaultHttpClient().execute(request): " + responseTime
+					+ "ms");
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(
+					response.getEntity().getContent()));
+
+			// logging
+			long buffReaderTime = (System.currentTimeMillis() - start - responseTime);
+			Log.d("MY", "response.getEntity().getContent(): " + buffReaderTime
+					+ "ms");
+
+			String line = "";
+			String NL = System.getProperty("line.separator");
+
+			while ((line = in.readLine()) != null)
+				sb.append(line + NL);
+
+			in.close();
+
+			// logging
+			Log.d("MY",
+					"BufferedReader fetch time: "
+							+ (System.currentTimeMillis() - start
+									- responseTime - buffReaderTime) + "ms");
+			Log.d("MY", "total: " + (System.currentTimeMillis() - start) + "ms");
+
+			// attach source code to input item
+			result = sb.toString();
+
+		} catch (Exception e) {
+			Log.e("MY", e.toString());
+		}
+
+		return result;
+	}
+
 	// public Keyword manageDownload(Keyword k) {
 	//
 	// // String result = null;
@@ -217,10 +247,10 @@ public class AsyncDownloader extends
 	// return k;
 	// }
 
-	// public URI generateEscapedQuery(Keyword k) throws URISyntaxException {
-	// return new URI("http://www.google.com/search?num=100&q="
-	// + URLEncoder.encode(k.value));
-	// }
+	public URI generateEscapedQuery(Keyword k) throws URISyntaxException {
+		return new URI("http://www.google.com/search?num=100&q="
+				+ URLEncoder.encode(k.value));
+	}
 
 	public String generateEscapedQueryString(Keyword k) {
 
