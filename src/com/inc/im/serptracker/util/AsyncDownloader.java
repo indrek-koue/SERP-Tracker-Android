@@ -23,6 +23,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.webkit.WebSettings;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -85,7 +86,12 @@ public class AsyncDownloader extends
 
 				doc = null;
 				try {
-					doc = Jsoup.connect(generateEscapedQueryString(k)).get();
+
+					// String authUser = new WebSettings().getUserAgentString();
+
+					String userAgent = "Mozilla/5.0 (Linux; U; Android 2.3.3; en-us; sdk Build/GRI34) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1";
+					doc = Jsoup.connect(generateEscapedQueryString(k))
+							.userAgent("???").get();
 				} catch (IOException e1) {
 					Log.e("MY", e1.toString());
 				}
@@ -105,11 +111,36 @@ public class AsyncDownloader extends
 
 			// Log.d("MY", "downloading: " + generateEscapedQueryString(k));
 
-			// Element divSearch = doc.select("div#search").first();
+			if (doc == null) {
+				Log.e("MY", "doc is null");
+				return null;
+			}
 
+//			Log.e("MY", Integer.toString(doc.getElementsByTag("div").size()));
+//			Log.e("MY", Integer.toString(doc.select("a").size()));
+//			Log.e("MY", Integer.toString(doc.select("div#search").size()));
+//			Log.e("MY", Integer.toString(doc.select("#search").size()));
+//			Log.e("MY", Integer.toString(doc.select("#main").size()));
+//			Log.e("MY", Boolean.toString(doc.getElementById("main") == null));
+//
+//			for(Element e : doc.getElementsByTag("div"))
+//				Log.e("MY", e.id());
+//			
+//			Log.e("MY", doc.html().substring(3000));
+
+			Element divSearch = doc.getElementById("ires");
+
+			//Element divSearch = doc.getElementById("div#search");
+			
+			// div#search
 			// Log.d("MY", "downloaded chars: " + doc.html().length());
 
-			Elements allResults = doc.select("h3 > a");
+			if (divSearch == null) {
+				Log.e("MY", "div#search is null");
+				return null;
+			}
+
+			Elements allResults = divSearch.select("h3 > a");
 
 			Log.d("MY",
 					"results downloaded:" + Integer.toString(allResults.size()));
@@ -129,6 +160,12 @@ public class AsyncDownloader extends
 
 	@Override
 	protected void onPostExecute(ArrayList<Keyword> input) {
+
+		if (input == null) {
+			progressDialog.dismiss();
+			return;
+
+		}
 
 		// if progressdialog is canceled, dont show results
 		if (!progressDialog.isShowing())
