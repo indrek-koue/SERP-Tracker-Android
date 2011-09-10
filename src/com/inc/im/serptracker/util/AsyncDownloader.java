@@ -31,7 +31,7 @@ public class AsyncDownloader extends
 
 	private Context con;
 	public ListView lv;
-	private final String searchable;
+	private final String WEBSITE;
 	private ProgressDialog progressDialog;
 
 	private int itemCount;
@@ -40,7 +40,7 @@ public class AsyncDownloader extends
 			ProgressDialog progress) {
 		this.con = con;
 		this.lv = lv;
-		this.searchable = removePrefix(searchable);
+		this.WEBSITE = removePrefix(searchable);
 		this.progressDialog = progress;
 	}
 
@@ -61,15 +61,53 @@ public class AsyncDownloader extends
 
 		for (Keyword k : keywords[0]) {
 
-			String html = manageDownload(k);
-			
-			Document doc = Jsoup.parse(html);
+			int mode = 2;
 
-			Log.d("MY", "downloading: " + generateEscapedQueryString(k));
+			Document doc = null;
+
+			// custom download + jsoap parse
+			if (mode == 1) {
+
+				String html = manageDownload(k);
+				long startJsoupParse = System.currentTimeMillis();
+				doc = Jsoup.parse(html);
+				Log.i("MY",
+						"Jsoup parse ("
+								+ k.value
+								+ "): "
+								+ (System.currentTimeMillis() - startJsoupParse));
+
+			}
+			// jsoup download + jsoup parse
+			else {
+
+				long startJsoupParse = System.currentTimeMillis();
+
+				doc = null;
+				try {
+					doc = Jsoup.connect(generateEscapedQueryString(k)).get();
+				} catch (IOException e1) {
+					Log.e("MY", e1.toString());
+				}
+
+				if (doc == null)
+					return null;
+
+				Log.i("MY",
+						"Jsoup download ("
+								+ k.value
+								+ "): "
+								+ (System.currentTimeMillis() - startJsoupParse));
+
+			}
+
+			// jsoup download + parse
+
+			// Log.d("MY", "downloading: " + generateEscapedQueryString(k));
 
 			// Element divSearch = doc.select("div#search").first();
 
-			Log.d("MY", "downloaded chars: " + doc.html().length());
+			// Log.d("MY", "downloaded chars: " + doc.html().length());
 
 			Elements allResults = doc.select("h3 > a");
 
@@ -83,7 +121,7 @@ public class AsyncDownloader extends
 
 		}
 
-		Log.d("MY", "TOTAL TIME: " + (System.currentTimeMillis() - start));
+		Log.i("MY", "Total: " + (System.currentTimeMillis() - start));
 
 		return keywords[0];
 
@@ -103,7 +141,7 @@ public class AsyncDownloader extends
 			// find position
 			int rank = -1;
 			for (int i = 0; i < k.searchEngineResults.size(); i++)
-				if (k.searchEngineResults.get(i).contains(searchable))
+				if (k.searchEngineResults.get(i).contains(WEBSITE))
 					rank = i;
 
 			if (rank == -1) {
@@ -182,7 +220,9 @@ public class AsyncDownloader extends
 					"BufferedReader fetch time: "
 							+ (System.currentTimeMillis() - start
 									- responseTime - buffReaderTime) + "ms");
-			Log.d("MY", "total: " + (System.currentTimeMillis() - start) + "ms");
+			Log.i("MY",
+					"download time(" + k.value + "): "
+							+ (System.currentTimeMillis() - start) + "ms");
 
 			// attach source code to input item
 			result = sb.toString();
@@ -259,10 +299,10 @@ public class AsyncDownloader extends
 	}
 
 	public String removePrefix(String searchable) {
-		searchable.replace("http://", "");
-		searchable.replace("www", "");
 
-		return searchable;
+		String result = searchable.replace("http://", "").replace("www.", "");
+
+		return result;
 	}
 
 }
