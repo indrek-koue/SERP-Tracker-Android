@@ -6,8 +6,14 @@ import java.util.List;
 public class Keyword {
 
 	public int id;
-	public int rank;
 	public String value;
+	
+	public int rank;
+	public int newRank;
+	
+	public String anchorText;
+	public String url;
+	
 	public List<String> searchEngineResults = new ArrayList<String>();
 
 	public Keyword(String value) {
