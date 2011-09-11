@@ -62,76 +62,79 @@ public class AsyncDownloader extends
 
 		for (Keyword k : keywords[0]) {
 
-			int mode = 2;
+			// int mode = 2;
+
+			// Document doc = null;
+
+			// // custom download + jsoap parse
+			// if (mode == 1) {
+			//
+			// String html = manageDownload(k);
+			// long startJsoupParse = System.currentTimeMillis();
+			// doc = Jsoup.parse(html);
+			// Log.i("MY",
+			// "Jsoup parse ("
+			// + k.value
+			// + "): "
+			// + (System.currentTimeMillis() - startJsoupParse));
+			//
+			// }
+			// // jsoup download + jsoup parse
+			// else {
+
+			long startJsoupParse = System.currentTimeMillis();
 
 			Document doc = null;
+			try {
 
-			// custom download + jsoap parse
-			if (mode == 1) {
+				// String authUser = new WebSettings().getUserAgentString();
 
-				String html = manageDownload(k);
-				long startJsoupParse = System.currentTimeMillis();
-				doc = Jsoup.parse(html);
-				Log.i("MY",
-						"Jsoup parse ("
-								+ k.value
-								+ "): "
-								+ (System.currentTimeMillis() - startJsoupParse));
-
+				String userAgent = "Mozilla/5.0 (Linux; U; Android 2.3.3; en-us; sdk Build/GRI34) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1";
+				doc = Jsoup.connect(generateEscapedQueryString(k))
+						.userAgent(userAgent).timeout(10 * 1000).get();
+			} catch (IOException e1) {
+				Log.e("MY", e1.toString());
 			}
-			// jsoup download + jsoup parse
-			else {
 
-				long startJsoupParse = System.currentTimeMillis();
-
-				doc = null;
-				try {
-
-					// String authUser = new WebSettings().getUserAgentString();
-
-					String userAgent = "Mozilla/5.0 (Linux; U; Android 2.3.3; en-us; sdk Build/GRI34) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1";
-					doc = Jsoup.connect(generateEscapedQueryString(k))
-							.userAgent("???").get();
-				} catch (IOException e1) {
-					Log.e("MY", e1.toString());
-				}
-
-				if (doc == null)
-					return null;
-
-				Log.i("MY",
-						"Jsoup download ("
-								+ k.value
-								+ "): "
-								+ (System.currentTimeMillis() - startJsoupParse));
-
+			if (doc == null) {
+				Log.e("MY", "download is null");
+				return null;
 			}
+			Log.i("MY",
+					"Jsoup download (" + k.value + "): "
+							+ (System.currentTimeMillis() - startJsoupParse));
+
+			// }
 
 			// jsoup download + parse
 
 			// Log.d("MY", "downloading: " + generateEscapedQueryString(k));
 
-			if (doc == null) {
-				Log.e("MY", "doc is null");
-				return null;
-			}
+			// if (doc == null) {
+			// Log.e("MY", "doc is null");
+			// return null;
+			// }
 
-//			Log.e("MY", Integer.toString(doc.getElementsByTag("div").size()));
-//			Log.e("MY", Integer.toString(doc.select("a").size()));
-//			Log.e("MY", Integer.toString(doc.select("div#search").size()));
-//			Log.e("MY", Integer.toString(doc.select("#search").size()));
-//			Log.e("MY", Integer.toString(doc.select("#main").size()));
-//			Log.e("MY", Boolean.toString(doc.getElementById("main") == null));
-//
-//			for(Element e : doc.getElementsByTag("div"))
-//				Log.e("MY", e.id());
-//			
-//			Log.e("MY", doc.html().substring(3000));
+			// Log.e("MY",
+			// Integer.toString(doc.getElementsByTag("div").size()));
+			// Log.e("MY", Integer.toString(doc.select("a").size()));
+			// Log.e("MY", Integer.toString(doc.select("div#search").size()));
+			// Log.e("MY", Integer.toString(doc.select("#search").size()));
+			// Log.e("MY", Integer.toString(doc.select("#main").size()));
+			// Log.e("MY", Boolean.toString(doc.getElementById("main") ==
+			// null));
+			//
+			// for(Element e : doc.getElementsByTag("div"))
+			// Log.e("MY", e.id());
+			//
+			// Log.e("MY",
+			// "contains search div: "
+			// + doc.html().contains("id=\"search\""));
 
 			Element divSearch = doc.getElementById("ires");
 
-			//Element divSearch = doc.getElementById("div#search");
-			
+			// Element divSearch = doc.getElementById("div#search");
+
 			// div#search
 			// Log.d("MY", "downloaded chars: " + doc.html().length());
 
@@ -142,11 +145,47 @@ public class AsyncDownloader extends
 
 			Elements allResults = divSearch.select("h3 > a");
 
+			if (allResults == null) {
+				Log.e("MY", "allResults is null");
+				return null;
+			}
+
 			Log.d("MY",
 					"results downloaded:" + Integer.toString(allResults.size()));
 
-			for (Element e : allResults)
-				k.searchEngineResults.add(e.attr("href"));
+			// remove
+			for (int i = 0; i < allResults.size(); i++)
+				if (allResults.get(i).attr("href").startsWith("/search?q=")) {
+					allResults.remove(i);
+				}
+
+			Log.d("MY", "results new count:" + allResults.size());
+
+			int i = 1;
+			for (Element singleResult : allResults) {
+
+				String singleResultAnchor = singleResult.text();
+				String singleResultUrl = singleResult.attr("href");
+
+				// && !singleResultAnchor.startsWith("/search?q=")
+
+				if (singleResultUrl.contains(WEBSITE) && k.newRank == 0) {
+					k.newRank = i;
+					i = 1;
+
+					Log.d("MY", "new rank: " + i);
+					Log.d("MY", singleResultAnchor);
+					Log.d("MY", singleResultUrl);
+
+					k.anchorText = singleResultAnchor;
+					k.url = singleResultUrl;
+
+				}
+				// k.searchEngineResults.add(e.attr("href"));
+
+				i++;
+
+			}
 
 			publishProgress(++counter);
 
@@ -162,7 +201,9 @@ public class AsyncDownloader extends
 	protected void onPostExecute(ArrayList<Keyword> input) {
 
 		if (input == null) {
-			progressDialog.dismiss();
+
+			progressDialog.setMessage("ERROR1: download is null");
+			// progressDialog.dismiss();
 			return;
 
 		}
@@ -175,28 +216,31 @@ public class AsyncDownloader extends
 
 		for (Keyword k : input) {
 
+			// Log.d("MY", "***************** + SEARCHING FOR: " + WEBSITE);
 			// find position
-			int rank = -1;
-			for (int i = 0; i < k.searchEngineResults.size(); i++)
-				if (k.searchEngineResults.get(i).contains(WEBSITE))
-					rank = i;
-
-			if (rank == -1) {
+			// int rank = -1;
+			// for (int i = 0; i < k.searchEngineResults.size(); i++) {
+			// Log.d("MY", k.searchEngineResults.get(i));
+			//
+			// if (k.searchEngineResults.get(i).contains(WEBSITE))
+			// rank = i;
+			// }
+			if (k.newRank == 0) {
 				toDisplay.add(k.value + " [not ranked]");
 			} else {
 
-				DbAdapter db = new DbAdapter(con);
+				// DbAdapter db = new DbAdapter(con);
 
 				// load old rank
-				int oldRank = k.rank;
+				// int oldRank = k.rank;
 
 				// save new rank
-				if (!db.updateKeywordRank(k, rank))
+				if (!new DbAdapter(con).updateKeywordRank(k, k.newRank))
 					Log.e("MY", "keyword rank update failed: " + k.value);
 
 				// show user
-				toDisplay.add(k.value + " new:" + Integer.toString(rank + 1)
-						+ " old:" + oldRank);
+				toDisplay.add(k.value + " [new:" + k.newRank + " old:" + k.rank
+						+ "]");
 
 			}
 		}// for

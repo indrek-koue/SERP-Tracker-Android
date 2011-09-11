@@ -234,6 +234,8 @@ public class DbAdapter {
 		Cursor profileHeaderCur = mDb.query(TABLE_PROFILE, null, null, null,
 				null, null, null);
 
+		
+		
 		if (profileHeaderCur != null && profileHeaderCur.getCount() != 0) {
 			profileHeaderCur.moveToFirst();
 
@@ -276,6 +278,9 @@ public class DbAdapter {
 
 			} while (profileHeaderCur.moveToNext());
 		}
+		
+		close();
+		
 		return profiles;
 
 	}
