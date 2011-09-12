@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity_layout);
 
-		//init spinner + loads data form db
+		// init spinner + loads data form db
 		initSpinner();
 
 		bindSpinnerItemOnSelectEvent();
@@ -194,14 +194,13 @@ public class MainActivity extends Activity {
 					int spinnerSelectedValueNr = getSpinnerSelectedIndex() - 1;
 
 					// find keywords by name
-					for (UserProfile u : data){
-					
+					for (UserProfile u : data) {
+
 						if (u.url.equals(data.get(spinnerSelectedValueNr).url)
 								&& u.id == data.get(spinnerSelectedValueNr).id)
 							keywords = u.keywords;
 					}
-					
-					
+
 					if (keywords != null) {
 
 						// start dialog
@@ -264,8 +263,14 @@ public class MainActivity extends Activity {
 			ArrayList<String> keywordsToBind = new ArrayList<String>();
 
 			if (selectedUser.keywords != null) {
-				for (Keyword k : selectedUser.keywords)
-					keywordsToBind.add(k.value + " [ - ] ");
+				for (Keyword k : selectedUser.keywords) {
+
+					if (k.rank == -1)
+						keywordsToBind.add(k.value + " [ - ] ");
+					else
+						keywordsToBind.add(k.value + " [ " + k.rank + " ] ");
+
+				}
 
 				ArrayAdapter<String> a = new ArrayAdapter<String>(
 						getBaseContext(), R.layout.main_activity_listview_item,
