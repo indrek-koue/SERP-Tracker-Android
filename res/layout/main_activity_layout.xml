@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+	android:layout_height="fill_parent" android:background="@drawable/app_bg">
 
 	<LinearLayout android:layout_width="fill_parent"
 		android:id="@+id/linearLayout1" android:layout_height="wrap_content"
@@ -16,27 +16,28 @@
 		android:layout_width="fill_parent" android:layout_weight="1"></ListView>
 
 	<!-- RUN BUTTON -->
-	<Button android:id="@+id/button_run" android:text="Request Search Engine Rankings"
-		android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
+	<Button android:id="@+id/button_run" android:text="Find Rankings"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"
+		android:background="@drawable/ok_button" style="@style/ButtonText"></Button>
 
 
 	<!-- MENU BAR STAT -->
 	<LinearLayout android:layout_height="wrap_content"
-		android:background="@color/menu_bar_background" android:layout_width="fill_parent"
-		android:id="@+id/linearLayout2" android:orientation="horizontal"
-		android:gravity="center">
+		android:layout_width="fill_parent" android:id="@+id/linearLayout2"
+		android:orientation="horizontal" android:gravity="center"
+		android:background="@drawable/menubar_bg">
 
 
 		<!-- ADD PROFILE -->
 		<LinearLayout android:layout_height="80dip"
 			android:id="@+id/linearLayoutAddProfile" android:background="@android:color/black"
-			android:layout_width="80dip" android:orientation="vertical"
+			android:layout_width="76dip" android:orientation="vertical"
 			android:gravity="center" android:layout_margin="1dip">
 
 			<ImageButton android:layout_height="wrap_content"
 				android:src="@android:drawable/ic_menu_add" android:id="@+id/imageButton1"
 				android:layout_width="wrap_content" android:background="@android:color/black"></ImageButton>
-			<TextView android:text="Add website" android:id="@+id/textView1"
+			<TextView android:text="Add" android:id="@+id/textView1"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:textColor="@android:color/white" android:gravity="center"></TextView>
 
@@ -46,13 +47,13 @@
 		<!-- MANAGE PROFILES -->
 		<LinearLayout android:layout_height="80dip"
 			android:id="@+id/linearLayoutManageProfiles" android:background="@android:color/black"
-			android:layout_width="80dip" android:orientation="vertical"
+			android:layout_width="76dip" android:orientation="vertical"
 			android:gravity="center" android:layout_margin="1dip">
 
 			<ImageButton android:layout_height="wrap_content"
 				android:src="@android:drawable/ic_menu_edit" android:id="@+id/imageButton2"
 				android:layout_width="wrap_content" android:background="@android:color/black"></ImageButton>
-			<TextView android:text="Manage websites" android:id="@+id/textView2"
+			<TextView android:text="Manage" android:id="@+id/textView2"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:textColor="@android:color/white" android:gravity="center"></TextView>
 
@@ -71,8 +72,8 @@
 
 
 		<!-- SETTINGS -->
-		<LinearLayout android:layout_height="80dip"
-			android:id="@+id/linearLayoutSettings" android:layout_width="80dip"
+		<LinearLayout android:layout_height="78dip"
+			android:id="@+id/linearLayoutSettings" android:layout_width="76dip"
 			android:orientation="vertical" android:background="@android:color/black"
 			android:gravity="center" android:layout_margin="1dip">
 
@@ -85,6 +86,21 @@
 
 		</LinearLayout>
 
+
+		<!-- ABOUT -->
+		<LinearLayout android:layout_height="80dip"
+			android:id="@+id/linearLayoutAbout" android:layout_width="76dip"
+			android:orientation="vertical" android:background="@android:color/black"
+			android:gravity="center" android:layout_margin="1dip">
+
+			<ImageButton android:layout_height="wrap_content"
+				android:src="@android:drawable/ic_menu_info_details" android:id="@+id/imageButton4"
+				android:background="@android:color/black" android:layout_width="wrap_content"></ImageButton>
+			<TextView android:text="About" android:id="@+id/textView4"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:textColor="@android:color/white" android:gravity="center"></TextView>
+
+		</LinearLayout>
 
 
 	</LinearLayout>

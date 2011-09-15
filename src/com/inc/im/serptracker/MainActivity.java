@@ -144,6 +144,27 @@ public class MainActivity extends Activity {
 		((TextView) findViewById(R.id.textView3))
 				.setOnClickListener(settingsListener);
 
+		
+		// about
+		View.OnClickListener aboutListener = new View.OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+
+				startActivity(new Intent(getBaseContext(),
+						AboutActivity.class));
+
+			}
+		};
+
+		((LinearLayout) findViewById(R.id.linearLayoutAbout))
+				.setOnClickListener(aboutListener);
+		((ImageButton) findViewById(R.id.imageButton4))
+				.setOnClickListener(aboutListener);
+		((TextView) findViewById(R.id.textView4))
+				.setOnClickListener(aboutListener);
+		
+		
 	}
 
 	public void initSpinner() {
