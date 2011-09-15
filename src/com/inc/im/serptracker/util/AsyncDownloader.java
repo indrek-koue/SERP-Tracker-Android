@@ -24,6 +24,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.webkit.DownloadListener;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ArrayAdapter;
@@ -56,8 +57,10 @@ public class AsyncDownloader extends
 		if (keywords == null || keywords.length == 0)
 			return null;
 
+		long downloadTime = 0L;
+
 		// time logging
-		long start = System.currentTimeMillis();
+		// long start = System.currentTimeMillis();
 
 		// count items for the load screen
 		itemCount = keywords[0].size();
@@ -68,30 +71,16 @@ public class AsyncDownloader extends
 			// time logging
 			long startJsoupParse = System.currentTimeMillis();
 
-			Document doc = null;
-			try {
-
-				// get userAgent
-				String ua = getUserAgentString(con);
-				Log.i("MY", "USERAGENT: " + ua);
-				Log.i("MY", "Q-URL:" + generateEscapedQueryString(keyword));
-
-				doc = Jsoup.connect(generateEscapedQueryString(keyword))
-						.userAgent(ua).timeout(TIMEOUT).get();
-
-			} catch (IOException e1) {
-				Log.e("MY", e1.toString());
-			}
+			Document doc = downloadJsoap(keyword);
 
 			if (doc == null) {
 				Log.e("MY", "download is null");
 				return null;
 			}
 
-			Log.i("MY",
-					"Jsoup download (" + keyword.value + "): "
-							+ (System.currentTimeMillis() - startJsoupParse));
-			Log.d("MY", doc.html().length() + "");
+			downloadTime = System.currentTimeMillis() - startJsoupParse;
+
+			Log.i("BENCH", "Download (" + keyword.value + "): " + downloadTime);
 			Elements allResults = doc.select("h3 > a");
 
 			if (allResults == null) {
@@ -107,9 +96,16 @@ public class AsyncDownloader extends
 								+ Integer.toString(allResults.size()));
 
 			if (allResults.size() == 0) {
-				Log.e("MY", "all results was 0 so all links are: "
-						+ doc.getElementsByTag("a").size());
-				keyword.newRank = -2;
+				Log.e("MY", "all results was 0 so all links are: ");
+				for (Element e : doc.getElementsByTag("a"))
+					Log.e("MY", e.attr("href"));
+
+				// try again
+				allResults = downloadJsoap(keyword).select("h3 > a");
+
+				if (allResults.size() == 0)
+					keyword.newRank = -2;
+
 			}
 			// remove
 			for (int i = 0; i < allResults.size(); i++)
@@ -129,13 +125,12 @@ public class AsyncDownloader extends
 				String singleResultUrl = singleResult.attr("href");
 
 				if (singleResultUrl.contains(WEBSITE) && keyword.newRank == 0) {
-					keyword.newRank = i;
+					 keyword.newRank = i;
+
+					//keyword.newRank = 20;
 
 					Log.d("MY", "new rank: " + i);
 					i = 1;
-
-					Log.d("MY", singleResultAnchor);
-					Log.d("MY", singleResultUrl);
 
 					keyword.anchorText = singleResultAnchor;
 					keyword.url = singleResultUrl;
@@ -144,12 +139,36 @@ public class AsyncDownloader extends
 				i++;
 			} // for links in keyword
 			publishProgress(++counter);
+			Log.i("BENCH",
+					"Parse time: "
+							+ (System.currentTimeMillis() - startJsoupParse - downloadTime));
+
 		} // for keywords
 
-		Log.i("MY", "Total time: " + (System.currentTimeMillis() - start));
+		// Log.i("BENCH", "Parse time: "
+		// + (System.currentTimeMillis() - start - ));
 
 		return keywords[0];
 
+	}
+
+	private Document downloadJsoap(Keyword keyword) {
+
+		Document doc = null;
+		try {
+
+			// get userAgent
+			String ua = getUserAgentString(con);
+			// Log.i("MY", "USERAGENT: " + ua);
+			Log.i("MY", "Q-URL:" + generateEscapedQueryString(keyword, true));
+
+			doc = Jsoup.connect(generateEscapedQueryString(keyword, true))
+					.userAgent(ua).timeout(TIMEOUT).get();
+
+		} catch (IOException e1) {
+			Log.e("MY", e1.toString());
+		}
+		return doc;
 	}
 
 	@Override
@@ -175,6 +194,8 @@ public class AsyncDownloader extends
 
 			if (k.newRank == 0) {
 				toDisplay.add(k.value + " [not ranked]");
+			} else if (k.newRank == -2) {
+				toDisplay.add(k.value + " [error, try again]");
 			} else {
 
 				// save new rank
@@ -183,15 +204,18 @@ public class AsyncDownloader extends
 
 				// show user
 				int valueChange = k.rank - k.newRank;
-				String sign = "";
-
-				if (valueChange >= 0)
-					sign = "+";
+				// String sign = "";
+				//
+				// if (valueChange >= 0)
+				// sign = "+";
+				// else
+				// sign = "-";
+				String ready = "";
+				if (k.rank != 0 && valueChange != 0)
+					ready = String.format("%s [ %d ] %s%d", k.value, k.newRank,
+							valueChange > 0 ? "+" : "",valueChange);
 				else
-					sign = "-";
-
-				String ready = String.format("%s [%d] %s%d", k.value,
-						k.newRank, sign, valueChange);
+					ready = String.format("%s [ %d ]", k.value, k.newRank);
 
 				toDisplay.add(ready);
 
@@ -347,10 +371,13 @@ public class AsyncDownloader extends
 	// + URLEncoder.encode(k.value));
 	// }
 
-	public String generateEscapedQueryString(Keyword k) {
-
-		return "http://www.google.com/search?num="+DCOUNT+"&nomo=1&q="
-				+ URLEncoder.encode(k.value);
+	public String generateEscapedQueryString(Keyword k, Boolean noMobile) {
+		if (noMobile)
+			return "http://www.google.com/search?num=" + DCOUNT + "&nomo=1&q="
+					+ URLEncoder.encode(k.value);
+		else
+			return "http://www.google.com/search?num=" + DCOUNT + "&q="
+					+ URLEncoder.encode(k.value);
 	}
 
 	public String removePrefix(String searchable) {

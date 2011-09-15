@@ -1,0 +1,2 @@
+#git ignore for serp tracker
+/lambikas
