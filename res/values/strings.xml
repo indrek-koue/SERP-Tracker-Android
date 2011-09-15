@@ -2,9 +2,16 @@
 <resources>
 	<string name="hello">Hello World, MinuActivity!</string>
 	<string name="app_name">SERP tracker</string>
+
+	<string name="profile_edit_page_delete">Delete</string>
+
 	<color name="menu_bar_background">#212121</color>
 	<color name="debug">#FF12C0</color>
-	<string name="profile_edit_page_delete">Delete</string>
+
+	<color name="white">#FFF</color>
+	<color name="black">#000</color>
+	<color name="lgray">#EEE</color>
+	
 
 	<style name="ButtonText">
 		<item name="android:layout_width">fill_parent</item>

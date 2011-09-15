@@ -16,8 +16,11 @@ public class AboutActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.about_layout);
 
-		bindInfoText();
-		bindSendEmailToDev();
+		bindInfoText("Version 0.9 released!\n\n"
+				+ "Version 0.9 adds whole new user interface. \n\n"
+				+ "1.6 version of android is not supported anymore due the lack of UI elements and functions\n\n"
+				+ "NOTE: If you are migrating from version 0.85 or lower, please reset your data under settings > delete all data");
+		bindSendEmailToDevButton();
 		bindBackButton();
 
 	}
@@ -35,7 +38,7 @@ public class AboutActivity extends Activity {
 				});
 	}
 
-	private void bindSendEmailToDev() {
+	private void bindSendEmailToDevButton() {
 		((Button) findViewById(R.id.button1))
 				.setOnClickListener(new View.OnClickListener() {
 
@@ -61,8 +64,8 @@ public class AboutActivity extends Activity {
 				});
 	}
 
-	private void bindInfoText() {
-		((TextView) findViewById(R.id.textView1)).setText("GET from my server");
+	private void bindInfoText(String s) {
+		((TextView) findViewById(R.id.textView1)).setText(s);
 	}
 
 }

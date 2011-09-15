@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:scrollbars="none" android:layout_width="fill_parent"
 	android:layout_height="fill_parent" android:background="@drawable/app_bg">
-	<TextView android:text="News/updates/changelog" android:id="@+id/textView1"
-		android:layout_width="fill_parent" android:layout_height="200dip"></TextView>
 
-	<Button android:text="Send an email to me!" android:id="@+id/button1"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:background="@drawable/ok_button" style="@style/ButtonText"></Button>
-	<Button android:text="Privacy policy" android:id="@+id/button2"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:background="@drawable/back_button" style="@style/ButtonText"></Button>
-	<Button android:text="Terms of service" android:id="@+id/button3"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:background="@drawable/back_button" style="@style/ButtonText"></Button>
-	<Button android:text="Back" android:id="@+id/button4"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:background="@drawable/back_button" style="@style/ButtonText"></Button>
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="fill_parent">
 
-</LinearLayout>
+		<TextView android:text="News and updates"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:textSize="25dip" android:textStyle="bold" android:textColor="@color/white"
+			android:layout_marginBottom="5dip"></TextView>
+
+		<TextView android:text="News/updates/changelog" android:id="@+id/textView1"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:textSize="20dip" android:textColor="@color/lgray"
+			android:layout_marginBottom="25dip"></TextView>
+
+		<Button android:text="Send an email to me!" android:id="@+id/button1"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:background="@drawable/ok_button" style="@style/ButtonText"></Button>
+		<Button android:text="Back" android:id="@+id/button4"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:background="@drawable/back_button" style="@style/ButtonText"></Button>
+
+	</LinearLayout>
+
+</ScrollView>
