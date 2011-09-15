@@ -2,7 +2,7 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 	android:scrollbars="none" android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+	android:layout_height="fill_parent" android:background="@drawable/app_bg">
 	<LinearLayout android:orientation="vertical"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
 
@@ -26,12 +26,14 @@
 			android:lines="5" android:gravity="top"></EditText>
 
 		<!-- BUTTON -->
-		<Button android:id="@+id/button1" android:text="Insert website and keywords"
+		<Button android:id="@+id/button1" android:text="Insert"
 			android:layout_height="wrap_content" android:layout_width="fill_parent"
-			android:layout_marginTop="10dip"></Button>
+			android:layout_marginTop="10dip" android:background="@drawable/ok_button"
+			style="@style/ButtonText"></Button>
 		<Button android:text="Back" android:id="@+id/button2"
 			android:layout_marginTop="10dip" android:layout_width="fill_parent"
-			android:layout_height="wrap_content"></Button>
+			android:layout_height="wrap_content" android:background="@drawable/back_button"
+			style="@style/ButtonText"></Button>
 
 	</LinearLayout>
 </ScrollView>

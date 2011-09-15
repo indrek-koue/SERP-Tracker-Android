@@ -20,6 +20,7 @@
 		<activity android:name="InsertWebsiteActivity"></activity>
 		<activity android:name="PreferencesActivity"></activity>
 		<activity android:name="ManageWebsitesActivity"></activity>
+		<activity android:name="AboutActivity"></activity>
 
 
 	</application>
