@@ -19,8 +19,8 @@ public class DbAdapter {
 	private DatabaseHelper mDbHelper;
 
 	private static final String DATABASE_NAME = "appdata";
-
-	// private static final int DATABASE_VERSION = 2;
+//
+	private static final int DATABASE_VERSION = 2;
 	private static final String TABLE_PROFILE = "profile";
 	private static final String KEY_PROFILE_TABLE_ID = "_id";
 	private static final String KEY_PROFILE_TABLE_URL = "url";
@@ -183,7 +183,7 @@ public class DbAdapter {
 
 	public Boolean updateKeywordRank(Keyword k, int newRank) {
 
-		if (k == null)
+		if (k == null || newRank == 0)
 			return false;
 
 		open();

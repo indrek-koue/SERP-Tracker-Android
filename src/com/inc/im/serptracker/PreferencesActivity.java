@@ -1,5 +1,6 @@
 package com.inc.im.serptracker;
 
+import com.flurry.android.FlurryAgent;
 import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.DbAdapter;
 
@@ -11,6 +12,18 @@ import android.widget.Toast;
 
 public class PreferencesActivity extends PreferenceActivity {
 
+	@Override
+	public void onStart() {
+		super.onStart();
+		FlurryAgent.onStartSession(this, "LCFV3QMWQDCW9VRBU14R");
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
