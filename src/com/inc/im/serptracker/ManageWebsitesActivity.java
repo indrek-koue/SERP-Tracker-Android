@@ -2,6 +2,7 @@ package com.inc.im.serptracker;
 
 import java.util.ArrayList;
 
+import com.flurry.android.FlurryAgent;
 import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.DbAdapter;
 import com.inc.im.serptracker.data.Keyword;
@@ -25,6 +26,18 @@ public class ManageWebsitesActivity extends Activity {
 
 	int selectedUserProfileId;
 
+	@Override
+	public void onStart() {
+		super.onStart();
+		FlurryAgent.onStartSession(this, "LCFV3QMWQDCW9VRBU14R");
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

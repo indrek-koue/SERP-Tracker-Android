@@ -2,6 +2,7 @@ package com.inc.im.serptracker;
 
 import java.util.ArrayList;
 
+import com.flurry.android.FlurryAgent;
 import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.DbAdapter;
 import com.inc.im.serptracker.data.Keyword;
@@ -34,6 +35,18 @@ public class MainActivity extends Activity {
 	public final static String EMPTY_SPINNER_TEXT = "Select a website...";
 	private Boolean menuBarIsVisible = true;
 	private AsyncDownloader downloader;
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		FlurryAgent.onStartSession(this, "LCFV3QMWQDCW9VRBU14R");
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -144,15 +157,13 @@ public class MainActivity extends Activity {
 		((TextView) findViewById(R.id.textView3))
 				.setOnClickListener(settingsListener);
 
-		
 		// about
 		View.OnClickListener aboutListener = new View.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 
-				startActivity(new Intent(getBaseContext(),
-						AboutActivity.class));
+				startActivity(new Intent(getBaseContext(), AboutActivity.class));
 
 			}
 		};
@@ -163,8 +174,7 @@ public class MainActivity extends Activity {
 				.setOnClickListener(aboutListener);
 		((TextView) findViewById(R.id.textView4))
 				.setOnClickListener(aboutListener);
-		
-		
+
 	}
 
 	public void initSpinner() {
@@ -317,6 +327,9 @@ public class MainActivity extends Activity {
 	public boolean internetConnectionExists() {
 
 		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+		if (cm == null)
+			return false;
 
 		NetworkInfo netInfo = cm.getActiveNetworkInfo();
 

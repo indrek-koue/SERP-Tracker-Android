@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.inc.im.serptracker.data.DbAdapter;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.UserProfile;
@@ -19,6 +20,19 @@ public class InsertWebsiteActivity extends Activity {
 
 	private int editTextRowCount = 0;
 
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		FlurryAgent.onStartSession(this, "LCFV3QMWQDCW9VRBU14R");
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
