@@ -68,6 +68,9 @@ public class AsyncDownloader extends
 		itemCount = keywords[0].size();
 		int counter = 0;
 
+		// output to flurry
+		String results = "";
+
 		for (Keyword keyword : keywords[0]) {
 
 			// individual keyword time logging
@@ -131,7 +134,8 @@ public class AsyncDownloader extends
 
 			// loging remove
 			if (allResults.size() != 100)
-				Log.w("MY", "WARNING: results after delete != 100, instead:" + allResults.size());
+				Log.w("MY", "WARNING: results after delete != 100, instead:"
+						+ allResults.size());
 
 			int i = 1;
 			for (Element singleResult : allResults) {
@@ -145,6 +149,10 @@ public class AsyncDownloader extends
 							&& keyword.newRank == 0) {
 
 						keyword.newRank = i;
+
+						// flurry output
+						results += i + " ";
+
 						Log.d("MY", "new rank: " + i);
 
 						// reset counter
@@ -174,7 +182,13 @@ public class AsyncDownloader extends
 		parameters.put("num of keywords", String.valueOf(itemCount));
 		parameters.put("total time",
 				String.valueOf(System.currentTimeMillis() - start));
-		FlurryAgent.onEvent("downloaded", parameters);
+		parameters
+				.put("avg time per keyword",
+						String.valueOf((System.currentTimeMillis() - start)
+								/ itemCount));
+		parameters.put("results", String.valueOf(results));
+
+		FlurryAgent.onEvent("download", parameters);
 
 		return keywords[0];
 

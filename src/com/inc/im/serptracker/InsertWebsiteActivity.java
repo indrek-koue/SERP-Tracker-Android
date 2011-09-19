@@ -20,7 +20,6 @@ public class InsertWebsiteActivity extends Activity {
 
 	private int editTextRowCount = 0;
 
-	
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -32,7 +31,7 @@ public class InsertWebsiteActivity extends Activity {
 		super.onStop();
 		FlurryAgent.onEndSession(this);
 	}
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -69,18 +68,27 @@ public class InsertWebsiteActivity extends Activity {
 					// about that
 					if (editTextRowCount >= 7) {
 
-						// find the last break
-						int lastBreakIndex = text.lastIndexOf("\n");
-
-						// compose new text
-						String newText = text.substring(0, lastBreakIndex);
-
-						// add new text - delete old one and append new one
-						// (append because I want the cursor to be at the end)
-						((EditText) v).setText("");
-						((EditText) v).append(newText);
+						Toast.makeText(
+								getBaseContext(),
+								"Beta version doesn't have keyword limit, enjoy",
+								Toast.LENGTH_SHORT).show();
+						
+//						// find the last break
+//						int lastBreakIndex = text.lastIndexOf("\n");
+//
+//						// compose new text
+//						String newText = text.substring(0, lastBreakIndex);
+//
+//						// add new text - delete old one and append new one
+//						// (append because I want the cursor to be at the end)
+//						((EditText) v).setText("");
+//						((EditText) v).append(newText);
 
 					}
+
+
+
+
 				}
 
 				return false;
@@ -132,6 +140,11 @@ public class InsertWebsiteActivity extends Activity {
 							return;
 						}
 
+						if(new DbAdapter(getBaseContext()).loadAllProfiles().size() >= 3)
+							Toast.makeText(getBaseContext(),
+									"Beta version doesn't have website count limit, enjoy",
+									Toast.LENGTH_SHORT).show();
+						
 						if (new DbAdapter(getBaseContext()).insertOrUpdate(
 								inputSite, keyword, 0)) {
 							Toast.makeText(getBaseContext(),

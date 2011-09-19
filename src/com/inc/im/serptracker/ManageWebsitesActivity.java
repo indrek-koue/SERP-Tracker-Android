@@ -11,6 +11,7 @@ import com.inc.im.serptracker.data.UserProfile;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,7 +24,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 public class ManageWebsitesActivity extends Activity {
 
 	ArrayList<UserProfile> data;
-
+	private int editTextRowCount = 0;
 	int selectedUserProfileId;
 
 	@Override
@@ -49,6 +50,60 @@ public class ManageWebsitesActivity extends Activity {
 		bindSaveButton();
 		bindBackButton();
 		bindDeleteButton();
+		
+		
+		final EditText et = (EditText) findViewById(R.id.editText2);
+
+		et.setOnKeyListener(new View.OnKeyListener() {
+
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+				// String text = et.getText().toString();
+				// enterCount = text.split("\\n").length;
+				//
+
+				// if enter is selected and on release start calculating
+				if (keyCode == KeyEvent.KEYCODE_ENTER
+						&& event.getAction() == KeyEvent.ACTION_UP) {
+
+					// get EditText text
+					String text = ((EditText) v).getText().toString();
+
+					// find how many rows it cointains
+					editTextRowCount = text.split("\\n").length;
+
+					// user has input more than limited - lets do something
+					// about that
+					if (editTextRowCount >= 7) {
+
+						Toast.makeText(
+								getBaseContext(),
+								"Beta version doesn't have keyword limit, enjoy",
+								Toast.LENGTH_SHORT).show();
+						
+//						// find the last break
+//						int lastBreakIndex = text.lastIndexOf("\n");
+//
+//						// compose new text
+//						String newText = text.substring(0, lastBreakIndex);
+//
+//						// add new text - delete old one and append new one
+//						// (append because I want the cursor to be at the end)
+//						((EditText) v).setText("");
+//						((EditText) v).append(newText);
+
+					}
+
+
+
+
+				}
+
+				return false;
+			}
+		});
+		
 
 	}
 
