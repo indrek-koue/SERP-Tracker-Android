@@ -38,7 +38,7 @@ public class ManageWebsitesActivity extends Activity {
 		super.onStop();
 		FlurryAgent.onEndSession(this);
 	}
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,8 +50,7 @@ public class ManageWebsitesActivity extends Activity {
 		bindSaveButton();
 		bindBackButton();
 		bindDeleteButton();
-		
-		
+
 		final EditText et = (EditText) findViewById(R.id.editText2);
 
 		et.setOnKeyListener(new View.OnKeyListener() {
@@ -81,29 +80,26 @@ public class ManageWebsitesActivity extends Activity {
 								getBaseContext(),
 								getString(R.string.beta_version_doesn_t_have_keyword_limit_enjoy),
 								Toast.LENGTH_SHORT).show();
-						
-//						// find the last break
-//						int lastBreakIndex = text.lastIndexOf("\n");
-//
-//						// compose new text
-//						String newText = text.substring(0, lastBreakIndex);
-//
-//						// add new text - delete old one and append new one
-//						// (append because I want the cursor to be at the end)
-//						((EditText) v).setText("");
-//						((EditText) v).append(newText);
+
+						// // find the last break
+						// int lastBreakIndex = text.lastIndexOf("\n");
+						//
+						// // compose new text
+						// String newText = text.substring(0, lastBreakIndex);
+						//
+						// // add new text - delete old one and append new one
+						// // (append because I want the cursor to be at the
+						// end)
+						// ((EditText) v).setText("");
+						// ((EditText) v).append(newText);
 
 					}
-
-
-
 
 				}
 
 				return false;
 			}
 		});
-		
 
 	}
 
@@ -133,7 +129,10 @@ public class ManageWebsitesActivity extends Activity {
 
 							Toast.makeText(
 									getBaseContext(),
-									getString(R.string.website_) + u.url.toUpperCase()
+									getString(R.string.website_)
+											+ " "
+											+ u.url.toUpperCase()
+											+ " "
 											+ getString(R.string._succesfully_deleted),
 									Toast.LENGTH_LONG).show();
 
@@ -150,7 +149,8 @@ public class ManageWebsitesActivity extends Activity {
 							}
 
 						} else {
-							Toast.makeText(getBaseContext(), getString(R.string.delete_failed),
+							Toast.makeText(getBaseContext(),
+									getString(R.string.delete_failed),
 									Toast.LENGTH_LONG).show();
 						}
 
@@ -226,14 +226,16 @@ public class ManageWebsitesActivity extends Activity {
 
 						// validating
 						if (keyword == null || keyword.length() < 1) {
-							Toast.makeText(getBaseContext(),
+							Toast.makeText(
+									getBaseContext(),
 									getString(R.string.please_enter_some_keywords),
 									Toast.LENGTH_SHORT).show();
 							return;
 						}
 
 						if (inputSite == null || inputSite.length() < 5) {
-							Toast.makeText(getBaseContext(),
+							Toast.makeText(
+									getBaseContext(),
 									getString(R.string.website_address_is_too_short_or_invalid),
 									Toast.LENGTH_SHORT).show();
 							return;
@@ -253,8 +255,8 @@ public class ManageWebsitesActivity extends Activity {
 									MainActivity.class));
 						} else {
 							Toast.makeText(getBaseContext(),
-									R.string.website_edit_failure, Toast.LENGTH_SHORT)
-									.show();
+									R.string.website_edit_failure,
+									Toast.LENGTH_SHORT).show();
 						}
 
 					}

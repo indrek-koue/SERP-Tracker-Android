@@ -22,6 +22,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -42,6 +43,7 @@ public class MainActivity extends Activity {
 	public static String EMPTY_SPINNER_TEXT;
 	private Boolean menuBarIsVisible = true;
 	private AsyncDownloader downloader;
+	private Long counterForExtensiveClickLimit = 0L;
 
 	@Override
 	public void onStart() {
@@ -60,6 +62,15 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity_layout);
 
+		// load in house ads
+		AsyncDownloaderInhouseAds ads = new AsyncDownloaderInhouseAds(
+				(ProgressBar) findViewById(R.id.progressBar1),
+				((TextView) findViewById(R.id.inhouseAdsText)),
+				((LinearLayout) findViewById(R.id.inhouseAds)),
+				MainActivity.this);
+
+		ads.execute(getString(R.string.ad_text_input_path));
+
 		EMPTY_SPINNER_TEXT = getString(R.string.spinner_default_selection);
 
 		// init spinner + loads data form db
@@ -74,15 +85,6 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
-		// load in house ads
-		AsyncDownloaderInhouseAds ads = new AsyncDownloaderInhouseAds(
-				(ProgressBar) findViewById(R.id.progressBar1),
-				((TextView) findViewById(R.id.inhouseAdsText)),
-				((LinearLayout) findViewById(R.id.inhouseAds)),
-				MainActivity.this);
-
-		ads.execute(getString(R.string.ad_text_input_path));
 
 		initSpinner();
 
@@ -238,46 +240,21 @@ public class MainActivity extends Activity {
 
 				// default not selected
 				if (!getSpinnerSelectedValue().equals(EMPTY_SPINNER_TEXT)) {
+					// limit requests
+					// if (counterForExtensiveClickLimit == 0l) {
+					// counterForExtensiveClickLimit = System
+					// .currentTimeMillis() / 1000;
+					// } else {
+					// Long currentTime = System.currentTimeMillis() / 1000;
+					// if (currentTime - counterForExtensiveClickLimit < 60)
+					// Toast.makeText(getBaseContext(),
+					// "Results are already up to date",
+					// Toast.LENGTH_SHORT).show();
+					// }
 
 					// counter for rate-us-dialog
-					int timesClicked = rateDialogCounter();
-
-					if (timesClicked == 10) {
-						// show rate us dialog
-
-						AlertDialog.Builder builder = new AlertDialog.Builder(
-								MainActivity.this);
-						builder.setMessage(
-								getString(R.string.like_this_app_rate_us_on_android_market_))
-								.setCancelable(false)
-								.setPositiveButton(getString(R.string.sure_),
-										new DialogInterface.OnClickListener() {
-											public void onClick(
-													DialogInterface dialog,
-													int id) {
-
-												Intent intent = new Intent(
-														Intent.ACTION_VIEW);
-												intent.setData(Uri
-														.parse(getString(R.string.market_details_id_com_inc_im_serptracker)));
-												startActivity(intent);
-
-											}
-										})
-								.setNegativeButton(getString(R.string.cancel),
-										new DialogInterface.OnClickListener() {
-											public void onClick(
-													DialogInterface dialog,
-													int id) {
-
-												dialog.cancel();
-
-											}
-										});
-						AlertDialog alert = builder.create();
-						alert.show();
-
-					}
+					if (rateUsDialog(rateDialogCounter()))
+						return;
 
 					ArrayList<Keyword> keywords = null;
 
@@ -325,6 +302,85 @@ public class MainActivity extends Activity {
 		});
 	}
 
+	public int rateDialogCounter() {
+
+		// read
+		SharedPreferences settings = getSharedPreferences("minuPref", 0);
+		int number = settings.getInt("minuMuutuja", 0);
+		int newNumber = number + 1;
+
+		Log.d("MY", number + "");
+		// write
+		// We need an Editor object to make preference changes.
+		// All objects are from android.context.Context
+		SharedPreferences settings2 = getSharedPreferences("minuPref", 0);
+		SharedPreferences.Editor editor = settings2.edit();
+		editor.putInt("minuMuutuja", newNumber);
+
+		// Commit the edits!
+		editor.commit();
+
+		return number;
+		// final String PREFS_NAME = "RateDialogCounter2";
+		//
+		// SharedPreferences counter = PreferenceManager
+		// .getDefaultSharedPreferences(getBaseContext());
+		//
+		// int oldValue = counter.getInt(PREFS_NAME, 0);
+		// Log.d("MY", "old value" + oldValue+"");
+		// int newValue = oldValue++;
+		//
+		// // SharedPreferences.Editor editor = PreferenceManager
+		// // .getDefaultSharedPreferences(getBaseContext()).edit();
+		// SharedPreferences.Editor editor = counter.edit();
+		// editor.putInt(PREFS_NAME, newValue);
+		// editor.commit();
+		//
+		// Log.d("MY", newValue+"");
+		//
+		// return newValue;
+	}
+
+	private Boolean rateUsDialog(int timesClicked) {
+
+		Boolean displayed = false;
+		if (timesClicked == 15 || timesClicked == 50) {
+			displayed = true;
+			AlertDialog.Builder builder = new AlertDialog.Builder(
+					MainActivity.this);
+			builder.setMessage(
+					getString(R.string.like_this_app_rate_us_on_android_market_))
+					.setCancelable(false)
+					.setPositiveButton(getString(R.string.sure_),
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+
+									Intent intent = new Intent(
+											Intent.ACTION_VIEW);
+									intent.setData(Uri
+											.parse(getString(R.string.market_details_id_com_inc_im_serptracker)));
+									startActivity(intent);
+
+								}
+							})
+					.setNegativeButton(getString(R.string.cancel),
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+
+									dialog.cancel();
+
+								}
+							});
+			AlertDialog alert = builder.create();
+			alert.show();
+
+		}
+
+		return displayed;
+	}
+
 	public void bindSpinnerItemOnSelectEvent() {
 		// find spinner selected url
 
@@ -335,6 +391,14 @@ public class MainActivity extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> adapter, View arg1,
 					int index, long arg3) {
+
+				//if deafult selected - clear listview
+				if (index == 0) {
+					((ListView) findViewById(R.id.listview_result))
+							.setAdapter(new ArrayAdapter<String>(
+									getBaseContext(),
+									R.layout.main_activity_listview_item));
+				}
 
 				bindListViewItems(index);
 			}
@@ -358,7 +422,7 @@ public class MainActivity extends Activity {
 				for (Keyword k : selectedUser.keywords) {
 
 					if (k.rank == -1)
-						keywordsToBind.add(k.value + " [ - ] ");
+						keywordsToBind.add(k.value + " [ not ranked ] ");
 					else
 						keywordsToBind.add(k.value + " [ " + k.rank + " ] ");
 
@@ -371,6 +435,7 @@ public class MainActivity extends Activity {
 				((ListView) findViewById(R.id.listview_result)).setAdapter(a);
 			}
 		}
+
 	}
 
 	public String getSpinnerSelectedValue() {
@@ -400,21 +465,6 @@ public class MainActivity extends Activity {
 			return false;
 		}
 
-	}
-
-	public int rateDialogCounter() {
-		final String rateDialogCounter = "RateDialogCounter";
-
-		SharedPreferences counter = PreferenceManager
-				.getDefaultSharedPreferences(getBaseContext());
-
-		int oldValue = counter.getInt(rateDialogCounter, -1);
-		SharedPreferences.Editor editor = counter.edit();
-		editor.putInt(rateDialogCounter, oldValue++);
-
-		editor.commit();
-
-		return oldValue;
 	}
 
 }

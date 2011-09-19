@@ -140,7 +140,9 @@ public class InsertWebsiteActivity extends Activity {
 							return;
 						}
 
-						if(new DbAdapter(getBaseContext()).loadAllProfiles().size() >= 3)
+						DbAdapter db = new DbAdapter(getBaseContext());
+						
+						if(db.loadAllProfiles() != null && db.loadAllProfiles().size() >= 3)
 							Toast.makeText(getBaseContext(),
 									getString(R.string.beta_version_doesn_t_have_website_count_limit_enjoy),
 									Toast.LENGTH_SHORT).show();

@@ -159,8 +159,8 @@ public class AboutActivity extends Activity {
 				});
 	}
 
-	private void bindInfoText(String s) {
-		((TextView) findViewById(R.id.textView1)).setText(s);
-	}
+//	private void bindInfoText(String s) {
+//		((TextView) findViewById(R.id.textView1)).setText(s);
+//	}
 
 }
