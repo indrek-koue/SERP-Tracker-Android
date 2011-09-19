@@ -31,7 +31,7 @@ public class AboutActivity extends Activity {
 	@Override
 	public void onStart() {
 		super.onStart();
-		FlurryAgent.onStartSession(this, "LCFV3QMWQDCW9VRBU14R");
+		FlurryAgent.onStartSession(this, getString(R.string.flurry_api_key));
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class AboutActivity extends Activity {
 				((ProgressBar) findViewById(R.id.progressBar1)),
 				((TextView) findViewById(R.id.textView1)));
 		
-		newsDownloader.execute("http://www.thedroidproject.com/_app/SERPTracker/apptext.txt");
+		newsDownloader.execute(getString(R.string.app_news_get_path));
 
 //		if (internetConnectionExists())
 //			bindInfoText(manageDownload("http://www.thedroidproject.com/_app/SERPTracker/apptext.txt"));
@@ -142,16 +142,16 @@ public class AboutActivity extends Activity {
 						intent.setType("text/plain");
 
 						intent.putExtra(Intent.EXTRA_EMAIL,
-								new String[] { "indrek.koue@gmail.com" });
+								new String[] { getString(R.string.dev_email) });
 
-						intent.putExtra(Intent.EXTRA_SUBJECT, "SERP Tracker");
+						intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
 
 						try {
 							startActivity(Intent.createChooser(intent,
-									"Send mail"));
+									getString(R.string.send_mail)));
 						} catch (android.content.ActivityNotFoundException ex) {
 							Toast.makeText(getBaseContext(),
-									"There are no email clients installed.",
+									R.string.there_are_no_email_clients_installed_,
 									Toast.LENGTH_SHORT).show();
 						}
 

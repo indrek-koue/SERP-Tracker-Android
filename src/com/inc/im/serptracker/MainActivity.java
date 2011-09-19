@@ -39,14 +39,14 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
 	private ArrayList<UserProfile> data;
-	public final static String EMPTY_SPINNER_TEXT = "Select a website...";
+	public static String EMPTY_SPINNER_TEXT;
 	private Boolean menuBarIsVisible = true;
 	private AsyncDownloader downloader;
 
 	@Override
 	public void onStart() {
 		super.onStart();
-		FlurryAgent.onStartSession(this, "LCFV3QMWQDCW9VRBU14R");
+		FlurryAgent.onStartSession(this, getString(R.string.flurry_api_key));
 	}
 
 	@Override
@@ -59,6 +59,8 @@ public class MainActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity_layout);
+
+		EMPTY_SPINNER_TEXT = getString(R.string.spinner_default_selection);
 
 		// init spinner + loads data form db
 		initSpinner();
@@ -79,8 +81,8 @@ public class MainActivity extends Activity {
 				((TextView) findViewById(R.id.inhouseAdsText)),
 				((LinearLayout) findViewById(R.id.inhouseAds)),
 				MainActivity.this);
-		
-		ads.execute("http://www.thedroidproject.com/_app/SERPTracker/ad.txt");
+
+		ads.execute(getString(R.string.ad_text_input_path));
 
 		initSpinner();
 
@@ -136,8 +138,9 @@ public class MainActivity extends Activity {
 			public void onClick(View arg0) {
 
 				if (new DbAdapter(getBaseContext()).loadAllProfiles() == null) {
-					Toast.makeText(getBaseContext(),
-							"No websites to manage. Please add a website",
+					Toast.makeText(
+							getBaseContext(),
+							getString(R.string.no_websites_to_manage_please_add_a_website),
 							Toast.LENGTH_SHORT).show();
 				} else {
 					startActivity(new Intent(getBaseContext(),
@@ -227,7 +230,7 @@ public class MainActivity extends Activity {
 				if (!internetConnectionExists()) {
 					Toast.makeText(
 							getBaseContext(),
-							"No active internet connection. Please check your settings",
+							getString(R.string.no_active_internet_connection_please_check_your_settings),
 							Toast.LENGTH_LONG).show();
 
 					return;
@@ -245,9 +248,9 @@ public class MainActivity extends Activity {
 						AlertDialog.Builder builder = new AlertDialog.Builder(
 								MainActivity.this);
 						builder.setMessage(
-								"Like this app? Rate us on android market!")
+								getString(R.string.like_this_app_rate_us_on_android_market_))
 								.setCancelable(false)
-								.setPositiveButton("Sure!",
+								.setPositiveButton(getString(R.string.sure_),
 										new DialogInterface.OnClickListener() {
 											public void onClick(
 													DialogInterface dialog,
@@ -256,12 +259,12 @@ public class MainActivity extends Activity {
 												Intent intent = new Intent(
 														Intent.ACTION_VIEW);
 												intent.setData(Uri
-														.parse("market://details?id=com.inc.im.serptracker"));
+														.parse(getString(R.string.market_details_id_com_inc_im_serptracker)));
 												startActivity(intent);
 
 											}
 										})
-								.setNegativeButton("Cancel",
+								.setNegativeButton(getString(R.string.cancel),
 										new DialogInterface.OnClickListener() {
 											public void onClick(
 													DialogInterface dialog,
@@ -291,8 +294,10 @@ public class MainActivity extends Activity {
 
 						// start dialog
 						ProgressDialog dialog = ProgressDialog.show(
-								MainActivity.this, "Inspecting keywords",
-								"Starting, please wait.", true, true);
+								MainActivity.this,
+								getString(R.string.inspect_dialog_title),
+								getString(R.string.inspect_dialog_fist_msg),
+								true, true);
 
 						// start download
 						downloader = new AsyncDownloader(getBaseContext(),
@@ -305,13 +310,14 @@ public class MainActivity extends Activity {
 					else {
 						Toast.makeText(
 								getBaseContext(),
-								"Profile keywords are missing - how's thats possible?",
+								getString(R.string.profile_keywords_are_missing_how_s_thats_possible_),
 								Toast.LENGTH_SHORT).show();
 					}
 
 				} else {
 
-					Toast.makeText(getBaseContext(), "Please select a profile",
+					Toast.makeText(getBaseContext(),
+							getString(R.string.please_select_a_profile),
 							Toast.LENGTH_SHORT).show();
 
 				} // if empty selected

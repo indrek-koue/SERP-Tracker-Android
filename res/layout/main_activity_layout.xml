@@ -26,7 +26,7 @@
 		android:layout_width="fill_parent" android:layout_weight="1"></ListView>
 
 	<!-- RUN BUTTON -->
-	<Button android:id="@+id/button_run" android:text="Find Rankings"
+	<Button android:id="@+id/button_run" android:text="@string/run_btton"
 		android:layout_height="wrap_content" android:layout_width="fill_parent"
 		android:background="@drawable/ok_button" style="@style/ButtonText"></Button>
 
@@ -46,7 +46,7 @@
 			<ImageButton android:layout_height="wrap_content"
 				android:src="@android:drawable/ic_menu_add" android:id="@+id/imageButton1"
 				android:layout_width="wrap_content" android:background="@android:color/black"></ImageButton>
-			<TextView android:text="Add" android:id="@+id/textView1"
+			<TextView android:text="@string/menubar_add" android:id="@+id/textView1"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:textColor="@android:color/white" android:gravity="center"></TextView>
 
@@ -62,7 +62,7 @@
 			<ImageButton android:layout_height="wrap_content"
 				android:src="@android:drawable/ic_menu_edit" android:id="@+id/imageButton2"
 				android:layout_width="wrap_content" android:background="@android:color/black"></ImageButton>
-			<TextView android:text="Manage" android:id="@+id/textView2"
+			<TextView android:text="@string/menubar_manage" android:id="@+id/textView2"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:textColor="@android:color/white" android:gravity="center"></TextView>
 
@@ -89,7 +89,7 @@
 			<ImageButton android:layout_height="wrap_content"
 				android:src="@android:drawable/ic_menu_manage" android:id="@+id/imageButton3"
 				android:background="@android:color/black" android:layout_width="wrap_content"></ImageButton>
-			<TextView android:text="Settings" android:id="@+id/textView3"
+			<TextView android:text="@string/menubar_settings" android:id="@+id/textView3"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:textColor="@android:color/white" android:gravity="center"></TextView>
 
@@ -105,7 +105,7 @@
 			<ImageButton android:layout_height="wrap_content"
 				android:src="@android:drawable/ic_menu_info_details" android:id="@+id/imageButton4"
 				android:background="@android:color/black" android:layout_width="wrap_content"></ImageButton>
-			<TextView android:text="Info" android:id="@+id/textView4"
+			<TextView android:text="@string/menubar_info" android:id="@+id/textView4"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:textColor="@android:color/white" android:gravity="center"></TextView>
 

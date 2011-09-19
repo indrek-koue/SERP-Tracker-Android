@@ -7,7 +7,7 @@
 	<LinearLayout android:orientation="vertical"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
 
-		<TextView android:text="News and updates"
+		<TextView android:text="@string/about_title_news_and_updates"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:textSize="25dip" android:textStyle="bold" android:textColor="@color/white"
 			android:layout_marginBottom="5dip"></TextView>
@@ -18,10 +18,10 @@
 			android:textSize="20dip" android:textColor="@color/lgray"
 			android:layout_marginBottom="25dip"></TextView>
 
-		<Button android:text="Send an email to me!" android:id="@+id/button1"
+		<Button android:text="@string/send_email_to_dev" android:id="@+id/button1"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:background="@drawable/ok_button" style="@style/ButtonText"></Button>
-		<Button android:text="Back" android:id="@+id/button4"
+		<Button android:text="@string/back" android:id="@+id/button4"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:background="@drawable/back_button" style="@style/ButtonText"></Button>
 

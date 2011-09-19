@@ -23,7 +23,7 @@ public class InsertWebsiteActivity extends Activity {
 	@Override
 	public void onStart() {
 		super.onStart();
-		FlurryAgent.onStartSession(this, "LCFV3QMWQDCW9VRBU14R");
+		FlurryAgent.onStartSession(this, getString(R.string.flurry_api_key));
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class InsertWebsiteActivity extends Activity {
 
 						Toast.makeText(
 								getBaseContext(),
-								"Beta version doesn't have keyword limit, enjoy",
+								getString(R.string.beta_version_doesn_t_have_keyword_limit_enjoy),
 								Toast.LENGTH_SHORT).show();
 						
 //						// find the last break
@@ -128,34 +128,34 @@ public class InsertWebsiteActivity extends Activity {
 
 						if (keyword == null || keyword.length() < 1) {
 							Toast.makeText(getBaseContext(),
-									"Please enter some keywords",
+									getString(R.string.please_enter_some_keywords),
 									Toast.LENGTH_SHORT).show();
 							return;
 						}
 
 						if (inputSite == null || inputSite.length() < 5) {
 							Toast.makeText(getBaseContext(),
-									"Website address is too short or invalid",
+									getString(R.string.website_address_is_too_short_or_invalid),
 									Toast.LENGTH_SHORT).show();
 							return;
 						}
 
 						if(new DbAdapter(getBaseContext()).loadAllProfiles().size() >= 3)
 							Toast.makeText(getBaseContext(),
-									"Beta version doesn't have website count limit, enjoy",
+									getString(R.string.beta_version_doesn_t_have_website_count_limit_enjoy),
 									Toast.LENGTH_SHORT).show();
 						
 						if (new DbAdapter(getBaseContext()).insertOrUpdate(
 								inputSite, keyword, 0)) {
 							Toast.makeText(getBaseContext(),
-									"Website added successfuly",
+									getString(R.string.website_added_successfuly),
 									Toast.LENGTH_SHORT).show();
 
 							startActivity(new Intent(getBaseContext(),
 									MainActivity.class));
 						} else {
 							Toast.makeText(getBaseContext(),
-									"Website add failure", Toast.LENGTH_SHORT)
+									getString(R.string.website_add_failure), Toast.LENGTH_SHORT)
 									.show();
 						}
 					}

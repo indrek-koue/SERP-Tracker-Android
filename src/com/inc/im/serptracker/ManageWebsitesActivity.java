@@ -30,7 +30,7 @@ public class ManageWebsitesActivity extends Activity {
 	@Override
 	public void onStart() {
 		super.onStart();
-		FlurryAgent.onStartSession(this, "LCFV3QMWQDCW9VRBU14R");
+		FlurryAgent.onStartSession(this, getString(R.string.flurry_api_key));
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class ManageWebsitesActivity extends Activity {
 
 						Toast.makeText(
 								getBaseContext(),
-								"Beta version doesn't have keyword limit, enjoy",
+								getString(R.string.beta_version_doesn_t_have_keyword_limit_enjoy),
 								Toast.LENGTH_SHORT).show();
 						
 //						// find the last break
@@ -133,8 +133,8 @@ public class ManageWebsitesActivity extends Activity {
 
 							Toast.makeText(
 									getBaseContext(),
-									"Website " + u.url.toUpperCase()
-											+ " succesfully deleted",
+									getString(R.string.website_) + u.url.toUpperCase()
+											+ getString(R.string._succesfully_deleted),
 									Toast.LENGTH_LONG).show();
 
 							// if there aren't any profiles to edit > direct to
@@ -150,7 +150,7 @@ public class ManageWebsitesActivity extends Activity {
 							}
 
 						} else {
-							Toast.makeText(getBaseContext(), "Delete failed",
+							Toast.makeText(getBaseContext(), getString(R.string.delete_failed),
 									Toast.LENGTH_LONG).show();
 						}
 
@@ -227,14 +227,14 @@ public class ManageWebsitesActivity extends Activity {
 						// validating
 						if (keyword == null || keyword.length() < 1) {
 							Toast.makeText(getBaseContext(),
-									"Please enter some keywords",
+									getString(R.string.please_enter_some_keywords),
 									Toast.LENGTH_SHORT).show();
 							return;
 						}
 
 						if (inputSite == null || inputSite.length() < 5) {
 							Toast.makeText(getBaseContext(),
-									"Website address is too short or invalid",
+									getString(R.string.website_address_is_too_short_or_invalid),
 									Toast.LENGTH_SHORT).show();
 							return;
 						}
@@ -246,14 +246,14 @@ public class ManageWebsitesActivity extends Activity {
 
 						if (editSuccess) {
 							Toast.makeText(getBaseContext(),
-									"Website edited successfuly",
+									R.string.website_edited_successfuly,
 									Toast.LENGTH_SHORT).show();
 
 							startActivity(new Intent(getBaseContext(),
 									MainActivity.class));
 						} else {
 							Toast.makeText(getBaseContext(),
-									"Website edit failure", Toast.LENGTH_SHORT)
+									R.string.website_edit_failure, Toast.LENGTH_SHORT)
 									.show();
 						}
 
