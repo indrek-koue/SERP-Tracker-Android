@@ -35,44 +35,42 @@ public class InsertWebsiteActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.insertprofile_activity_layout);
-
-		// new DbAdapter(getBaseContext()).trunkTables();
 
 		bindAddButton();
 		bindBackButton();
 
-		final EditText et = (EditText) findViewById(R.id.editText2);
-
-		et.setOnKeyListener(new View.OnKeyListener() {
-
-			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-				// String text = et.getText().toString();
-				// enterCount = text.split("\\n").length;
-				//
-
-				// if enter is selected and on release start calculating
-				if (keyCode == KeyEvent.KEYCODE_ENTER
-						&& event.getAction() == KeyEvent.ACTION_UP) {
-
-					// get EditText text
-					String text = ((EditText) v).getText().toString();
-
-					// find how many rows it cointains
-					editTextRowCount = text.split("\\n").length;
-
-					// user has input more than limited - lets do something
-					// about that
-					if (editTextRowCount >= 7) {
-
-						Toast.makeText(
-								getBaseContext(),
-								getString(R.string.beta_version_doesn_t_have_keyword_limit_enjoy),
-								Toast.LENGTH_SHORT).show();
-						
+		// keyword limit disabled
+//		final EditText et = (EditText) findViewById(R.id.editText2);
+//
+//		et.setOnKeyListener(new View.OnKeyListener() {
+//
+//			@Override
+//			public boolean onKey(View v, int keyCode, KeyEvent event) {
+//
+//				// String text = et.getText().toString();
+//				// enterCount = text.split("\\n").length;
+//				//
+//
+//				// if enter is selected and on release start calculating
+//				if (keyCode == KeyEvent.KEYCODE_ENTER
+//						&& event.getAction() == KeyEvent.ACTION_UP) {
+//
+//					// get EditText text
+//					String text = ((EditText) v).getText().toString();
+//
+//					// find how many rows it cointains
+//					editTextRowCount = text.split("\\n").length;
+//
+//					// user has input more than limited - lets do something
+//					// about that
+//					if (editTextRowCount >= 7) {
+//
+////						Toast.makeText(
+////								getBaseContext(),
+////								getString(R.string.beta_version_doesn_t_have_keyword_limit_enjoy),
+////								Toast.LENGTH_SHORT).show();
+//						
 //						// find the last break
 //						int lastBreakIndex = text.lastIndexOf("\n");
 //
@@ -83,17 +81,17 @@ public class InsertWebsiteActivity extends Activity {
 //						// (append because I want the cursor to be at the end)
 //						((EditText) v).setText("");
 //						((EditText) v).append(newText);
-
-					}
-
-
-
-
-				}
-
-				return false;
-			}
-		});
+//
+//					}
+//
+//
+//
+//
+//				}
+//
+//				return false;
+//			}
+//		});
 
 	}
 
@@ -141,13 +139,13 @@ public class InsertWebsiteActivity extends Activity {
 						}
 
 						DbAdapter db = new DbAdapter(getBaseContext());
-						
-						if(db.loadAllProfiles() != null && db.loadAllProfiles().size() >= 3)
-							Toast.makeText(getBaseContext(),
-									getString(R.string.beta_version_doesn_t_have_website_count_limit_enjoy),
-									Toast.LENGTH_SHORT).show();
-						
-						if (new DbAdapter(getBaseContext()).insertOrUpdate(
+//	no website count limit					
+//						if(db.loadAllProfiles() != null && db.loadAllProfiles().size() >= 3)
+//							Toast.makeText(getBaseContext(),
+//									getString(R.string.beta_version_doesn_t_have_website_count_limit_enjoy),
+//									Toast.LENGTH_SHORT).show();
+//						
+						if (db.insertOrUpdate(
 								inputSite, keyword, 0)) {
 							Toast.makeText(getBaseContext(),
 									getString(R.string.website_added_successfuly),
