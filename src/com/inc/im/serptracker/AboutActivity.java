@@ -9,6 +9,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.flurry.android.FlurryAgent;
+import com.inc.im.serptracker.util.AsyncDownloaderNews;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,13 +20,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class AboutActivity extends Activity {
 
 	/** Called when the activity is first created. */
-	
+
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -37,17 +39,23 @@ public class AboutActivity extends Activity {
 		super.onStop();
 		FlurryAgent.onEndSession(this);
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.about_layout);
 
 		// TODO: async downlod
-		if (internetConnectionExists())
-			bindInfoText(manageDownload("http://www.thedroidproject.com/_app/SERPTracker/apptext.txt"));
-		else
-			bindInfoText("ERROR: no internet connection exists");
+		AsyncDownloaderNews newsDownloader = new AsyncDownloaderNews(
+				((ProgressBar) findViewById(R.id.progressBar1)),
+				((TextView) findViewById(R.id.textView1)));
+		
+		newsDownloader.execute("http://www.thedroidproject.com/_app/SERPTracker/apptext.txt");
+
+//		if (internetConnectionExists())
+//			bindInfoText(manageDownload("http://www.thedroidproject.com/_app/SERPTracker/apptext.txt"));
+//		else
+//			bindInfoText("ERROR: no internet connection exists");
 
 		// bindInfoText("Version 0.9 released!\n\n"
 		// + "Version 0.9 adds whole new user interface. \n\n"

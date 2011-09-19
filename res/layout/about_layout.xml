@@ -11,6 +11,7 @@
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:textSize="25dip" android:textStyle="bold" android:textColor="@color/white"
 			android:layout_marginBottom="5dip"></TextView>
+		<ProgressBar android:id="@+id/progressBar1" android:layout_width="wrap_content" android:layout_height="wrap_content"></ProgressBar>
 
 		<TextView android:text="News/updates/changelog" android:id="@+id/textView1"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
