@@ -57,138 +57,146 @@ public class AsyncDownloader extends
 	@Override
 	protected ArrayList<Keyword> doInBackground(ArrayList<Keyword>... keywords) {
 
-		if (keywords == null || keywords.length == 0)
-			return null;
+		try {
 
-		// time logging
-		long downloadTime = 0L;
-		long start = System.currentTimeMillis();
-
-		// count items for the load screen
-		itemCount = keywords[0].size();
-		int counter = 0;
-
-		// output to flurry
-		String results = "";
-
-		for (Keyword keyword : keywords[0]) {
-
-			// individual keyword time logging
-			long startJsoupParse = System.currentTimeMillis();
-
-			// jsoup download
-			Document doc = downloadJsoap(keyword);
-
-			// custom download
-			// Document doc = Jsoup.parse(manageDownload(keyword.value));
-
-			if (doc == null) {
-				Log.e("MY", "download is null");
+			if (keywords == null || keywords.length == 0)
 				return null;
-			}
 
-			// logging
-			downloadTime = System.currentTimeMillis() - startJsoupParse;
-			Log.i("BENCH", "Download+bind if custom download (" + keyword.value
-					+ "): " + downloadTime);
+			// time logging
+			long downloadTime = 0L;
+			long start = System.currentTimeMillis();
 
-			Elements allResults = doc.select("h3 > a");
-			if (allResults == null) {
-				Log.e("MY", "allResults h3a is null");
-				return null;
-			}
+			// count items for the load screen
+			itemCount = keywords[0].size();
+			int counter = 0;
 
-			// logging
-			if (allResults.size() == 0) {
-				Log.e("MY", "0 results parsed from doc");
+			// output to flurry
+			String results = "";
 
-				for (Element e : doc.getElementsByTag("a"))
-					Log.e("MY", e.text());
-				// -2 == problem getting rank
-				keyword.newRank = -2;
+			for (Keyword keyword : keywords[0]) {
 
-			} else
-				Log.i("MY",
-						"results downloaded:"
-								+ Integer.toString(allResults.size()));
+				// individual keyword time logging
+				long startJsoupParse = System.currentTimeMillis();
 
-			// 2nd try - disabled ATM
-			// if (allResults.size() == 0) {
-			// Log.e("MY", "all results was 0 so all links are: ");
-			// for (Element e : doc.getElementsByTag("a"))
-			// Log.e("MY", e.attr("href"));
-			//
-			// // try again
-			// allResults = downloadJsoap(keyword).select("h3 > a");
-			//
-			// if (allResults.size() == 0)
-			// keyword.newRank = -2;
-			//
-			// }
+				// jsoup download
+				Document doc = downloadJsoap(keyword);
 
-			// remove not valid urls
-			for (int i = 0; i < allResults.size(); i++)
-				if (allResults.get(i).attr("href").startsWith("/search?q=")) {
-					allResults.remove(i);
+				// custom download
+				// Document doc = Jsoup.parse(manageDownload(keyword.value));
+
+				if (doc == null) {
+					Log.e("MY", "download is null");
+					return null;
 				}
 
-			// loging remove
-			if (allResults.size() != 100)
-				Log.w("MY", "WARNING: results after delete != 100, instead:"
-						+ allResults.size());
+				// logging
+				downloadTime = System.currentTimeMillis() - startJsoupParse;
+				Log.i("BENCH", "Download+bind if custom download ("
+						+ keyword.value + "): " + downloadTime);
 
-			int i = 1;
-			for (Element singleResult : allResults) {
+				Elements allResults = doc.select("h3 > a");
+				if (allResults == null) {
+					Log.e("MY", "allResults h3a is null");
+					return null;
+				}
 
-				if (singleResult != null) {
-					String singleResultAnchor = singleResult.text();
-					String singleResultUrl = singleResult.attr("href");
+				// logging
+				if (allResults.size() == 0) {
+					Log.e("MY", "0 results parsed from doc");
 
-					// if cointains url and is not set yet
-					if (singleResultUrl.contains(WEBSITE)
-							&& keyword.newRank == 0) {
+					for (Element e : doc.getElementsByTag("a"))
+						Log.e("MY", e.text());
+					// -2 == problem getting rank
+					keyword.newRank = -2;
 
-						keyword.newRank = i;
+				} else
+					Log.i("MY",
+							"results downloaded:"
+									+ Integer.toString(allResults.size()));
 
-						// flurry output
-						results += i + " ";
+				// 2nd try - disabled ATM
+				// if (allResults.size() == 0) {
+				// Log.e("MY", "all results was 0 so all links are: ");
+				// for (Element e : doc.getElementsByTag("a"))
+				// Log.e("MY", e.attr("href"));
+				//
+				// // try again
+				// allResults = downloadJsoap(keyword).select("h3 > a");
+				//
+				// if (allResults.size() == 0)
+				// keyword.newRank = -2;
+				//
+				// }
 
-						Log.d("MY", "new rank: " + i);
-
-						// reset counter
-						i = 1;
-
-						keyword.anchorText = singleResultAnchor;
-						keyword.url = singleResultUrl;
-
+				// remove not valid urls
+				for (int i = 0; i < allResults.size(); i++)
+					if (allResults.get(i).attr("href").startsWith("/search?q=")) {
+						allResults.remove(i);
 					}
-					i++;
-				} // if singelresult!= null
-			} // for links in keyword
 
-			publishProgress(++counter);
+				// loging remove
+				if (allResults.size() != 100)
+					Log.w("MY",
+							"WARNING: results after delete != 100, instead:"
+									+ allResults.size());
 
-			Log.i("BENCH",
-					"Parse time: "
-							+ (System.currentTimeMillis() - startJsoupParse - downloadTime));
+				int i = 1;
+				for (Element singleResult : allResults) {
 
-		} // for keywords
+					if (singleResult != null) {
+						String singleResultAnchor = singleResult.text();
+						String singleResultUrl = singleResult.attr("href");
 
-		// Log.i("BENCH", "Parse time: "
-		// + (System.currentTimeMillis() - start - ));
+						// if cointains url and is not set yet
+						if (singleResultUrl.contains(WEBSITE)
+								&& keyword.newRank == 0) {
 
-		// flurry logging
-		HashMap<String, String> parameters = new HashMap<String, String>();
-		parameters.put("num of keywords", String.valueOf(itemCount));
-		parameters.put("total time",
-				String.valueOf(System.currentTimeMillis() - start));
-		parameters
-				.put("avg time per keyword",
-						String.valueOf((System.currentTimeMillis() - start)
-								/ itemCount));
-		parameters.put("results", String.valueOf(results));
+							keyword.newRank = i;
 
-		FlurryAgent.onEvent("download", parameters);
+							// flurry output
+							results += i + " ";
+
+							Log.d("MY", "new rank: " + i);
+
+							// reset counter
+							i = 1;
+
+							keyword.anchorText = singleResultAnchor;
+							keyword.url = singleResultUrl;
+
+						}
+						i++;
+					} // if singelresult!= null
+				} // for links in keyword
+
+				publishProgress(++counter);
+
+				Log.i("BENCH",
+						"Parse time: "
+								+ (System.currentTimeMillis() - startJsoupParse - downloadTime));
+
+			} // for keywords
+
+			// Log.i("BENCH", "Parse time: "
+			// + (System.currentTimeMillis() - start - ));
+
+			// flurry logging
+			HashMap<String, String> parameters = new HashMap<String, String>();
+			parameters.put("num of keywords", String.valueOf(itemCount));
+			parameters.put("total time",
+					String.valueOf(System.currentTimeMillis() - start));
+			parameters.put(
+					"avg time per keyword",
+					String.valueOf((System.currentTimeMillis() - start)
+							/ itemCount));
+			parameters.put("results", String.valueOf(results));
+
+			FlurryAgent.onEvent("download", parameters);
+
+		} catch (Exception e) {
+			FlurryAgent.onError("EX", e.toString(), "AsyncDownloader");
+			return null;
+		}
 
 		return keywords[0];
 
