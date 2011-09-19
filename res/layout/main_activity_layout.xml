@@ -6,11 +6,11 @@
 	<!-- IN HOUSE ADS -->
 	<LinearLayout android:layout_height="wrap_content"
 		android:id="@+id/inhouseAds" android:layout_width="fill_parent"
-		android:orientation="vertical">
+		android:orientation="vertical" android:gravity="center">
 		<ProgressBar android:id="@+id/progressBar1"
 			android:layout_height="wrap_content" android:layout_width="wrap_content"
 			style="?android:attr/progressBarStyleSmall"></ProgressBar>
-		<TextView android:text="InHouseAds" android:id="@+id/inhouseAdsText"
+		<TextView android:id="@+id/inhouseAdsText"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 
 	</LinearLayout>

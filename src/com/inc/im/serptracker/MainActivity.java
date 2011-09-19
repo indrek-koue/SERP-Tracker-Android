@@ -112,12 +112,12 @@ public class MainActivity extends Activity {
 
 		return super.onKeyDown(keyCode, event);
 	}
-	
-	@Override
-	public void onBackPressed() {
-		downloader.cancel(true);
-		super.onBackPressed();
-	}
+
+//	@Override
+//	public void onBackPressed() {
+//		downloader.cancel(true);
+//		super.onBackPressed();
+//	}
 
 	private void bindMenuBarButtons() {
 

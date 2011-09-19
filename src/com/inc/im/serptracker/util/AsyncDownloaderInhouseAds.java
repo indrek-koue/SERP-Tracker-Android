@@ -41,7 +41,8 @@ public class AsyncDownloaderInhouseAds extends
 
 	@Override
 	protected void onPreExecute() {
-		pb.setVisibility(View.VISIBLE);
+//		pb.setVisibility(View.VISIBLE);
+		ll.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -80,7 +81,7 @@ public class AsyncDownloaderInhouseAds extends
 
 		InhouseAd ad = null;
 
-		if (result != null) {
+		if (result != null && result.length() > 5) {
 
 			String text = result.substring(result.indexOf("%%") + 2,
 					result.lastIndexOf("%%"));
@@ -103,10 +104,10 @@ public class AsyncDownloaderInhouseAds extends
 	protected void onPostExecute(final InhouseAd ad) {
 
 		if (ad == null) {
-
-			ll.setVisibility(View.GONE);
 			return;
 		}
+		
+		ll.setVisibility(View.VISIBLE);
 
 		tv.setText(ad.text);
 		ll.setOnClickListener(new View.OnClickListener() {
