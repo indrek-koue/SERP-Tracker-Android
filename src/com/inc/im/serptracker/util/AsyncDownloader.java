@@ -243,7 +243,7 @@ public class AsyncDownloader extends
 				String ready = "";
 				String sign = valueChange > 0 ? "+" : "";
 
-				if (k.rank != 0 && valueChange != 0)
+				if (k.rank != 0 && valueChange != 0 && k.rank != -1)
 					ready = String.format("%s [ %d ] %s%d", k.value, k.newRank,
 							sign, valueChange);
 				else
