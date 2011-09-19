@@ -45,7 +45,6 @@ public class AboutActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.about_layout);
 
-		// TODO: async downlod
 		AsyncDownloaderNews newsDownloader = new AsyncDownloaderNews(
 				((ProgressBar) findViewById(R.id.progressBar1)),
 				((TextView) findViewById(R.id.textView1)));
