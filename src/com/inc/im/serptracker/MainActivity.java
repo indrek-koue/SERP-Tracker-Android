@@ -10,12 +10,17 @@ import com.inc.im.serptracker.data.UserProfile;
 import com.inc.im.serptracker.util.AsyncDownloader;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -69,10 +74,10 @@ public class MainActivity extends Activity {
 		initSpinner();
 
 		// clear listview
-		if (data == null)
-			((ListView) findViewById(R.id.listview_result))
-					.setAdapter(new ArrayAdapter<String>(getBaseContext(),
-							R.layout.main_activity_listview_item));
+		// if (data == null)
+		((ListView) findViewById(R.id.listview_result))
+				.setAdapter(new ArrayAdapter<String>(getBaseContext(),
+						R.layout.main_activity_listview_item));
 
 	}
 
@@ -220,13 +225,43 @@ public class MainActivity extends Activity {
 				// default not selected
 				if (!getSpinnerSelectedValue().equals(EMPTY_SPINNER_TEXT)) {
 
+					// counter for rate-us-dialog
+					int timesClicked = rateDialogCounter();
+					
+					if(timesClicked == 10){
+						//show rate us dialog
+						
+						AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+						builder.setMessage("Like this app? Rate us on android market!")
+						       .setCancelable(false)
+						       .setPositiveButton("Sure!", new DialogInterface.OnClickListener() {
+						           public void onClick(DialogInterface dialog, int id) {
+						        	  
+						        	   Intent intent = new Intent(Intent.ACTION_VIEW);
+						        	   intent.setData(Uri.parse("market://details?id=com.inc.im.serptracker"));
+						        	   startActivity(intent);
+						        	   
+						           }
+						       })
+						       .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+						           public void onClick(DialogInterface dialog, int id) {
+						           
+						        	   dialog.cancel();
+						           
+						           }
+						       });
+						AlertDialog alert = builder.create();
+						alert.show();
+						
+						
+					}
+					
 					ArrayList<Keyword> keywords = null;
 
 					int spinnerSelectedValueNr = getSpinnerSelectedIndex() - 1;
 
 					// find keywords by name
 					for (UserProfile u : data) {
-
 						if (u.url.equals(data.get(spinnerSelectedValueNr).url)
 								&& u.id == data.get(spinnerSelectedValueNr).id)
 							keywords = u.keywords;
@@ -259,7 +294,7 @@ public class MainActivity extends Activity {
 					Toast.makeText(getBaseContext(), "Please select a profile",
 							Toast.LENGTH_SHORT).show();
 
-				}
+				} // if empty selected
 			}
 		});
 	}
@@ -339,6 +374,21 @@ public class MainActivity extends Activity {
 			return false;
 		}
 
+	}
+
+	public int rateDialogCounter() {
+		final String rateDialogCounter = "RateDialogCounter";
+
+		SharedPreferences counter = PreferenceManager
+				.getDefaultSharedPreferences(getBaseContext());
+		
+		int oldValue = counter.getInt(rateDialogCounter, -1);
+		SharedPreferences.Editor editor = counter.edit();
+		editor.putInt(rateDialogCounter, oldValue++);
+
+		editor.commit();
+		
+		return oldValue;
 	}
 
 }
