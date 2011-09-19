@@ -15,7 +15,7 @@ public class PreferencesActivity extends PreferenceActivity {
 	@Override
 	public void onStart() {
 		super.onStart();
-		FlurryAgent.onStartSession(this, "LCFV3QMWQDCW9VRBU14R");
+		FlurryAgent.onStartSession(this, getString(R.string.flurry_api_key));
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class PreferencesActivity extends PreferenceActivity {
 								new DbAdapter(getBaseContext()).trunkTables();
 
 								Toast.makeText(getBaseContext(),
-										"All user data deleted",
+										getString(R.string.all_user_data_deleted),
 										Toast.LENGTH_SHORT).show();
 
 								startActivity(new Intent(getBaseContext(),

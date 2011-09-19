@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="menu_bar_background">#212121</color>
+	<color name="debug">#FF12C0</color>
+
+	<color name="white">#FFF</color>
+	<color name="black">#000</color>
+	<color name="lgray">#EEE</color>
+
+</resources>
