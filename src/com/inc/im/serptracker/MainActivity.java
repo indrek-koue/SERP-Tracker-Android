@@ -8,6 +8,7 @@ import com.inc.im.serptracker.data.DbAdapter;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.UserProfile;
 import com.inc.im.serptracker.util.AsyncDownloader;
+import com.inc.im.serptracker.util.AsyncDownloaderInhouseAds;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -30,6 +31,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,6 +72,15 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+		// load in house ads
+		AsyncDownloaderInhouseAds ads = new AsyncDownloaderInhouseAds(
+				(ProgressBar) findViewById(R.id.progressBar1),
+				((TextView) findViewById(R.id.inhouseAdsText)),
+				((LinearLayout) findViewById(R.id.inhouseAds)),
+				MainActivity.this);
+		
+		ads.execute("http://www.thedroidproject.com/_app/SERPTracker/ad.txt");
 
 		initSpinner();
 
@@ -227,35 +238,44 @@ public class MainActivity extends Activity {
 
 					// counter for rate-us-dialog
 					int timesClicked = rateDialogCounter();
-					
-					if(timesClicked == 10){
-						//show rate us dialog
-						
-						AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-						builder.setMessage("Like this app? Rate us on android market!")
-						       .setCancelable(false)
-						       .setPositiveButton("Sure!", new DialogInterface.OnClickListener() {
-						           public void onClick(DialogInterface dialog, int id) {
-						        	  
-						        	   Intent intent = new Intent(Intent.ACTION_VIEW);
-						        	   intent.setData(Uri.parse("market://details?id=com.inc.im.serptracker"));
-						        	   startActivity(intent);
-						        	   
-						           }
-						       })
-						       .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-						           public void onClick(DialogInterface dialog, int id) {
-						           
-						        	   dialog.cancel();
-						           
-						           }
-						       });
+
+					if (timesClicked == 10) {
+						// show rate us dialog
+
+						AlertDialog.Builder builder = new AlertDialog.Builder(
+								MainActivity.this);
+						builder.setMessage(
+								"Like this app? Rate us on android market!")
+								.setCancelable(false)
+								.setPositiveButton("Sure!",
+										new DialogInterface.OnClickListener() {
+											public void onClick(
+													DialogInterface dialog,
+													int id) {
+
+												Intent intent = new Intent(
+														Intent.ACTION_VIEW);
+												intent.setData(Uri
+														.parse("market://details?id=com.inc.im.serptracker"));
+												startActivity(intent);
+
+											}
+										})
+								.setNegativeButton("Cancel",
+										new DialogInterface.OnClickListener() {
+											public void onClick(
+													DialogInterface dialog,
+													int id) {
+
+												dialog.cancel();
+
+											}
+										});
 						AlertDialog alert = builder.create();
 						alert.show();
-						
-						
+
 					}
-					
+
 					ArrayList<Keyword> keywords = null;
 
 					int spinnerSelectedValueNr = getSpinnerSelectedIndex() - 1;
@@ -381,13 +401,13 @@ public class MainActivity extends Activity {
 
 		SharedPreferences counter = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
-		
+
 		int oldValue = counter.getInt(rateDialogCounter, -1);
 		SharedPreferences.Editor editor = counter.edit();
 		editor.putInt(rateDialogCounter, oldValue++);
 
 		editor.commit();
-		
+
 		return oldValue;
 	}
 
