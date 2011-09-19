@@ -46,6 +46,12 @@ public class AsyncDownloader extends
 
 	private int itemCount;
 
+	@Override
+	protected void onCancelled() {
+		Log.d("MY", "onCancelled() triggered");
+		super.onCancelled();
+	}
+
 	public AsyncDownloader(Context con, ListView lv, String searchable,
 			ProgressDialog progress) {
 		this.con = con;
@@ -74,6 +80,9 @@ public class AsyncDownloader extends
 			String results = "";
 
 			for (Keyword keyword : keywords[0]) {
+
+				if (!progressDialog.isShowing())
+					return null;
 
 				// individual keyword time logging
 				long startJsoupParse = System.currentTimeMillis();
@@ -206,7 +215,7 @@ public class AsyncDownloader extends
 	protected void onPostExecute(ArrayList<Keyword> input) {
 
 		if (input == null) {
-			progressDialog.setMessage("ERROR1: download is null");
+			progressDialog.setMessage("ERROR1: download is null or canceled by the user");
 			return;
 		}
 

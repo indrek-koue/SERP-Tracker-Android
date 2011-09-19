@@ -51,55 +51,55 @@ public class ManageWebsitesActivity extends Activity {
 		bindBackButton();
 		bindDeleteButton();
 
-		final EditText et = (EditText) findViewById(R.id.editText2);
-
-		et.setOnKeyListener(new View.OnKeyListener() {
-
-			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-				// String text = et.getText().toString();
-				// enterCount = text.split("\\n").length;
-				//
-
-				// if enter is selected and on release start calculating
-				if (keyCode == KeyEvent.KEYCODE_ENTER
-						&& event.getAction() == KeyEvent.ACTION_UP) {
-
-					// get EditText text
-					String text = ((EditText) v).getText().toString();
-
-					// find how many rows it cointains
-					editTextRowCount = text.split("\\n").length;
-
-					// user has input more than limited - lets do something
-					// about that
-					if (editTextRowCount >= 7) {
-
-						Toast.makeText(
-								getBaseContext(),
-								getString(R.string.beta_version_doesn_t_have_keyword_limit_enjoy),
-								Toast.LENGTH_SHORT).show();
-
-						// // find the last break
-						// int lastBreakIndex = text.lastIndexOf("\n");
-						//
-						// // compose new text
-						// String newText = text.substring(0, lastBreakIndex);
-						//
-						// // add new text - delete old one and append new one
-						// // (append because I want the cursor to be at the
-						// end)
-						// ((EditText) v).setText("");
-						// ((EditText) v).append(newText);
-
-					}
-
-				}
-
-				return false;
-			}
-		});
+		//keyword limit disabled
+//		final EditText et = (EditText) findViewById(R.id.editText2);
+//
+//		et.setOnKeyListener(new View.OnKeyListener() {
+//
+//			@Override
+//			public boolean onKey(View v, int keyCode, KeyEvent event) {
+//
+//				// String text = et.getText().toString();
+//				// enterCount = text.split("\\n").length;
+//				//
+//
+//				// if enter is selected and on release start calculating
+//				if (keyCode == KeyEvent.KEYCODE_ENTER
+//						&& event.getAction() == KeyEvent.ACTION_UP) {
+//
+//					// get EditText text
+//					String text = ((EditText) v).getText().toString();
+//
+//					// find how many rows it cointains
+//					editTextRowCount = text.split("\\n").length;
+//
+//					// user has input more than limited - lets do something
+//					// about that
+//					if (editTextRowCount >= 7) {
+//
+//						// Toast.makeText(
+//						// getBaseContext(),
+//						// getString(R.string.beta_version_doesn_t_have_keyword_limit_enjoy),
+//						// Toast.LENGTH_SHORT).show();
+//
+//						// find the last break
+//						int lastBreakIndex = text.lastIndexOf("\n");
+//
+//						// compose new text
+//						String newText = text.substring(0, lastBreakIndex);
+//
+//						// add new text - delete old one and append new one
+//						// (append because I want the cursor to be at the end)
+//						((EditText) v).setText("");
+//						((EditText) v).append(newText);
+//
+//					}
+//
+//				}
+//
+//				return false;
+//			}
+//		});
 
 	}
 

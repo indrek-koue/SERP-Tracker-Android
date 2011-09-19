@@ -112,6 +112,12 @@ public class MainActivity extends Activity {
 
 		return super.onKeyDown(keyCode, event);
 	}
+	
+	@Override
+	public void onBackPressed() {
+		downloader.cancel(true);
+		super.onBackPressed();
+	}
 
 	private void bindMenuBarButtons() {
 
@@ -355,7 +361,7 @@ public class MainActivity extends Activity {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
-
+dialog.dismiss();
 									Intent intent = new Intent(
 											Intent.ACTION_VIEW);
 									intent.setData(Uri
@@ -369,7 +375,7 @@ public class MainActivity extends Activity {
 								public void onClick(DialogInterface dialog,
 										int id) {
 
-									dialog.cancel();
+									dialog.dismiss();
 
 								}
 							});
@@ -392,7 +398,7 @@ public class MainActivity extends Activity {
 			public void onItemSelected(AdapterView<?> adapter, View arg1,
 					int index, long arg3) {
 
-				//if deafult selected - clear listview
+				// if deafult selected - clear listview
 				if (index == 0) {
 					((ListView) findViewById(R.id.listview_result))
 							.setAdapter(new ArrayAdapter<String>(
@@ -422,9 +428,9 @@ public class MainActivity extends Activity {
 				for (Keyword k : selectedUser.keywords) {
 
 					if (k.rank == -1)
-						keywordsToBind.add(k.value + " [ not ranked ] ");
+						keywordsToBind.add(k.value + " [not ranked] ");
 					else
-						keywordsToBind.add(k.value + " [ " + k.rank + " ] ");
+						keywordsToBind.add(k.value + " [" + k.rank + "] ");
 
 				}
 
