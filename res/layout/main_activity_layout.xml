@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:background="@drawable/app_bg" android:orientation="vertical">
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:background="@drawable/app_bg" android:orientation="vertical">
 
 	<!-- IN HOUSE ADS -->
 	<LinearLayout android:layout_height="wrap_content"
 		android:id="@+id/inhouseAds" android:layout_width="fill_parent"
 		android:orientation="vertical">
-		<ProgressBar android:id="@+id/progressBar1" android:layout_height="wrap_content" android:layout_width="wrap_content" style="?android:attr/progressBarStyleSmall"></ProgressBar>
+		<ProgressBar android:id="@+id/progressBar1"
+			android:layout_height="wrap_content" android:layout_width="wrap_content"
+			style="?android:attr/progressBarStyleSmall"></ProgressBar>
 		<TextView android:text="InHouseAds" android:id="@+id/inhouseAdsText"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 
@@ -89,9 +91,10 @@
 			<ImageButton android:layout_height="wrap_content"
 				android:src="@android:drawable/ic_menu_manage" android:id="@+id/imageButton3"
 				android:background="@android:color/black" android:layout_width="wrap_content"></ImageButton>
-			<TextView android:text="@string/menubar_settings" android:id="@+id/textView3"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:textColor="@android:color/white" android:gravity="center"></TextView>
+			<TextView android:text="@string/menubar_settings"
+				android:id="@+id/textView3" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:textColor="@android:color/white"
+				android:gravity="center"></TextView>
 
 		</LinearLayout>
 

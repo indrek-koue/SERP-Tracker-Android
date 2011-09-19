@@ -23,7 +23,7 @@ public class PreferencesActivity extends PreferenceActivity {
 		super.onStop();
 		FlurryAgent.onEndSession(this);
 	}
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,13 +39,29 @@ public class PreferencesActivity extends PreferenceActivity {
 									Preference preference) {
 								new DbAdapter(getBaseContext()).trunkTables();
 
-								Toast.makeText(getBaseContext(),
+								Toast.makeText(
+										getBaseContext(),
 										getString(R.string.all_user_data_deleted),
 										Toast.LENGTH_SHORT).show();
 
 								startActivity(new Intent(getBaseContext(),
 										MainActivity.class));
 
+								return false;
+							}
+						});
+
+		getPreferenceManager().findPreference("prefSearchEngine")
+				.setOnPreferenceClickListener(
+						new Preference.OnPreferenceClickListener() {
+
+							@Override
+							public boolean onPreferenceClick(
+									Preference preference) {
+								Toast.makeText(
+										getBaseContext(),
+										"Google is trademark of Google inc. This application is built on Google Custom Search API and does not infringe any terms of service.",
+										Toast.LENGTH_LONG).show();
 								return false;
 							}
 						});

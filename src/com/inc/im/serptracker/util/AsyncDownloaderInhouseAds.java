@@ -8,9 +8,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.InhouseAd;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -79,12 +82,16 @@ public class AsyncDownloaderInhouseAds extends
 
 		if (result != null) {
 
-			String text = result.substring(result.indexOf("%%"),
+			String text = result.substring(result.indexOf("%%") + 2,
 					result.lastIndexOf("%%"));
-			String link = result.substring(result.indexOf("&&"),
+			String link = result.substring(result.indexOf("&&") + 2,
 					result.lastIndexOf("&&"));
-
-			ad = new InhouseAd(text, link);
+			
+			//if cant find tags, then don't show any ads
+			if (result.indexOf("%%") == -1 || result.indexOf("&&") == -1)
+				ad = null;
+			else
+				ad = new InhouseAd(link, text);
 
 		}
 
@@ -95,8 +102,11 @@ public class AsyncDownloaderInhouseAds extends
 	@Override
 	protected void onPostExecute(final InhouseAd ad) {
 
-		if (ad == null)
+		if (ad == null) {
+
+			ll.setVisibility(View.GONE);
 			return;
+		}
 
 		tv.setText(ad.text);
 		ll.setOnClickListener(new View.OnClickListener() {
@@ -104,8 +114,12 @@ public class AsyncDownloaderInhouseAds extends
 			@Override
 			public void onClick(View v) {
 
-				Toast.makeText(a, "GO TO: " + ad.url, Toast.LENGTH_SHORT)
-						.show();
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				intent.setData(Uri.parse(ad.url));
+				a.startActivity(intent);
+
+				// Toast.makeText(a, "GO TO: " + ad.url, Toast.LENGTH_SHORT)
+				// .show();
 
 			}
 		});
