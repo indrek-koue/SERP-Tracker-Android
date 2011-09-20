@@ -18,7 +18,7 @@ public class DbAdapter {
 	private DatabaseHelper mDbHelper;
 
 	private static final String DATABASE_NAME = "appdata";
-//
+	//
 	private static final int DATABASE_VERSION = 2;
 	private static final String TABLE_PROFILE = "profile";
 	private static final String KEY_PROFILE_TABLE_ID = "_id";
@@ -199,31 +199,6 @@ public class DbAdapter {
 
 	}
 
-	// public int getKeywordRank(Keyword k) {
-	//
-	// if (k == null)
-	// return 0;
-	//
-	// int result = 0;
-	//
-	// open();
-	//
-	// Cursor cur = mDb.query(TABLE_KEYWORDS,
-	// new String[] { KEY_KEYWORDS_TABLE_POSTION },
-	// KEY_KEYWORDS_TABLE_ID + " = " + k.id, null, null, null, null);
-	//
-	// if (cur.getCount() != 1)
-	// Log.e("MY", "getKeywordRank returned not 1");
-	//
-	// if (cur.moveToFirst())
-	// result = cur.getInt(cur.getColumnIndex(KEY_KEYWORDS_TABLE_POSTION));
-	//
-	// close();
-	//
-	// return result;
-	//
-	// }
-
 	public ArrayList<UserProfile> loadAllProfiles() {
 
 		ArrayList<UserProfile> profiles = null;
@@ -233,8 +208,6 @@ public class DbAdapter {
 		Cursor profileHeaderCur = mDb.query(TABLE_PROFILE, null, null, null,
 				null, null, null);
 
-		
-		
 		if (profileHeaderCur != null && profileHeaderCur.getCount() != 0) {
 			profileHeaderCur.moveToFirst();
 
@@ -277,9 +250,9 @@ public class DbAdapter {
 
 			} while (profileHeaderCur.moveToNext());
 		}
-		
+
 		close();
-		
+
 		return profiles;
 
 	}
@@ -357,12 +330,15 @@ public class DbAdapter {
 			// should use this method to drop tables, add tables, or do anything
 			// else it needs to upgrade to the new schema version.
 
-			db.execSQL("drop table if exists " + TABLE_PROFILE);
-			db.execSQL("drop table if exists " + TABLE_KEYWORDS);
+			if (db.getVersion() == oldVersion) {
+				db.setVersion(newVersion);
 
-			db.execSQL(PROFILE_TABLE_CREATE);
-			db.execSQL(KEYWORDS_TABLE_CREATE);
+				db.execSQL("drop table if exists " + TABLE_PROFILE);
+				db.execSQL("drop table if exists " + TABLE_KEYWORDS);
 
+				db.execSQL(PROFILE_TABLE_CREATE);
+				db.execSQL(KEYWORDS_TABLE_CREATE);
+			}
 		}
 
 	}

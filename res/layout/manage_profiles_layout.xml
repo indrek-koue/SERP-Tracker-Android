@@ -5,8 +5,7 @@
 	android:layout_height="fill_parent" android:background="@drawable/app_bg">
 
 	<LinearLayout android:orientation="vertical"
-		android:layout_width="fill_parent" android:layout_height="fill_parent"
-		>
+		android:layout_width="fill_parent" android:layout_height="fill_parent">
 
 		<!-- CHOOSE WEBSITE SPINNER -->
 		<Spinner android:id="@+id/spinner1" android:layout_height="wrap_content"
@@ -14,20 +13,23 @@
 		</Spinner>
 
 		<!-- WEBSITE ADDRESS -->
+		<TextView android:text="@string/address_of_your_website" android:id="@+id/textView1"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textSize="18dip"></TextView>
 		<EditText android:id="@+id/editText1" android:layout_height="wrap_content"
-			android:layout_width="fill_parent" android:inputType="textEmailAddress"
+			android:layout_width="fill_parent" android:inputType="textUri"
 			android:singleLine="true" android:hint="@string/address"
 			android:layout_marginBottom="10dip">
 			<requestFocus></requestFocus>
 		</EditText>
 
 		<!-- WEBSITE KEYWORDS -->
-		<!-- <TextView android:text="Keywords" android:id="@+id/textView2" android:layout_width="wrap_content" 
-			android:layout_height="wrap_content" android:textSize="18dip"></TextView> -->
+		<TextView android:text="@string/keywords_to_track" android:id="@+id/textView2"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textSize="18dip"></TextView>
 		<EditText android:id="@+id/editText2" android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:inputType="textMultiLine"
-			android:lines="8" android:gravity="top"
-			android:hint="@string/keywords"></EditText>
+			android:gravity="top" android:hint="\n\n\n"></EditText>
 
 		<!-- SAVE/DELETE BUTTON -->
 		<LinearLayout android:layout_height="wrap_content"
