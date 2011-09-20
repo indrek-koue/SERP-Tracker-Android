@@ -34,9 +34,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
 	private ArrayList<UserProfile> data;
-	// public static String EMPTY_SPINNER_TEXT;
 	private Boolean menuBarIsVisible = true;
-	private AsyncDownloader downloader;
 
 	@Override
 	public void onStart() {
@@ -60,20 +58,9 @@ public class MainActivity extends Activity {
 				MainActivity.this, getString(R.string.ad_text_input_path),
 				false);
 
-		// // load in house ads
-		// AsyncDownloaderInhouseAds ads = new AsyncDownloaderInhouseAds(
-		// ((TextView) findViewById(R.id.inhouseAdsText)),
-		// ((LinearLayout) findViewById(R.id.inhouseAds)),
-		// MainActivity.this);
-		//
-		// ads.execute(getString(R.string.ad_text_input_path));
-
-		// EMPTY_SPINNER_TEXT = getString(R.string.spinner_default_selection);
-
 		// init spinner + loads data form db
 		initSpinner();
 
-		// bindSpinnerItemOnSelectEvent();
 		bindRunButton();
 		bindMenuBarButtons();
 
@@ -83,10 +70,10 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 
+		// load default value on spinner
 		initSpinner();
 
 		// clear listview
-		// if (data == null)
 		((ListView) findViewById(R.id.listview_result))
 				.setAdapter(new ArrayAdapter<String>(getBaseContext(),
 						R.layout.main_activity_listview_item));
@@ -208,10 +195,6 @@ public class MainActivity extends Activity {
 			for (UserProfile u : data)
 				spinnerValues.add(u.url + "[" + u.keywords.size() + "]");
 
-		// ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-		// getBaseContext(), R.layout.main_activity_spinner_item,
-		// R.id.textView1, spinnerValues);
-
 		spinner.setAdapter(new ArrayAdapter<String>(getBaseContext(),
 				R.layout.main_activity_spinner_item, R.id.textView1,
 				spinnerValues));
@@ -222,15 +205,8 @@ public class MainActivity extends Activity {
 			public void onItemSelected(AdapterView<?> adapter, View arg1,
 					int index, long arg3) {
 
-				// if deafult selected - clear listview
-				// if (index == 0) {
-				// ((ListView) findViewById(R.id.listview_result))
-				// .setAdapter(new ArrayAdapter<String>(
-				// getBaseContext(),
-				// R.layout.main_activity_listview_item));
-				// } else {
 				bindListViewItems(index);
-				// }
+
 			}
 
 			@Override
@@ -240,151 +216,79 @@ public class MainActivity extends Activity {
 		});
 	}
 
-	// public void bindSpinnerItemOnSelectEvent() {
-	// // find spinner selected url
-	//
-	// Spinner s = (Spinner) findViewById(R.id.spinner_profile);
-	//
-	// s.setOnItemSelectedListener(new OnItemSelectedListener() {
-	//
-	// @Override
-	// public void onItemSelected(AdapterView<?> adapter, View arg1,
-	// int index, long arg3) {
-	//
-	// // if deafult selected - clear listview
-	// if (index == 0) {
-	// ((ListView) findViewById(R.id.listview_result))
-	// .setAdapter(new ArrayAdapter<String>(
-	// getBaseContext(),
-	// R.layout.main_activity_listview_item));
-	// } else {
-	// bindListViewItems(index);
-	// }
-	// }
-	//
-	// @Override
-	// public void onNothingSelected(AdapterView<?> arg0) {
-	//
-	// }
-	// });
-	// }
-
 	private void bindRunButton() {
 
-		Button btn = (Button) findViewById(R.id.button_run);
+		((Button) findViewById(R.id.button_run))
+				.setOnClickListener(new View.OnClickListener() {
 
-		btn.setOnClickListener(new View.OnClickListener() {
+					@SuppressWarnings("unchecked")
+					@Override
+					public void onClick(View v) {
 
-			@SuppressWarnings("unchecked")
-			@Override
-			public void onClick(View v) {
+						if (!Util.internetConnectionExists(getBaseContext())) {
+							Toast.makeText(
+									getBaseContext(),
+									getString(R.string.no_active_internet_connection_please_check_your_settings),
+									Toast.LENGTH_LONG).show();
 
-				if (!Util.internetConnectionExists(getBaseContext())) {
-					Toast.makeText(
-							getBaseContext(),
-							getString(R.string.no_active_internet_connection_please_check_your_settings),
-							Toast.LENGTH_LONG).show();
+							return;
+						}
 
-					return;
-				}
+						// default not selected
+						if (!getSpinnerSelectedValue().equals(
+								getString(R.string.spinner_default_selection))) {
 
-				// default not selected
-				if (!getSpinnerSelectedValue().equals(
-						getString(R.string.spinner_default_selection))) {
+							// counter for rate-us-dialog
+							if (rateUsDialog(15, 50))
+								return;
 
-					// counter for rate-us-dialog
-					if (rateUsDialog(15, 50))
-						return;
+							ArrayList<Keyword> keywords = null;
 
-					ArrayList<Keyword> keywords = null;
+							int spinnerSelectedValueNr = getSpinnerSelectedIndex() - 1;
 
-					int spinnerSelectedValueNr = getSpinnerSelectedIndex() - 1;
+							if (data == null
+									|| spinnerSelectedValueNr >= data.size()
+									|| spinnerSelectedValueNr < 0)
+								return;
 
-					if (data == null || spinnerSelectedValueNr >= data.size()
-							|| spinnerSelectedValueNr < 0)
-						return;
+							// find keywords by name
+							for (UserProfile u : data) {
+								if (data.get(spinnerSelectedValueNr) != null)
+									if (u.url.equals(data
+											.get(spinnerSelectedValueNr).url)
+											&& u.id == data
+													.get(spinnerSelectedValueNr).id)
+										keywords = u.keywords;
+							}
 
-					// find keywords by name
-					for (UserProfile u : data) {
-						if (data.get(spinnerSelectedValueNr) != null)
-							if (u.url.equals(data.get(spinnerSelectedValueNr).url)
-									&& u.id == data.get(spinnerSelectedValueNr).id)
-								keywords = u.keywords;
+							if (keywords != null) {
+
+								// start download
+								new AsyncDownloader(
+										MainActivity.this,
+										(ListView) findViewById(R.id.listview_result),
+										data.get(spinnerSelectedValueNr).url)
+										.execute(keywords);
+							}
+
+							else {
+								Toast.makeText(
+										getBaseContext(),
+										getString(R.string.profile_keywords_are_missing_how_s_thats_possible_),
+										Toast.LENGTH_SHORT).show();
+							}
+
+						} else {
+
+							Toast.makeText(
+									getBaseContext(),
+									getString(R.string.please_select_a_profile),
+									Toast.LENGTH_SHORT).show();
+
+						} // if empty selected
 					}
-
-					if (keywords != null) {
-
-						// start dialog
-						// ProgressDialog dialog = ProgressDialog.show(
-						// MainActivity.this,
-						// getString(R.string.inspect_dialog_title),
-						// getString(R.string.inspect_dialog_fist_msg),
-						// true, true);
-
-						// start download
-						downloader = new AsyncDownloader(MainActivity.this,
-								(ListView) findViewById(R.id.listview_result),
-								data.get(spinnerSelectedValueNr).url);
-
-						downloader.execute(keywords);
-					}
-
-					else {
-						Toast.makeText(
-								getBaseContext(),
-								getString(R.string.profile_keywords_are_missing_how_s_thats_possible_),
-								Toast.LENGTH_SHORT).show();
-					}
-
-				} else {
-
-					Toast.makeText(getBaseContext(),
-							getString(R.string.please_select_a_profile),
-							Toast.LENGTH_SHORT).show();
-
-				} // if empty selected
-			}
-		});
+				});
 	}
-
-	// public int rateDialogCounter() {
-	//
-	// // read
-	// SharedPreferences settings = getSharedPreferences("minuPref", 0);
-	// int number = settings.getInt("minuMuutuja", 0);
-	// int newNumber = number + 1;
-	//
-	// Log.d("MY", number + "");
-	// // write
-	// // We need an Editor object to make preference changes.
-	// // All objects are from android.context.Context
-	// SharedPreferences settings2 = getSharedPreferences("minuPref", 0);
-	// SharedPreferences.Editor editor = settings2.edit();
-	// editor.putInt("minuMuutuja", newNumber);
-	//
-	// // Commit the edits!
-	// editor.commit();
-	//
-	// return number;
-	// // final String PREFS_NAME = "RateDialogCounter2";
-	// //
-	// // SharedPreferences counter = PreferenceManager
-	// // .getDefaultSharedPreferences(getBaseContext());
-	// //
-	// // int oldValue = counter.getInt(PREFS_NAME, 0);
-	// // Log.d("MY", "old value" + oldValue+"");
-	// // int newValue = oldValue++;
-	// //
-	// // // SharedPreferences.Editor editor = PreferenceManager
-	// // // .getDefaultSharedPreferences(getBaseContext()).edit();
-	// // SharedPreferences.Editor editor = counter.edit();
-	// // editor.putInt(PREFS_NAME, newValue);
-	// // editor.commit();
-	// //
-	// // Log.d("MY", newValue+"");
-	// //
-	// // return newValue;
-	// }
 
 	private Boolean rateUsDialog(int firstCap, int secondCap) {
 
@@ -398,8 +302,6 @@ public class MainActivity extends Activity {
 		SharedPreferences settings2 = getSharedPreferences("minuPref", 0);
 		SharedPreferences.Editor editor = settings2.edit();
 		editor.putInt("minuMuutuja", newNumber);
-
-		// Commit the edits!
 		editor.commit();
 
 		Boolean displayed = false;
@@ -465,9 +367,6 @@ public class MainActivity extends Activity {
 					else
 						keywordsToBind.add(k.value + " [" + k.rank + "] ");
 				}
-				// ArrayAdapter<String> a = new ArrayAdapter<String>(
-				// getBaseContext(), R.layout.main_activity_listview_item,
-				// R.id.textView1, keywordsToBind);
 
 				listView.setAdapter(new ArrayAdapter<String>(getBaseContext(),
 						R.layout.main_activity_listview_item, R.id.textView1,
@@ -490,10 +389,6 @@ public class MainActivity extends Activity {
 		else
 			return "";
 
-		// return ((Spinner)
-		// findViewById(R.id.spinner_profile)).getSelectedItem()
-		// .toString();
-
 	}
 
 	public int getSpinnerSelectedIndex() {
@@ -502,23 +397,5 @@ public class MainActivity extends Activity {
 				.getSelectedItemPosition();
 
 	}
-
-	// public boolean internetConnectionExists() {
-	//
-	// ConnectivityManager cm = (ConnectivityManager)
-	// getSystemService(Context.CONNECTIVITY_SERVICE);
-	//
-	// if (cm == null)
-	// return false;
-	//
-	// NetworkInfo netInfo = cm.getActiveNetworkInfo();
-	//
-	// if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-	// return true;
-	// } else {
-	// return false;
-	// }
-	//
-	// }
 
 }

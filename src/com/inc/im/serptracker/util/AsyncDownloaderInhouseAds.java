@@ -18,7 +18,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class AsyncDownloaderInhouseAds extends
@@ -31,18 +30,11 @@ public class AsyncDownloaderInhouseAds extends
 	public AsyncDownloaderInhouseAds(
 			LinearLayout ll, Activity a) {
 		super();
-		//this.tv = tv;
 		tv = (TextView)ll.findViewById(R.id.inhouseAdsText);
 		this.ll = ll;
 		this.a = a;
 	}
 
-	@Override
-	protected void onPreExecute() {
-//		pb.setVisibility(View.VISIBLE);
-		//ll.setVisibility(View.GONE);
-		
-	}
 
 	@Override
 	protected InhouseAd doInBackground(String... params) {
@@ -73,10 +65,7 @@ public class AsyncDownloaderInhouseAds extends
 			Log.e("MY", e.toString());
 		}
 
-		// parse
-		// ##admob## < show admob ads
-		// &&link&&
-		// %%text%%
+		// TODO: make xml based ad parser
 
 		InhouseAd ad = null;
 
@@ -119,13 +108,9 @@ public class AsyncDownloaderInhouseAds extends
 				intent.setData(Uri.parse(ad.url));
 				a.startActivity(intent);
 
-				// Toast.makeText(a, "GO TO: " + ad.url, Toast.LENGTH_SHORT)
-				// .show();
-
 			}
 		});
 
-		//pb.setVisibility(View.GONE);
 
 	}
 

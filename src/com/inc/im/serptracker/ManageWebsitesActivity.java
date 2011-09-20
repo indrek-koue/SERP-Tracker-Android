@@ -7,6 +7,7 @@ import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.DbAdapter;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.UserProfile;
+import com.inc.im.serptracker.util.Util;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -23,7 +24,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 public class ManageWebsitesActivity extends Activity {
 
 	ArrayList<UserProfile> data;
-	// private int editTextRowCount = 0;
 	int selectedUserProfileId;
 
 	@Override
@@ -44,61 +44,13 @@ public class ManageWebsitesActivity extends Activity {
 		setContentView(R.layout.manage_profiles_layout);
 
 		initSpinner();
-		// bindSpinnerItemOnSelectEvent();
 
 		bindSaveButton();
 		bindBackButton();
 		bindDeleteButton();
 
-		// keyword limit disabled
-		// final EditText et = (EditText) findViewById(R.id.editText2);
-		//
-		// et.setOnKeyListener(new View.OnKeyListener() {
-		//
-		// @Override
-		// public boolean onKey(View v, int keyCode, KeyEvent event) {
-		//
-		// // String text = et.getText().toString();
-		// // enterCount = text.split("\\n").length;
-		// //
-		//
-		// // if enter is selected and on release start calculating
-		// if (keyCode == KeyEvent.KEYCODE_ENTER
-		// && event.getAction() == KeyEvent.ACTION_UP) {
-		//
-		// // get EditText text
-		// String text = ((EditText) v).getText().toString();
-		//
-		// // find how many rows it cointains
-		// editTextRowCount = text.split("\\n").length;
-		//
-		// // user has input more than limited - lets do something
-		// // about that
-		// if (editTextRowCount >= 7) {
-		//
-		// // Toast.makeText(
-		// // getBaseContext(),
-		// // getString(R.string.beta_version_doesn_t_have_keyword_limit_enjoy),
-		// // Toast.LENGTH_SHORT).show();
-		//
-		// // find the last break
-		// int lastBreakIndex = text.lastIndexOf("\n");
-		//
-		// // compose new text
-		// String newText = text.substring(0, lastBreakIndex);
-		//
-		// // add new text - delete old one and append new one
-		// // (append because I want the cursor to be at the end)
-		// ((EditText) v).setText("");
-		// ((EditText) v).append(newText);
-		//
-		// }
-		//
-		// }
-		//
-		// return false;
-		// }
-		// });
+		Util.setKeywordLimit(-1, (EditText) findViewById(R.id.editText2),
+				"free version limit 5 keywords per website", getBaseContext());
 
 	}
 
@@ -129,7 +81,7 @@ public class ManageWebsitesActivity extends Activity {
 											+ u.url.toUpperCase()
 											+ " "
 											+ getString(R.string._succesfully_deleted),
-									Toast.LENGTH_LONG).show();
+									Toast.LENGTH_SHORT).show();
 
 							// if there aren't any profiles to edit > direct to
 							// mainpage
@@ -145,7 +97,7 @@ public class ManageWebsitesActivity extends Activity {
 						} else {
 							Toast.makeText(getBaseContext(),
 									getString(R.string.delete_failed),
-									Toast.LENGTH_LONG).show();
+									Toast.LENGTH_SHORT).show();
 						}
 
 					}
@@ -281,9 +233,14 @@ public class ManageWebsitesActivity extends Activity {
 
 		String keyWordsToPopulate = "";
 
-		for (Keyword k : keywords)
-			keyWordsToPopulate += k.value + "\n";
+		// for (Keyword k : keywords)
+		// keyWordsToPopulate += k.value + "\n";
 
+		for (int i = 0; i < keywords.size(); i++)
+			if (i != keywords.size() - 1)
+				keyWordsToPopulate += keywords.get(i).value + "\n";
+			else
+				keyWordsToPopulate += keywords.get(i).value;
 		((EditText) findViewById(R.id.editText2)).setText(keyWordsToPopulate);
 
 	}

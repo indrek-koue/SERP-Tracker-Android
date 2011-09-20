@@ -35,13 +35,12 @@
 	<string name="address_of_your_website">Address of your website</string>
 	<string name="www_example_com">www.example.com</string>
 	<string name="keywords_to_track">Keywords to track</string>
-	<string name="example_keyword_1_nexample_keyword_2">example keyword 1\nexample keyword 2</string>
+	<string name="example_keyword_1_nexample_keyword_2">example keyword 1\nexample keyword 2\nexample keyword 3\n...\nexample keyword n</string>
 	<string name="insert">Insert</string>
 	<string name="back">Back</string>
 	<string name="about_title_news_and_updates">News and updates</string>
 	<string name="send_email_to_dev">Send an email to me!</string>
 	<string name="address">Address</string>
-	<string name="keywords">Keywords</string>
 	<string name="save">Save</string>
 	<string name="not_ranked">not ranked</string>
 </resources>
