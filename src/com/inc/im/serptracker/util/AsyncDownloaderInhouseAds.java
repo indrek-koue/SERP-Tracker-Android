@@ -20,21 +20,19 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class AsyncDownloaderInhouseAds extends
 		AsyncTask<String, Integer, InhouseAd> {
 
-	ProgressBar pb;
 	TextView tv;
 	LinearLayout ll;
 	Activity a;
 
-	public AsyncDownloaderInhouseAds(ProgressBar pb, TextView tv,
+	public AsyncDownloaderInhouseAds(
 			LinearLayout ll, Activity a) {
 		super();
-		this.pb = pb;
-		this.tv = tv;
+		//this.tv = tv;
+		tv = (TextView)ll.findViewById(R.id.inhouseAdsText);
 		this.ll = ll;
 		this.a = a;
 	}
@@ -42,7 +40,8 @@ public class AsyncDownloaderInhouseAds extends
 	@Override
 	protected void onPreExecute() {
 //		pb.setVisibility(View.VISIBLE);
-		ll.setVisibility(View.GONE);
+		//ll.setVisibility(View.GONE);
+		
 	}
 
 	@Override
@@ -110,6 +109,7 @@ public class AsyncDownloaderInhouseAds extends
 		ll.setVisibility(View.VISIBLE);
 
 		tv.setText(ad.text);
+		
 		ll.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -125,7 +125,7 @@ public class AsyncDownloaderInhouseAds extends
 			}
 		});
 
-		pb.setVisibility(View.GONE);
+		//pb.setVisibility(View.GONE);
 
 	}
 

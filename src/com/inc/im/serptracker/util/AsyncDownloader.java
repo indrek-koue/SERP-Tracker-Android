@@ -1,18 +1,10 @@
 package com.inc.im.serptracker.util;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Constructor;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,13 +15,10 @@ import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.DbAdapter;
 import com.inc.im.serptracker.data.Keyword;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.webkit.DownloadListener;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -39,25 +28,26 @@ public class AsyncDownloader extends
 	private final int TIMEOUT = 10000;
 	private final int DCOUNT = 100;
 
-	private Context con;
+	private Activity a;
 	public ListView lv;
 	private final String WEBSITE;
 	private ProgressDialog progressDialog;
 
 	private int itemCount;
 
-	@Override
-	protected void onCancelled() {
-		Log.d("MY", "onCancelled() triggered");
-		super.onCancelled();
-	}
-
-	public AsyncDownloader(Context con, ListView lv, String searchable,
-			ProgressDialog progress) {
-		this.con = con;
+	public AsyncDownloader(Activity a, ListView lv, String searchable) {
+		this.a = a;
 		this.lv = lv;
 		this.WEBSITE = removePrefix(searchable);
-		this.progressDialog = progress;
+	}
+
+	@Override
+	protected void onPreExecute() {
+
+		progressDialog = ProgressDialog.show(a,
+				a.getString(R.string.inspect_dialog_title),
+				a.getString(R.string.inspect_dialog_fist_msg), true, true);
+
 	}
 
 	@Override
@@ -77,7 +67,7 @@ public class AsyncDownloader extends
 			int counter = 0;
 
 			// output to flurry
-			String results = "";
+			String flurryExportParameters = "";
 
 			for (Keyword keyword : keywords[0]) {
 
@@ -95,6 +85,7 @@ public class AsyncDownloader extends
 
 				if (doc == null) {
 					Log.e("MY", "download is null");
+					FlurryAgent.onError("EX", "doc download is null", "AsyncDownloader");
 					return null;
 				}
 
@@ -106,22 +97,24 @@ public class AsyncDownloader extends
 				Elements allResults = doc.select("h3 > a");
 				if (allResults == null) {
 					Log.e("MY", "allResults h3a is null");
+					FlurryAgent.onError("EX", "h3 first a select is null", "AsyncDownloader");
 					return null;
 				}
 
 				// logging
-				if (allResults.size() == 0) {
-					Log.e("MY", "0 results parsed from doc");
-
-					for (Element e : doc.getElementsByTag("a"))
-						Log.e("MY", e.text());
-					// -2 == problem getting rank
-					keyword.newRank = -2;
-
-				} else
-					Log.i("MY",
-							"results downloaded:"
-									+ Integer.toString(allResults.size()));
+				// if (allResults.size() == 0) {
+				// Log.e("MY", "0 results parsed from doc");
+				//
+				// for (Element e : doc.getElementsByTag("a"))
+				// Log.e("MY", e.text());
+				// // -2 == problem getting rank
+				// keyword.newRank = -2;
+				// flurryExportParameters += -2 + "";
+				//
+				// } else
+				Log.i("MY",
+						"results downloaded:"
+								+ Integer.toString(allResults.size()));
 
 				// 2nd try - disabled ATM
 				// if (allResults.size() == 0) {
@@ -163,9 +156,7 @@ public class AsyncDownloader extends
 							keyword.newRank = i;
 
 							// flurry output
-							results += i + " ";
-
-							Log.d("MY", "new rank: " + i);
+							flurryExportParameters += i + "";
 
 							// reset counter
 							i = 1;
@@ -178,6 +169,8 @@ public class AsyncDownloader extends
 					} // if singelresult!= null
 				} // for links in keyword
 
+				flurryExportParameters += ":";
+
 				publishProgress(++counter);
 
 				Log.i("BENCH",
@@ -189,18 +182,7 @@ public class AsyncDownloader extends
 			// Log.i("BENCH", "Parse time: "
 			// + (System.currentTimeMillis() - start - ));
 
-			// flurry logging
-			HashMap<String, String> parameters = new HashMap<String, String>();
-			parameters.put("num of keywords", String.valueOf(itemCount));
-			parameters.put("total time",
-					String.valueOf(System.currentTimeMillis() - start));
-			parameters.put(
-					"avg time per keyword",
-					String.valueOf((System.currentTimeMillis() - start)
-							/ itemCount));
-			parameters.put("results", String.valueOf(results));
-
-			FlurryAgent.onEvent("download", parameters);
+			flurryLogging(start, flurryExportParameters);
 
 		} catch (Exception e) {
 			FlurryAgent.onError("EX", e.toString(), "AsyncDownloader");
@@ -215,7 +197,8 @@ public class AsyncDownloader extends
 	protected void onPostExecute(ArrayList<Keyword> input) {
 
 		if (input == null) {
-			progressDialog.setMessage("ERROR1: download is null or canceled by the user");
+			progressDialog
+					.setMessage("ERROR1: download is null or canceled by the user");
 			return;
 		}
 
@@ -234,7 +217,7 @@ public class AsyncDownloader extends
 			} else {
 
 				// save new rank
-				if (!new DbAdapter(con).updateKeywordRank(k, k.newRank))
+				if (!new DbAdapter(a).updateKeywordRank(k, k.newRank))
 					Log.e("MY", "keyword rank update failed: " + k.value);
 
 				// show user
@@ -254,31 +237,11 @@ public class AsyncDownloader extends
 			}
 		}// for
 
-		lv.setAdapter(new ArrayAdapter<String>(con,
+		lv.setAdapter(new ArrayAdapter<String>(a,
 				R.layout.main_activity_listview_item, R.id.textView1, toDisplay));
 
 		progressDialog.dismiss();
 
-	}
-
-	private Document downloadJsoap(Keyword keyword) {
-
-		Document doc = null;
-		try {
-
-			// get userAgent
-			String ua = getUserAgentString(con);
-			// Log.i("MY", "USERAGENT: " + ua);
-			Log.i("MY", "Q-URL:" + generateEscapedQueryString(keyword, false));
-
-			doc = Jsoup.connect(generateEscapedQueryString(keyword, false))
-					.userAgent("Apache-HttpClient/UNAVAILABLE (java 1.4)")
-					.timeout(TIMEOUT).get();
-
-		} catch (IOException e1) {
-			Log.e("MY", e1.toString());
-		}
-		return doc;
 	}
 
 	@Override
@@ -290,81 +253,115 @@ public class AsyncDownloader extends
 
 	}
 
-	public static String getUserAgentString(Context context) {
+	public void flurryLogging(long start, String flurryExportParameters) {
+		HashMap<String, String> parameters = new HashMap<String, String>();
+		parameters.put("num of keywords", String.valueOf(itemCount));
+		parameters.put("total time",
+				String.valueOf(System.currentTimeMillis() - start));
+		parameters.put("avg time per keyword", String.valueOf((System
+				.currentTimeMillis() - start) / itemCount));
+		parameters.put("results", String.valueOf(flurryExportParameters));
+
+		FlurryAgent.onEvent("download", parameters);
+	}
+
+	private Document downloadJsoap(Keyword keyword) {
+
+		Document doc = null;
 		try {
-			Constructor<WebSettings> constructor = WebSettings.class
-					.getDeclaredConstructor(Context.class, WebView.class);
-			constructor.setAccessible(true);
-			try {
-				WebSettings settings = constructor.newInstance(context, null);
-				return settings.getUserAgentString();
-			} finally {
-				constructor.setAccessible(false);
-			}
-		} catch (Exception e) {
-			FlurryAgent.onError("DOWNLOAD", "get user agent problem",
+
+			// get userAgent
+			// String ua = getUserAgentString(a);
+			// Log.i("MY", "USERAGENT: " + ua);
+			Log.i("MY", "Q-URL:" + generateEscapedQueryString(keyword, false));
+
+			doc = Jsoup.connect(generateEscapedQueryString(keyword, false))
+					.userAgent("Apache-HttpClient/UNAVAILABLE (java 1.4)")
+					.timeout(TIMEOUT).get();
+
+		} catch (IOException e1) {
+			Log.e("MY", e1.toString());
+			FlurryAgent.onError("EX", "JSOUP DOWNLOAD ERROR: " + e1.toString(),
 					"AsyncDownloader");
-
-			return "";
 		}
+		return doc;
 	}
 
-	public String manageDownload(String keyword) {
+	// public static String getUserAgentString(Context context) {
+	// try {
+	// Constructor<WebSettings> constructor = WebSettings.class
+	// .getDeclaredConstructor(Context.class, WebView.class);
+	// constructor.setAccessible(true);
+	// try {
+	// WebSettings settings = constructor.newInstance(context, null);
+	// return settings.getUserAgentString();
+	// } finally {
+	// constructor.setAccessible(false);
+	// }
+	// } catch (Exception e) {
+	// FlurryAgent.onError("DOWNLOAD", "get user agent problem",
+	// "AsyncDownloader");
+	//
+	// return "";
+	// }
+	// }
 
-		String result = null;
-		try {
-			StringBuffer sb = new StringBuffer("");
-
-			HttpGet request = new HttpGet();
-			request.setURI(generateEscapedQuery(keyword));
-
-			// logging
-			// long start = System.currentTimeMillis();
-
-			HttpResponse response = new DefaultHttpClient().execute(request);
-
-			// logging
-			// long responseTime = (System.currentTimeMillis() - start);
-			// Log.d("MY", "DefaultHttpClient().execute(request): " +
-			// responseTime
-			// + "ms");
-
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					response.getEntity().getContent()));
-
-			// logging
-			// long buffReaderTime = (System.currentTimeMillis() - start -
-			// responseTime);
-			// Log.d("MY", "response.getEntity().getContent(): " +
-			// buffReaderTime
-			// + "ms");
-
-			String line = "";
-			String NL = System.getProperty("line.separator");
-
-			while ((line = in.readLine()) != null)
-				sb.append(line + NL);
-
-			in.close();
-
-			// logging
-			// Log.d("MY",
-			// "BufferedReader fetch time: "
-			// + (System.currentTimeMillis() - start
-			// - responseTime - buffReaderTime) + "ms");
-			// Log.i("MY",
-			// "download time(" + keyword + "): "
-			// + (System.currentTimeMillis() - start) + "ms");
-
-			// attach source code to input item
-			result = sb.toString();
-
-		} catch (Exception e) {
-			Log.e("MY", e.toString());
-		}
-
-		return result;
-	}
+	// public String manageDownload(String keyword) {
+	//
+	// String result = null;
+	// try {
+	// StringBuffer sb = new StringBuffer("");
+	//
+	// HttpGet request = new HttpGet();
+	// request.setURI(generateEscapedQuery(keyword));
+	//
+	// // logging
+	// // long start = System.currentTimeMillis();
+	//
+	// HttpResponse response = new DefaultHttpClient().execute(request);
+	//
+	// // logging
+	// // long responseTime = (System.currentTimeMillis() - start);
+	// // Log.d("MY", "DefaultHttpClient().execute(request): " +
+	// // responseTime
+	// // + "ms");
+	//
+	// BufferedReader in = new BufferedReader(new InputStreamReader(
+	// response.getEntity().getContent()));
+	//
+	// // logging
+	// // long buffReaderTime = (System.currentTimeMillis() - start -
+	// // responseTime);
+	// // Log.d("MY", "response.getEntity().getContent(): " +
+	// // buffReaderTime
+	// // + "ms");
+	//
+	// String line = "";
+	// String NL = System.getProperty("line.separator");
+	//
+	// while ((line = in.readLine()) != null)
+	// sb.append(line + NL);
+	//
+	// in.close();
+	//
+	// // logging
+	// // Log.d("MY",
+	// // "BufferedReader fetch time: "
+	// // + (System.currentTimeMillis() - start
+	// // - responseTime - buffReaderTime) + "ms");
+	// // Log.i("MY",
+	// // "download time(" + keyword + "): "
+	// // + (System.currentTimeMillis() - start) + "ms");
+	//
+	// // attach source code to input item
+	// result = sb.toString();
+	//
+	// } catch (Exception e) {
+	// Log.e("MY", e.toString());
+	// }
+	//
+	// return result;
+	// }
 
 	// public Keyword manageDownload(Keyword k) {
 	//
@@ -419,10 +416,10 @@ public class AsyncDownloader extends
 	// return k;
 	// }
 
-	public URI generateEscapedQuery(String k) throws URISyntaxException {
-		return new URI("http://www.google.com/search?num=100&q="
-				+ URLEncoder.encode(k));
-	}
+	// public URI generateEscapedQuery(String k) throws URISyntaxException {
+	// return new URI("http://www.google.com/search?num=100&q="
+	// + URLEncoder.encode(k));
+	// }
 
 	public String generateEscapedQueryString(Keyword k, Boolean noMobile) {
 		if (noMobile)

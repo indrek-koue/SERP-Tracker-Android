@@ -6,12 +6,14 @@
 	<!-- IN HOUSE ADS -->
 	<LinearLayout android:layout_height="wrap_content"
 		android:id="@+id/inhouseAds" android:layout_width="fill_parent"
-		android:orientation="vertical" android:gravity="center">
-		<ProgressBar android:id="@+id/progressBar1"
-			android:layout_height="wrap_content" android:layout_width="wrap_content"
-			style="?android:attr/progressBarStyleSmall"></ProgressBar>
+		android:orientation="vertical" android:gravity="center"
+		android:background="@color/red" android:visibility="gone">
+
 		<TextView android:id="@+id/inhouseAdsText"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:textSize="16dip"
+			android:textColor="@color/white" android:layout_marginTop="6dip"
+			android:layout_marginBottom="6dip"></TextView>
 
 	</LinearLayout>
 

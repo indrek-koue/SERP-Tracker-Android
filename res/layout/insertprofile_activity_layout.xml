@@ -12,7 +12,7 @@
 			android:textSize="18dip"></TextView>
 		<EditText android:id="@+id/editText1" android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:inputType="textEmailAddress"
-			android:hint="@string/www_example_com" android:singleLine="true">
+			android:hint="@string/www_example_com"  android:text="www.thedroidproject.com" android:singleLine="true">
 			<requestFocus></requestFocus>
 		</EditText>
 
@@ -22,8 +22,8 @@
 			android:textSize="18dip"></TextView>
 		<EditText android:id="@+id/editText2" android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:inputType="textMultiLine"
-			android:hint="@string/example_keyword_1_nexample_keyword_2" android:maxLines="7"
-			android:lines="5" android:gravity="top"></EditText>
+			android:hint="@string/example_keyword_1_nexample_keyword_2" android:text="thedroidproject\nandroid video tutorials\n free android video tutorials\n android findviewbyid bug"
+			android:lines="8" android:gravity="top"></EditText>
 
 		<!-- BUTTON -->
 		<Button android:id="@+id/button1" android:text="@string/insert"

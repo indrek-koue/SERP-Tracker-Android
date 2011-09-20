@@ -27,9 +27,32 @@ public class PreferencesActivity extends PreferenceActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		addPreferencesFromResource(R.xml.app_preferences_layout);
 
+		bindDeleteAllDataButton();
+		bindSelectSearchEngine();
+
+	}
+
+	public void bindSelectSearchEngine() {
+		getPreferenceManager().findPreference("prefSearchEngine")
+				.setOnPreferenceClickListener(
+						new Preference.OnPreferenceClickListener() {
+
+							@Override
+							public boolean onPreferenceClick(
+									Preference preference) {
+								Toast.makeText(
+										getBaseContext(),
+										"Google is trademark of Google inc. This application is built on Google Custom Search API and does not infringe Google search terms of service.",
+										Toast.LENGTH_LONG).show();
+
+								return false;
+							}
+						});
+	}
+
+	public void bindDeleteAllDataButton() {
 		getPreferenceManager().findPreference("prefTrunk")
 				.setOnPreferenceClickListener(
 						new Preference.OnPreferenceClickListener() {
@@ -50,22 +73,6 @@ public class PreferencesActivity extends PreferenceActivity {
 								return false;
 							}
 						});
-
-		getPreferenceManager().findPreference("prefSearchEngine")
-				.setOnPreferenceClickListener(
-						new Preference.OnPreferenceClickListener() {
-
-							@Override
-							public boolean onPreferenceClick(
-									Preference preference) {
-								Toast.makeText(
-										getBaseContext(),
-										"Google is trademark of Google inc. This application is built on Google Custom Search API and does not infringe any terms of service.",
-										Toast.LENGTH_LONG).show();
-								return false;
-							}
-						});
-
 	}
 
 }

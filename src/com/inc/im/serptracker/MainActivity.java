@@ -8,20 +8,15 @@ import com.inc.im.serptracker.data.DbAdapter;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.UserProfile;
 import com.inc.im.serptracker.util.AsyncDownloader;
-import com.inc.im.serptracker.util.AsyncDownloaderInhouseAds;
+import com.inc.im.serptracker.util.Util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -32,7 +27,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,10 +34,9 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
 	private ArrayList<UserProfile> data;
-	public static String EMPTY_SPINNER_TEXT;
+	// public static String EMPTY_SPINNER_TEXT;
 	private Boolean menuBarIsVisible = true;
 	private AsyncDownloader downloader;
-	private Long counterForExtensiveClickLimit = 0L;
 
 	@Override
 	public void onStart() {
@@ -62,21 +55,25 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity_layout);
 
-		// load in house ads
-		AsyncDownloaderInhouseAds ads = new AsyncDownloaderInhouseAds(
-				(ProgressBar) findViewById(R.id.progressBar1),
+		Util.loadInHouseAds(((LinearLayout) findViewById(R.id.inhouseAds)),
 				((TextView) findViewById(R.id.inhouseAdsText)),
-				((LinearLayout) findViewById(R.id.inhouseAds)),
-				MainActivity.this);
+				MainActivity.this, getString(R.string.ad_text_input_path),
+				false);
 
-		ads.execute(getString(R.string.ad_text_input_path));
+		// // load in house ads
+		// AsyncDownloaderInhouseAds ads = new AsyncDownloaderInhouseAds(
+		// ((TextView) findViewById(R.id.inhouseAdsText)),
+		// ((LinearLayout) findViewById(R.id.inhouseAds)),
+		// MainActivity.this);
+		//
+		// ads.execute(getString(R.string.ad_text_input_path));
 
-		EMPTY_SPINNER_TEXT = getString(R.string.spinner_default_selection);
+		// EMPTY_SPINNER_TEXT = getString(R.string.spinner_default_selection);
 
 		// init spinner + loads data form db
 		initSpinner();
 
-		bindSpinnerItemOnSelectEvent();
+		// bindSpinnerItemOnSelectEvent();
 		bindRunButton();
 		bindMenuBarButtons();
 
@@ -112,12 +109,6 @@ public class MainActivity extends Activity {
 
 		return super.onKeyDown(keyCode, event);
 	}
-
-//	@Override
-//	public void onBackPressed() {
-//		downloader.cancel(true);
-//		super.onBackPressed();
-//	}
 
 	private void bindMenuBarButtons() {
 
@@ -207,23 +198,76 @@ public class MainActivity extends Activity {
 	public void initSpinner() {
 
 		data = new DbAdapter(getBaseContext()).loadAllProfiles();
+		Spinner spinner = (Spinner) findViewById(R.id.spinner_profile);
 
 		ArrayList<String> spinnerValues = new ArrayList<String>();
-
-		spinnerValues.add(EMPTY_SPINNER_TEXT);
+		spinnerValues.add(getString(R.string.spinner_default_selection));
 
 		// generate spinner values
 		if (data != null)
 			for (UserProfile u : data)
 				spinnerValues.add(u.url + "[" + u.keywords.size() + "]");
 
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				getBaseContext(), R.layout.main_activity_spinner_item,
-				R.id.textView1, spinnerValues);
+		// ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+		// getBaseContext(), R.layout.main_activity_spinner_item,
+		// R.id.textView1, spinnerValues);
 
-		((Spinner) findViewById(R.id.spinner_profile)).setAdapter(adapter);
+		spinner.setAdapter(new ArrayAdapter<String>(getBaseContext(),
+				R.layout.main_activity_spinner_item, R.id.textView1,
+				spinnerValues));
 
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> adapter, View arg1,
+					int index, long arg3) {
+
+				// if deafult selected - clear listview
+				// if (index == 0) {
+				// ((ListView) findViewById(R.id.listview_result))
+				// .setAdapter(new ArrayAdapter<String>(
+				// getBaseContext(),
+				// R.layout.main_activity_listview_item));
+				// } else {
+				bindListViewItems(index);
+				// }
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+
+			}
+		});
 	}
+
+	// public void bindSpinnerItemOnSelectEvent() {
+	// // find spinner selected url
+	//
+	// Spinner s = (Spinner) findViewById(R.id.spinner_profile);
+	//
+	// s.setOnItemSelectedListener(new OnItemSelectedListener() {
+	//
+	// @Override
+	// public void onItemSelected(AdapterView<?> adapter, View arg1,
+	// int index, long arg3) {
+	//
+	// // if deafult selected - clear listview
+	// if (index == 0) {
+	// ((ListView) findViewById(R.id.listview_result))
+	// .setAdapter(new ArrayAdapter<String>(
+	// getBaseContext(),
+	// R.layout.main_activity_listview_item));
+	// } else {
+	// bindListViewItems(index);
+	// }
+	// }
+	//
+	// @Override
+	// public void onNothingSelected(AdapterView<?> arg0) {
+	//
+	// }
+	// });
+	// }
 
 	private void bindRunButton() {
 
@@ -235,7 +279,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 
-				if (!internetConnectionExists()) {
+				if (!Util.internetConnectionExists(getBaseContext())) {
 					Toast.makeText(
 							getBaseContext(),
 							getString(R.string.no_active_internet_connection_please_check_your_settings),
@@ -245,47 +289,42 @@ public class MainActivity extends Activity {
 				}
 
 				// default not selected
-				if (!getSpinnerSelectedValue().equals(EMPTY_SPINNER_TEXT)) {
-					// limit requests
-					// if (counterForExtensiveClickLimit == 0l) {
-					// counterForExtensiveClickLimit = System
-					// .currentTimeMillis() / 1000;
-					// } else {
-					// Long currentTime = System.currentTimeMillis() / 1000;
-					// if (currentTime - counterForExtensiveClickLimit < 60)
-					// Toast.makeText(getBaseContext(),
-					// "Results are already up to date",
-					// Toast.LENGTH_SHORT).show();
-					// }
+				if (!getSpinnerSelectedValue().equals(
+						getString(R.string.spinner_default_selection))) {
 
 					// counter for rate-us-dialog
-					if (rateUsDialog(rateDialogCounter()))
+					if (rateUsDialog(15, 50))
 						return;
 
 					ArrayList<Keyword> keywords = null;
 
 					int spinnerSelectedValueNr = getSpinnerSelectedIndex() - 1;
 
+					if (data == null || spinnerSelectedValueNr >= data.size()
+							|| spinnerSelectedValueNr < 0)
+						return;
+
 					// find keywords by name
 					for (UserProfile u : data) {
-						if (u.url.equals(data.get(spinnerSelectedValueNr).url)
-								&& u.id == data.get(spinnerSelectedValueNr).id)
-							keywords = u.keywords;
+						if (data.get(spinnerSelectedValueNr) != null)
+							if (u.url.equals(data.get(spinnerSelectedValueNr).url)
+									&& u.id == data.get(spinnerSelectedValueNr).id)
+								keywords = u.keywords;
 					}
 
 					if (keywords != null) {
 
 						// start dialog
-						ProgressDialog dialog = ProgressDialog.show(
-								MainActivity.this,
-								getString(R.string.inspect_dialog_title),
-								getString(R.string.inspect_dialog_fist_msg),
-								true, true);
+						// ProgressDialog dialog = ProgressDialog.show(
+						// MainActivity.this,
+						// getString(R.string.inspect_dialog_title),
+						// getString(R.string.inspect_dialog_fist_msg),
+						// true, true);
 
 						// start download
-						downloader = new AsyncDownloader(getBaseContext(),
+						downloader = new AsyncDownloader(MainActivity.this,
 								(ListView) findViewById(R.id.listview_result),
-								data.get(spinnerSelectedValueNr).url, dialog);
+								data.get(spinnerSelectedValueNr).url);
 
 						downloader.execute(keywords);
 					}
@@ -308,17 +347,54 @@ public class MainActivity extends Activity {
 		});
 	}
 
-	public int rateDialogCounter() {
+	// public int rateDialogCounter() {
+	//
+	// // read
+	// SharedPreferences settings = getSharedPreferences("minuPref", 0);
+	// int number = settings.getInt("minuMuutuja", 0);
+	// int newNumber = number + 1;
+	//
+	// Log.d("MY", number + "");
+	// // write
+	// // We need an Editor object to make preference changes.
+	// // All objects are from android.context.Context
+	// SharedPreferences settings2 = getSharedPreferences("minuPref", 0);
+	// SharedPreferences.Editor editor = settings2.edit();
+	// editor.putInt("minuMuutuja", newNumber);
+	//
+	// // Commit the edits!
+	// editor.commit();
+	//
+	// return number;
+	// // final String PREFS_NAME = "RateDialogCounter2";
+	// //
+	// // SharedPreferences counter = PreferenceManager
+	// // .getDefaultSharedPreferences(getBaseContext());
+	// //
+	// // int oldValue = counter.getInt(PREFS_NAME, 0);
+	// // Log.d("MY", "old value" + oldValue+"");
+	// // int newValue = oldValue++;
+	// //
+	// // // SharedPreferences.Editor editor = PreferenceManager
+	// // // .getDefaultSharedPreferences(getBaseContext()).edit();
+	// // SharedPreferences.Editor editor = counter.edit();
+	// // editor.putInt(PREFS_NAME, newValue);
+	// // editor.commit();
+	// //
+	// // Log.d("MY", newValue+"");
+	// //
+	// // return newValue;
+	// }
+
+	private Boolean rateUsDialog(int firstCap, int secondCap) {
 
 		// read
 		SharedPreferences settings = getSharedPreferences("minuPref", 0);
-		int number = settings.getInt("minuMuutuja", 0);
-		int newNumber = number + 1;
+		int loadedCountFromPref = settings.getInt("minuMuutuja", 0);
+		int newNumber = loadedCountFromPref + 1;
 
-		Log.d("MY", number + "");
+		Log.d("MY", loadedCountFromPref + "");
 		// write
-		// We need an Editor object to make preference changes.
-		// All objects are from android.context.Context
 		SharedPreferences settings2 = getSharedPreferences("minuPref", 0);
 		SharedPreferences.Editor editor = settings2.edit();
 		editor.putInt("minuMuutuja", newNumber);
@@ -326,31 +402,8 @@ public class MainActivity extends Activity {
 		// Commit the edits!
 		editor.commit();
 
-		return number;
-		// final String PREFS_NAME = "RateDialogCounter2";
-		//
-		// SharedPreferences counter = PreferenceManager
-		// .getDefaultSharedPreferences(getBaseContext());
-		//
-		// int oldValue = counter.getInt(PREFS_NAME, 0);
-		// Log.d("MY", "old value" + oldValue+"");
-		// int newValue = oldValue++;
-		//
-		// // SharedPreferences.Editor editor = PreferenceManager
-		// // .getDefaultSharedPreferences(getBaseContext()).edit();
-		// SharedPreferences.Editor editor = counter.edit();
-		// editor.putInt(PREFS_NAME, newValue);
-		// editor.commit();
-		//
-		// Log.d("MY", newValue+"");
-		//
-		// return newValue;
-	}
-
-	private Boolean rateUsDialog(int timesClicked) {
-
 		Boolean displayed = false;
-		if (timesClicked == 15 || timesClicked == 50) {
+		if (loadedCountFromPref == firstCap || loadedCountFromPref == secondCap) {
 			displayed = true;
 			AlertDialog.Builder builder = new AlertDialog.Builder(
 					MainActivity.this);
@@ -361,7 +414,7 @@ public class MainActivity extends Activity {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
-dialog.dismiss();
+									dialog.dismiss();
 									Intent intent = new Intent(
 											Intent.ACTION_VIEW);
 									intent.setData(Uri
@@ -387,39 +440,14 @@ dialog.dismiss();
 		return displayed;
 	}
 
-	public void bindSpinnerItemOnSelectEvent() {
-		// find spinner selected url
-
-		Spinner s = (Spinner) findViewById(R.id.spinner_profile);
-
-		s.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> adapter, View arg1,
-					int index, long arg3) {
-
-				// if deafult selected - clear listview
-				if (index == 0) {
-					((ListView) findViewById(R.id.listview_result))
-							.setAdapter(new ArrayAdapter<String>(
-									getBaseContext(),
-									R.layout.main_activity_listview_item));
-				}
-
-				bindListViewItems(index);
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-
-			}
-		});
-	}
-
 	public void bindListViewItems(int spinnerSelectedItemIndex) {
 
-		// index 0 is reserved for "Select a item..."
-		if (spinnerSelectedItemIndex > 0) {
+		ListView listView = (ListView) findViewById(R.id.listview_result);
+
+		if (spinnerSelectedItemIndex > 0 && data != null
+				&& spinnerSelectedItemIndex <= data.size()) {
+
+			// -1 because 0 index holds default text
 			UserProfile selectedUser = data.get(spinnerSelectedItemIndex - 1);
 
 			ArrayList<String> keywordsToBind = new ArrayList<String>();
@@ -427,50 +455,70 @@ dialog.dismiss();
 			if (selectedUser.keywords != null) {
 				for (Keyword k : selectedUser.keywords) {
 
-					if (k.rank == -1)
-						keywordsToBind.add(k.value + " [not ranked] ");
+					// 0 - empty field in DB
+					// -1 - not ranked
+					// -2 - error
+
+					if (k.rank == -1 || k.rank == -2 || k.rank == 0)
+						keywordsToBind.add(k.value + " ["
+								+ getString(R.string.not_ranked) + "]");
 					else
 						keywordsToBind.add(k.value + " [" + k.rank + "] ");
-
 				}
+				// ArrayAdapter<String> a = new ArrayAdapter<String>(
+				// getBaseContext(), R.layout.main_activity_listview_item,
+				// R.id.textView1, keywordsToBind);
 
-				ArrayAdapter<String> a = new ArrayAdapter<String>(
-						getBaseContext(), R.layout.main_activity_listview_item,
-						R.id.textView1, keywordsToBind);
+				listView.setAdapter(new ArrayAdapter<String>(getBaseContext(),
+						R.layout.main_activity_listview_item, R.id.textView1,
+						keywordsToBind));
 
-				((ListView) findViewById(R.id.listview_result)).setAdapter(a);
 			}
+		} else {
+			listView.setAdapter(new ArrayAdapter<String>(getBaseContext(),
+					R.layout.main_activity_listview_item));
 		}
 
 	}
 
 	public String getSpinnerSelectedValue() {
-		return ((Spinner) findViewById(R.id.spinner_profile)).getSelectedItem()
-				.toString();
+
+		Object o = ((Spinner) findViewById(R.id.spinner_profile))
+				.getSelectedItem();
+		if (o != null)
+			return o.toString();
+		else
+			return "";
+
+		// return ((Spinner)
+		// findViewById(R.id.spinner_profile)).getSelectedItem()
+		// .toString();
 
 	}
 
 	public int getSpinnerSelectedIndex() {
+
 		return ((Spinner) findViewById(R.id.spinner_profile))
 				.getSelectedItemPosition();
 
 	}
 
-	public boolean internetConnectionExists() {
-
-		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-		if (cm == null)
-			return false;
-
-		NetworkInfo netInfo = cm.getActiveNetworkInfo();
-
-		if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-			return true;
-		} else {
-			return false;
-		}
-
-	}
+	// public boolean internetConnectionExists() {
+	//
+	// ConnectivityManager cm = (ConnectivityManager)
+	// getSystemService(Context.CONNECTIVITY_SERVICE);
+	//
+	// if (cm == null)
+	// return false;
+	//
+	// NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	//
+	// if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+	// return true;
+	// } else {
+	// return false;
+	// }
+	//
+	// }
 
 }

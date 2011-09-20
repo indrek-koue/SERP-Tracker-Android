@@ -26,7 +26,7 @@
 			android:layout_height="wrap_content" android:textSize="18dip"></TextView> -->
 		<EditText android:id="@+id/editText2" android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:inputType="textMultiLine"
-			android:maxLines="7" android:lines="5" android:gravity="top"
+			android:lines="8" android:gravity="top"
 			android:hint="@string/keywords"></EditText>
 
 		<!-- SAVE/DELETE BUTTON -->
