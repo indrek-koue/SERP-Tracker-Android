@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="hello">Hello World, MinuActivity!</string>
-	<string name="app_name">SERP tracker</string>
+	<string name="app_name">SEO SERP Tracker</string>
 	<string name="profile_edit_page_delete">Delete</string>
 	<string name="there_are_no_email_clients_installed_">There are no email clients installed.</string>
 	<string name="send_mail">Send mail</string>
@@ -43,6 +43,7 @@
 	<string name="address">Address</string>
 	<string name="keywords">Keywords</string>
 	<string name="save">Save</string>
+	<string name="not_ranked">not ranked</string>
 </resources>
 
 
