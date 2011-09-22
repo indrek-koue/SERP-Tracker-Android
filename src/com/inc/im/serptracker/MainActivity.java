@@ -2,6 +2,7 @@ package com.inc.im.serptracker;
 
 import java.util.ArrayList;
 
+import com.bugsense.trace.BugSenseHandler;
 import com.flurry.android.FlurryAgent;
 import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.DbAdapter;
@@ -53,6 +54,9 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity_layout);
 
+		//bugsense error tracking
+		BugSenseHandler.setup(this, "dd278c2d");
+		
 		Util.loadInHouseAds(((LinearLayout) findViewById(R.id.inhouseAds)),
 				((TextView) findViewById(R.id.inhouseAdsText)),
 				MainActivity.this, getString(R.string.ad_text_input_path),
