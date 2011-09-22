@@ -53,7 +53,7 @@ public class AsyncDownloader extends
 	@Override
 	protected ArrayList<Keyword> doInBackground(ArrayList<Keyword>... keywords) {
 
-		try {
+//		try {
 
 			if (keywords == null || keywords.length == 0)
 				return null;
@@ -184,10 +184,10 @@ public class AsyncDownloader extends
 
 			flurryLogging(start, flurryExportParameters);
 
-		} catch (Exception e) {
-			FlurryAgent.onError("EX", e.toString(), "AsyncDownloader");
-			return null;
-		}
+//		} catch (Exception e) {
+//			FlurryAgent.onError("EX", e.toString(), "AsyncDownloader");
+//			return null;
+//		}
 
 		return keywords[0];
 
@@ -281,8 +281,8 @@ public class AsyncDownloader extends
 
 		} catch (IOException e1) {
 			Log.e("MY", e1.toString());
-			FlurryAgent.onError("EX", "JSOUP DOWNLOAD ERROR: " + e1.toString(),
-					"AsyncDownloader");
+//			FlurryAgent.onError("EX", "JSOUP DOWNLOAD ERROR: " + e1.toString(),
+//					"AsyncDownloader");
 		}
 		return doc;
 	}
