@@ -69,20 +69,8 @@
 			<TextView android:text="@string/menubar_manage" android:id="@+id/textView2"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:textColor="@android:color/white" android:gravity="center"></TextView>
-
+				
 		</LinearLayout>
-
-
-
-		<!-- <LinearLayout android:layout_height="80dip" android:id="@+id/linearLayoutManageProfiles" 
-			android:background="@android:color/black" android:layout_width="80dip" android:orientation="vertical" 
-			android:gravity="center" android:layout_margin="1dip"> <ImageButton android:layout_height="wrap_content" 
-			android:src="@android:drawable/ic_menu_edit" android:id="@+id/imageButton2" 
-			android:layout_width="wrap_content" android:background="@android:color/black"></ImageButton> 
-			<TextView android:text="Manage profiles" android:id="@+id/textView2" android:layout_width="wrap_content" 
-			android:layout_height="wrap_content" android:textColor="@android:color/white"></TextView> 
-			</LinearLayout> -->
-
 
 		<!-- SETTINGS -->
 		<LinearLayout android:layout_height="78dip"
@@ -97,7 +85,7 @@
 				android:id="@+id/textView3" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:textColor="@android:color/white"
 				android:gravity="center"></TextView>
-
+				
 		</LinearLayout>
 
 
@@ -116,9 +104,6 @@
 
 		</LinearLayout>
 
-
 	</LinearLayout>
-
-
 
 </LinearLayout>

@@ -44,7 +44,7 @@ public class PreferencesActivity extends PreferenceActivity {
 									Preference preference) {
 								Toast.makeText(
 										getBaseContext(),
-										"Google is trademark of Google inc. This application is built on Google Custom Search API and does not infringe Google search terms of service.",
+										getString(R.string.google_is_trademark_of_google_inc_this_application_is_built_on_google_custom_search_api_and_does_not_infringe_google_search_terms_of_service_),
 										Toast.LENGTH_LONG).show();
 
 								return false;
