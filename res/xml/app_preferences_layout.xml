@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<Preference android:summary="Resets all application internal data"
-		android:key="prefTrunk" android:title="Delete all data"></Preference>
+	<Preference android:summary="@string/resets_all_application_internal_data"
+		android:key="prefTrunk" android:title="@string/delete_all_data"></Preference>
 	<ListPreference android:key="prefSearchEngine"
-		android:summary="Google™" android:title="Search Engine"
+		android:summary="Google™" android:title="@string/search_engine"
 		android:entries="@array/SearchEngines" android:entryValues="@array/SearchEngines"></ListPreference>
 
 </PreferenceScreen>

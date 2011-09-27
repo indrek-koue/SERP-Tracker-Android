@@ -7,9 +7,9 @@
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
 
 		<!-- WEBSITE ADDRESS -->
-		<TextView android:text="@string/address_of_your_website" android:id="@+id/textView1"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:textSize="18dip"></TextView>
+		<TextView android:text="@string/address_of_your_website"
+			android:id="@+id/textView1" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:textSize="18dip"></TextView>
 		<EditText android:id="@+id/editText1" android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:inputType="textUri"
 			android:hint="@string/www_example_com" android:singleLine="true">
@@ -17,13 +17,13 @@
 		</EditText>
 
 		<!-- WEBSITE KEYWORDS -->
-		<TextView android:text="@string/keywords_to_track" android:id="@+id/textView2"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:textSize="18dip"></TextView>
+		<TextView android:text="@string/keywords_to_track"
+			android:id="@+id/textView2" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:textSize="18dip"></TextView>
 		<EditText android:id="@+id/editText2" android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:inputType="textMultiLine"
-			android:hint="@string/example_keyword_1_nexample_keyword_2" 
- android:gravity="top"></EditText>
+			android:hint="@string/example_keyword_1_nexample_keyword_2"
+			android:gravity="top"></EditText>
 
 		<!-- BUTTON -->
 		<Button android:id="@+id/button1" android:text="@string/insert"

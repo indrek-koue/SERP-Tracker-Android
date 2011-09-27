@@ -36,7 +36,7 @@ public class InsertWebsiteActivity extends Activity {
 
 		// keyword limit disabled
 		Util.setKeywordLimit(-1, (EditText) findViewById(R.id.editText2),
-				"free version limit 5 keywords per website", getBaseContext());
+				getString(R.string.free_version_limit_5_keywords_per_website), getBaseContext());
 
 	}
 

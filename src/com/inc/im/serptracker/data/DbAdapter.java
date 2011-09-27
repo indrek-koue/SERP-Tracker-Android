@@ -209,6 +209,7 @@ public class DbAdapter {
 				null, null, null);
 
 		if (profileHeaderCur != null && profileHeaderCur.getCount() != 0) {
+
 			profileHeaderCur.moveToFirst();
 
 			profiles = new ArrayList<UserProfile>();
@@ -227,26 +228,31 @@ public class DbAdapter {
 						KEY_KEYWORDS_TABLE_PARENTID + " = " + profileId, null,
 						null, null, null);
 
-				if (keywordsCur != null)
+				if (keywordsCur != null) {
+					// profile has keywords
+
 					keywordsCur.moveToFirst();
 
-				do {
+					do {
 
-					int id = keywordsCur.getInt(keywordsCur
-							.getColumnIndex(KEY_KEYWORDS_TABLE_ID));
+						int id = keywordsCur.getInt(keywordsCur
+								.getColumnIndex(KEY_KEYWORDS_TABLE_ID));
 
-					String keyword = keywordsCur.getString(keywordsCur
-							.getColumnIndex(KEY_KEYWORDS_TABLE_KEYWORD));
+						String keyword = keywordsCur.getString(keywordsCur
+								.getColumnIndex(KEY_KEYWORDS_TABLE_KEYWORD));
 
-					int rank = keywordsCur.getInt(keywordsCur
-							.getColumnIndex(KEY_KEYWORDS_TABLE_POSTION));
+						int rank = keywordsCur.getInt(keywordsCur
+								.getColumnIndex(KEY_KEYWORDS_TABLE_POSTION));
 
-					keywords.add(new Keyword(id, keyword, rank));
+						keywords.add(new Keyword(id, keyword, rank));
 
-				} while (keywordsCur.moveToNext());
+					} while (keywordsCur.moveToNext());
 
-				// done - now repeat
-				profiles.add(new UserProfile(profileId, profileUrl, keywords));
+					// done - now repeat
+					profiles.add(new UserProfile(profileId, profileUrl,
+							keywords));
+
+				}
 
 			} while (profileHeaderCur.moveToNext());
 		}
