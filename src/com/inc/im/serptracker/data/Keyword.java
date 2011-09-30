@@ -8,7 +8,7 @@ public class Keyword {
 	public int id;
 	public String value;
 	
-	public int rank;
+	public int oldRank;
 	public int newRank;
 	
 	public String anchorText;
@@ -22,13 +22,13 @@ public class Keyword {
 
 	public Keyword(String value, int rank) {
 		this.value = value;
-		this.rank = rank;
+		this.oldRank = rank;
 	}
 
 	public Keyword(int id, String value, int rank) {
 		this.id = id;
 		this.value = value;
-		this.rank = rank;
+		this.oldRank = rank;
 	}
 
 }
