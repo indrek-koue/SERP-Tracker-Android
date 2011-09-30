@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import com.bugsense.trace.BugSenseHandler;
 import com.flurry.android.FlurryAgent;
 import com.inc.im.serptracker.R;
-import com.inc.im.serptracker.data.DbAdapter;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.UserProfile;
-import com.inc.im.serptracker.util.AsyncDownloader;
+import com.inc.im.serptracker.data.access.AsyncDownloader;
+import com.inc.im.serptracker.data.access.DbAdapter;
+import com.inc.im.serptracker.util.MainActivityHelper;
 import com.inc.im.serptracker.util.Util;
 
 import android.app.Activity;
@@ -55,7 +56,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.main_activity_layout);
 
 		// bugsense error tracking
-		// TODO: temp remove BugSenseHandler.setup(this, "dd278c2d");
+		BugSenseHandler.setup(this, "dd278c2d");
 
 		Util.loadInHouseAds(((LinearLayout) findViewById(R.id.inhouseAds)),
 				((TextView) findViewById(R.id.inhouseAdsText)),
@@ -162,8 +163,6 @@ public class MainActivity extends Activity {
 									MainActivity.this, 15, 50))
 								return;
 
-							ArrayList<Keyword> keywords = null;
-
 							int spinnerSelectedValueNr = getSpinnerSelectedIndex() - 1;
 
 							if (data == null
@@ -172,14 +171,9 @@ public class MainActivity extends Activity {
 								return;
 
 							// find keywords by name
-							for (UserProfile u : data) {
-								if (data.get(spinnerSelectedValueNr) != null)
-									if (u.url.equals(data
-											.get(spinnerSelectedValueNr).url)
-											&& u.id == data
-													.get(spinnerSelectedValueNr).id)
-										keywords = u.keywords;
-							}
+							ArrayList<Keyword> keywords = MainActivityHelper
+									.findKeywordsByName(data,
+											spinnerSelectedValueNr);
 
 							if (keywords != null) {
 

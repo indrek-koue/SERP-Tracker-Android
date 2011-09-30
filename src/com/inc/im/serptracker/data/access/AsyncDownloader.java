@@ -1,4 +1,4 @@
-package com.inc.im.serptracker.util;
+package com.inc.im.serptracker.data.access;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -11,10 +11,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.flurry.android.FlurryAgent;
-import com.inc.im.serptracker.MainActivityHelper;
 import com.inc.im.serptracker.R;
-import com.inc.im.serptracker.data.DbAdapter;
 import com.inc.im.serptracker.data.Keyword;
+import com.inc.im.serptracker.util.MainActivityHelper;
 
 import android.app.Activity;
 import android.app.ProgressDialog;

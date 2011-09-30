@@ -1,4 +1,4 @@
-package com.inc.im.serptracker.util;
+package com.inc.im.serptracker.data.access;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
