@@ -54,9 +54,9 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity_layout);
 
-		//bugsense error tracking
-		BugSenseHandler.setup(this, "dd278c2d");
-		
+		// bugsense error tracking
+		// TODO: temp remove BugSenseHandler.setup(this, "dd278c2d");
+
 		Util.loadInHouseAds(((LinearLayout) findViewById(R.id.inhouseAds)),
 				((TextView) findViewById(R.id.inhouseAdsText)),
 				MainActivity.this, getString(R.string.ad_text_input_path),
@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
 		initSpinner();
 
 		bindRunButton();
-		bindMenuBarButtons();
+		MainActivityHelper.bindMenuBarButtons(this);
 
 	}
 
@@ -99,91 +99,6 @@ public class MainActivity extends Activity {
 			}
 
 		return super.onKeyDown(keyCode, event);
-	}
-
-	private void bindMenuBarButtons() {
-
-		// insert website
-		View.OnClickListener insertProfileListener = new View.OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				startActivity(new Intent(getBaseContext(),
-						InsertWebsiteActivity.class));
-
-			}
-		};
-
-		((LinearLayout) findViewById(R.id.linearLayoutAddProfile))
-				.setOnClickListener(insertProfileListener);
-		((ImageButton) findViewById(R.id.imageButton1))
-				.setOnClickListener(insertProfileListener);
-		((TextView) findViewById(R.id.textView1))
-				.setOnClickListener(insertProfileListener);
-
-		// manage websites
-		View.OnClickListener manageProfilesListener = new View.OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-
-				if (new DbAdapter(getBaseContext()).loadAllProfiles() == null) {
-					Toast.makeText(
-							getBaseContext(),
-							getString(R.string.no_websites_to_manage_please_add_a_website),
-							Toast.LENGTH_SHORT).show();
-				} else {
-					startActivity(new Intent(getBaseContext(),
-							ManageWebsitesActivity.class));
-				}
-
-			}
-		};
-
-		((LinearLayout) findViewById(R.id.linearLayoutManageProfiles))
-				.setOnClickListener(manageProfilesListener);
-		((ImageButton) findViewById(R.id.imageButton2))
-				.setOnClickListener(manageProfilesListener);
-		((TextView) findViewById(R.id.textView2))
-				.setOnClickListener(manageProfilesListener);
-
-		// settings
-		View.OnClickListener settingsListener = new View.OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-
-				startActivity(new Intent(getBaseContext(),
-						PreferencesActivity.class));
-
-			}
-		};
-
-		((LinearLayout) findViewById(R.id.linearLayoutSettings))
-				.setOnClickListener(settingsListener);
-		((ImageButton) findViewById(R.id.imageButton3))
-				.setOnClickListener(settingsListener);
-		((TextView) findViewById(R.id.textView3))
-				.setOnClickListener(settingsListener);
-
-		// about
-		View.OnClickListener aboutListener = new View.OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-
-				startActivity(new Intent(getBaseContext(), AboutActivity.class));
-
-			}
-		};
-
-		((LinearLayout) findViewById(R.id.linearLayoutAbout))
-				.setOnClickListener(aboutListener);
-		((ImageButton) findViewById(R.id.imageButton4))
-				.setOnClickListener(aboutListener);
-		((TextView) findViewById(R.id.textView4))
-				.setOnClickListener(aboutListener);
-
 	}
 
 	public void initSpinner() {
@@ -243,7 +158,8 @@ public class MainActivity extends Activity {
 								getString(R.string.spinner_default_selection))) {
 
 							// counter for rate-us-dialog
-							if (rateUsDialog(15, 50))
+							if (MainActivityHelper.rateUsDialog(
+									MainActivity.this, 15, 50))
 								return;
 
 							ArrayList<Keyword> keywords = null;
@@ -294,58 +210,6 @@ public class MainActivity extends Activity {
 				});
 	}
 
-	private Boolean rateUsDialog(int firstCap, int secondCap) {
-
-		// read
-		SharedPreferences settings = getSharedPreferences("minuPref", 0);
-		int loadedCountFromPref = settings.getInt("minuMuutuja", 0);
-		int newNumber = loadedCountFromPref + 1;
-
-		Log.d("MY", loadedCountFromPref + "");
-		// write
-		SharedPreferences settings2 = getSharedPreferences("minuPref", 0);
-		SharedPreferences.Editor editor = settings2.edit();
-		editor.putInt("minuMuutuja", newNumber);
-		editor.commit();
-
-		Boolean displayed = false;
-		if (loadedCountFromPref == firstCap || loadedCountFromPref == secondCap) {
-			displayed = true;
-			AlertDialog.Builder builder = new AlertDialog.Builder(
-					MainActivity.this);
-			builder.setMessage(
-					getString(R.string.like_this_app_rate_us_on_android_market_))
-					.setCancelable(false)
-					.setPositiveButton(getString(R.string.sure_),
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									dialog.dismiss();
-									Intent intent = new Intent(
-											Intent.ACTION_VIEW);
-									intent.setData(Uri
-											.parse(getString(R.string.market_details_id_com_inc_im_serptracker)));
-									startActivity(intent);
-
-								}
-							})
-					.setNegativeButton(getString(R.string.cancel),
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-
-									dialog.dismiss();
-
-								}
-							});
-			AlertDialog alert = builder.create();
-			alert.show();
-
-		}
-
-		return displayed;
-	}
-
 	public void bindListViewItems(int spinnerSelectedItemIndex) {
 
 		ListView listView = (ListView) findViewById(R.id.listview_result);
@@ -356,27 +220,8 @@ public class MainActivity extends Activity {
 			// -1 because 0 index holds default text
 			UserProfile selectedUser = data.get(spinnerSelectedItemIndex - 1);
 
-			ArrayList<String> keywordsToBind = new ArrayList<String>();
-
-			if (selectedUser.keywords != null) {
-				for (Keyword k : selectedUser.keywords) {
-
-					// 0 - empty field in DB
-					// -1 - not ranked
-					// -2 - error
-
-					if (k.rank == -1 || k.rank == -2 || k.rank == 0)
-						keywordsToBind.add(k.value + " ["
-								+ getString(R.string.not_ranked) + "]");
-					else
-						keywordsToBind.add(k.value + " [" + k.rank + "] ");
-				}
-
-				listView.setAdapter(new ArrayAdapter<String>(getBaseContext(),
-						R.layout.main_activity_listview_item, R.id.textView1,
-						keywordsToBind));
-
-			}
+			MainActivityHelper.bindResultListView(this, listView,
+					selectedUser.keywords);
 		} else {
 			listView.setAdapter(new ArrayAdapter<String>(getBaseContext(),
 					R.layout.main_activity_listview_item));

@@ -11,6 +11,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.flurry.android.FlurryAgent;
+import com.inc.im.serptracker.MainActivityHelper;
 import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.DbAdapter;
 import com.inc.im.serptracker.data.Keyword;
@@ -79,11 +80,92 @@ public class AsyncDownloader extends
 			int progress = counter;
 			publishProgress(++progress);
 
+			// not found / ranked
+			if (keyword.newRank == 0)
+				keyword.newRank = -1;
+
 		}
 
 		flurryLogging();
 
 		return keywords[0];
+
+	}
+
+	@Override
+	protected void onPostExecute(ArrayList<Keyword> input) {
+
+		if (input == null) {
+			progressDialog.setMessage(a
+					.getString(R.string.error1_input_keywords_are_null));
+			return;
+		}
+
+		// if progressdialog is canceled, dont show results
+		if (!progressDialog.isShowing())
+			return;
+
+		MainActivityHelper.bindResultListView(a, lv, input);
+
+		// save new ranks
+		for (Keyword k : input)
+			new DbAdapter(a).updateKeywordRank(k, k.newRank);
+		// ArrayList<String> toDisplay = new ArrayList<String>();
+		//
+		// for (Keyword k : input) {
+		//
+		// // not ranked
+		// if (k.newRank == 0) {
+		// toDisplay.add(k.value + a.getString(R.string._not_ranked_));
+		// // ranked
+		// } else {
+		// // save new rank
+		// if (!new DbAdapter(a).updateKeywordRank(k, k.newRank))
+		// Log.e("MY", "keyword rank update failed: " + k.value);
+		//
+		// // show user
+		// int valueChange = k.rank - k.newRank;
+		//
+		// // -2 = error
+		// // -1 = new?
+		// // 0 = not ranked
+		//
+		// String ready = "";
+		// String sign = valueChange > 0 ? "+" : "";
+		//
+		// // is ranked and value change exists and is not new show long
+		// // info
+		//
+		// if (k.rank == -2) {
+		// ready = k.value + "["
+		// + a.getString(R.string.error_please_try_again)
+		// + "]";
+		// }
+		// else if (k.rank != 0 && valueChange != 0 && k.rank != -1) {
+		// ready = String.format("%s [ %d ] %s%d", k.value, k.newRank,
+		// sign, valueChange);
+		// } else
+		// ready = String.format("%s [ %d ]", k.value, k.newRank);
+		//
+		// toDisplay.add(ready);
+		//
+		// }
+		// }// for
+
+		// lv.setAdapter(new ArrayAdapter<String>(a,
+		// R.layout.main_activity_listview_item, R.id.textView1, toDisplay));
+
+		progressDialog.dismiss();
+
+	}
+
+	@Override
+	protected void onProgressUpdate(Integer... values) {
+
+		String loaderValue = a.getString(R.string.keyword_) + " " + values[0]
+				+ "/" + itemCount;
+
+		progressDialog.setMessage(loaderValue);
 
 	}
 
@@ -122,7 +204,8 @@ public class AsyncDownloader extends
 
 		// remove not valid urls
 		for (int i = 0; i < allResults.size(); i++)
-			if (allResults.get(i).attr("href").startsWith("/search?q=")) {
+			if (allResults.get(i).attr("href").startsWith("/search?q=")
+					|| allResults.get(i).attr("href").startsWith("/aclk?")) {
 				allResults.remove(i);
 			}
 
@@ -130,72 +213,6 @@ public class AsyncDownloader extends
 		if (allResults.size() != 100)
 			Log.w("MY", "WARNING: results after delete != 100, instead:"
 					+ allResults.size());
-	}
-
-	@Override
-	protected void onPostExecute(ArrayList<Keyword> input) {
-
-		if (input == null) {
-			progressDialog.setMessage(a
-					.getString(R.string.error1_input_keywords_are_null));
-			return;
-		}
-
-		// if progressdialog is canceled, dont show results
-		if (!progressDialog.isShowing())
-			return;
-
-		ArrayList<String> toDisplay = new ArrayList<String>();
-
-		for (Keyword k : input) {
-
-			// not ranked
-			if (k.newRank == 0) {
-				toDisplay.add(k.value + a.getString(R.string._not_ranked_));
-				// ranked
-			} else {
-				// save new rank
-				if (!new DbAdapter(a).updateKeywordRank(k, k.newRank))
-					Log.e("MY", "keyword rank update failed: " + k.value);
-
-				// show user
-				int valueChange = k.rank - k.newRank;
-
-				// -2 = error
-				// -1 = new?
-				// 0 = not ranked
-
-				String ready = "";
-				String sign = valueChange > 0 ? "+" : "";
-
-				// is ranked and value change exists and is not new show long
-				// info
-				if (k.rank != 0 && valueChange != 0 && k.rank != -1)
-					ready = String.format("%s [ %d ] %s%d", k.value, k.newRank,
-							sign, valueChange);
-				else
-					ready = String.format("%s [ %d ]", k.value, k.newRank);
-
-				toDisplay.add(ready);
-
-			}
-		}// for
-
-		lv.setAdapter(new ArrayAdapter<String>(a,
-				R.layout.main_activity_listview_item, R.id.textView1, toDisplay));
-
-		progressDialog.dismiss();
-
-	}
-
-	@Override
-	protected void onProgressUpdate(Integer... values) {
-
-		String loaderValue = a.getString(R.string.keyword_) + " " + values[0]
-				+ "/" + itemCount;
-
-		progressDialog.setMessage(loaderValue);
-
 	}
 
 	public void flurryLogging() {
@@ -230,6 +247,8 @@ public class AsyncDownloader extends
 
 		} catch (Exception e1) {
 			Log.e("MY", e1.toString());
+			
+			keyword.newRank = -2;
 
 		}
 
@@ -237,6 +256,9 @@ public class AsyncDownloader extends
 			Log.w("MY", "download is null");
 			FlurryAgent.onError("MINOR-EX", "JSOUP download is null",
 					"AsyncDownloader");
+			
+			keyword.newRank = -2;
+		
 			return null;
 		}
 
@@ -246,6 +268,9 @@ public class AsyncDownloader extends
 			FlurryAgent.onError("MINOR-EX",
 					"JSOUP download h3 first a select is null",
 					"AsyncDownloader");
+			
+			keyword.newRank = -2;
+			
 			return null;
 		}
 

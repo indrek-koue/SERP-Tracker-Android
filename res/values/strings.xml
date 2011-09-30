@@ -44,13 +44,15 @@
 	<string name="save">Save</string>
 	<string name="not_ranked">not ranked</string>
 	<string name="error1_input_keywords_are_null">ERROR1: input keywords are null</string>
-	<string name="_not_ranked_"> [not ranked]</string>
+	<!-- <string name="_not_ranked_"> [not ranked]</string> -->
 	<string name="keyword_">Keyword </string>
 	<string name="free_version_limit_5_keywords_per_website">Free version limit: 5 keywords per website</string>
 	<string name="google_is_trademark_of_google_inc_this_application_is_built_on_google_custom_search_api_and_does_not_infringe_google_search_terms_of_service_">DISCLAIMER: Google is trademark of Google inc. This application is built on Google Custom Search API and does not infringe Google Search terms of service</string>
 	<string name="search_engine">Search Engine</string>
 	<string name="delete_all_data">Delete all data</string>
 	<string name="resets_all_application_internal_data">Resets all application internal data</string>
+	<string name="legal_information">Legal Information</string>
+	<string name="error_please_try_again">Error, please try again</string>
 </resources>
 
 
