@@ -1,7 +1,7 @@
 package com.inc.im.serptracker;
 
 import com.flurry.android.FlurryAgent;
-import com.inc.im.serptracker.util.AsyncDownloaderNews;
+import com.inc.im.serptracker.data.access.AsyncDownloaderNews;
 
 import android.app.Activity;
 import android.app.AlertDialog;

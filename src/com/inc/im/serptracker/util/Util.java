@@ -1,5 +1,7 @@
 package com.inc.im.serptracker.util;
 
+import com.inc.im.serptracker.data.access.AsyncDownloaderInhouseAds;
+
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;

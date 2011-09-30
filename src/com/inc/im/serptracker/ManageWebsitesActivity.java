@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import com.flurry.android.FlurryAgent;
 import com.inc.im.serptracker.R;
-import com.inc.im.serptracker.data.DbAdapter;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.UserProfile;
+import com.inc.im.serptracker.data.access.DbAdapter;
 import com.inc.im.serptracker.util.Util;
 
 import android.app.Activity;

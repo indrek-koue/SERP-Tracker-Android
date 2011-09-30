@@ -1,6 +1,9 @@
-package com.inc.im.serptracker.data;
+package com.inc.im.serptracker.data.access;
 
 import java.util.ArrayList;
+
+import com.inc.im.serptracker.data.Keyword;
+import com.inc.im.serptracker.data.UserProfile;
 
 import android.content.ContentValues;
 import android.content.Context;

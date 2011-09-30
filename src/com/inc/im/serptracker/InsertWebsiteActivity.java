@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
-import com.inc.im.serptracker.data.DbAdapter;
+import com.inc.im.serptracker.data.access.DbAdapter;
 import com.inc.im.serptracker.util.Util;
 
 public class InsertWebsiteActivity extends Activity {

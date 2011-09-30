@@ -1,4 +1,4 @@
-package com.inc.im.serptracker;
+package com.inc.im.serptracker.util;
 
 import java.util.ArrayList;
 
@@ -18,8 +18,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.inc.im.serptracker.data.DbAdapter;
+import com.inc.im.serptracker.AboutActivity;
+import com.inc.im.serptracker.InsertWebsiteActivity;
+import com.inc.im.serptracker.ManageWebsitesActivity;
+import com.inc.im.serptracker.PreferencesActivity;
+import com.inc.im.serptracker.R;
+import com.inc.im.serptracker.R.id;
+import com.inc.im.serptracker.R.layout;
+import com.inc.im.serptracker.R.string;
 import com.inc.im.serptracker.data.Keyword;
+import com.inc.im.serptracker.data.UserProfile;
+import com.inc.im.serptracker.data.access.DbAdapter;
 
 public class MainActivityHelper {
 
@@ -35,8 +44,10 @@ public class MainActivityHelper {
 				// 0 - empty field in DB - new
 				// -1 - not ranked in top 100
 				// -2 - error getting data
-
-				if (k.newRank == -1) {
+				
+				if ((k.newRank == -1 && k.oldRank == 0)
+						|| (k.newRank == 0 && k.oldRank == -1)
+						|| k.newRank == -1) {
 					// not ranked
 					keywordsToBind.add(k.value + " ["
 							+ a.getString(R.string.not_ranked) + "]");
@@ -77,6 +88,19 @@ public class MainActivityHelper {
 
 		return keywordsToBind;
 
+	}
+
+	public static ArrayList<Keyword> findKeywordsByName(
+			ArrayList<UserProfile> data, int spinnerSelectedValueNr) {
+		ArrayList<Keyword> keywords = null;
+
+		for (UserProfile u : data) {
+			if (data.get(spinnerSelectedValueNr) != null)
+				if (u.url.equals(data.get(spinnerSelectedValueNr).url)
+						&& u.id == data.get(spinnerSelectedValueNr).id)
+					keywords = u.keywords;
+		}
+		return keywords;
 	}
 
 	public static void bindMenuBarButtons(final Activity a) {
