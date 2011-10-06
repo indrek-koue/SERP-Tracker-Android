@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="jsoup-1.6.1.jar"/>
 	<classpathentry kind="lib" path="FlurryAgent.jar"/>
 	<classpathentry kind="lib" path="bugsense-trace.jar"/>
+	<classpathentry kind="lib" path="GoogleAdMobAdsSdk-4.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -4,8 +4,16 @@
 	android:scrollbars="none" android:layout_width="fill_parent"
 	android:layout_height="fill_parent" android:background="@drawable/app_bg">
 
+
+
 	<LinearLayout android:orientation="vertical"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+		<!-- ADMOB -->
+		<LinearLayout android:layout_height="wrap_content"
+			android:id="@+id/admob_banner" android:layout_width="fill_parent"
+			android:orientation="vertical" android:gravity="center">
+		</LinearLayout>
 
 		<!-- CHOOSE WEBSITE SPINNER -->
 		<Spinner android:id="@+id/spinner1" android:layout_height="wrap_content"
@@ -13,9 +21,9 @@
 		</Spinner>
 
 		<!-- WEBSITE ADDRESS -->
-		<TextView android:text="@string/address_of_your_website" android:id="@+id/textView1"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:textSize="18dip"></TextView>
+		<TextView android:text="@string/address_of_your_website"
+			android:id="@+id/textView1" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:textSize="18dip"></TextView>
 		<EditText android:id="@+id/editText1" android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:inputType="textUri"
 			android:singleLine="true" android:hint="@string/address"
@@ -24,9 +32,9 @@
 		</EditText>
 
 		<!-- WEBSITE KEYWORDS -->
-		<TextView android:text="@string/keywords_to_track" android:id="@+id/textView2"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:textSize="18dip"></TextView>
+		<TextView android:text="@string/keywords_to_track"
+			android:id="@+id/textView2" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:textSize="18dip"></TextView>
 		<EditText android:id="@+id/editText2" android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:inputType="textMultiLine"
 			android:gravity="top" android:hint="\n\n\n"></EditText>

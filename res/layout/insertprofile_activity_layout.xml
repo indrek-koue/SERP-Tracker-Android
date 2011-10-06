@@ -3,8 +3,17 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 	android:scrollbars="none" android:layout_width="fill_parent"
 	android:layout_height="fill_parent" android:background="@drawable/app_bg">
+
+
+
 	<LinearLayout android:orientation="vertical"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+		<!-- ADMOB -->
+		<LinearLayout android:layout_height="wrap_content"
+			android:id="@+id/admob_banner" android:layout_width="fill_parent"
+			android:orientation="vertical" android:gravity="center">
+		</LinearLayout>
 
 		<!-- WEBSITE ADDRESS -->
 		<TextView android:text="@string/address_of_your_website"

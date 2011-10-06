@@ -43,15 +43,18 @@ public class ManageWebsitesActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.manage_profiles_layout);
 
+		Util.initAdmob(this);
+
 		initSpinner();
 
 		bindSaveButton();
 		bindBackButton();
 		bindDeleteButton();
 
-		//-1 == disabled
+		// -1 == disabled
 		Util.setKeywordLimit(-1, (EditText) findViewById(R.id.editText2),
-				getString(R.string.free_version_limit_5_keywords_per_website), getBaseContext());
+				getString(R.string.free_version_limit_5_keywords_per_website),
+				getBaseContext());
 
 	}
 
