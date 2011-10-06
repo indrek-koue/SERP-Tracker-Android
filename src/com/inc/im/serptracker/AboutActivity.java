@@ -2,6 +2,7 @@ package com.inc.im.serptracker;
 
 import com.flurry.android.FlurryAgent;
 import com.inc.im.serptracker.data.access.AsyncDownloaderNews;
+import com.inc.im.serptracker.util.Util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -34,6 +35,8 @@ public class AboutActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.about_layout);
 
+		Util.initAdmob(this);
+		
 		AsyncDownloaderNews newsDownloader = new AsyncDownloaderNews(
 				((ProgressBar) findViewById(R.id.progressBar1)),
 				((TextView) findViewById(R.id.textView1)));

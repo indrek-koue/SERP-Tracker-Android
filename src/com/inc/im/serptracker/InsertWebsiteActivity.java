@@ -30,6 +30,8 @@ public class InsertWebsiteActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.insertprofile_activity_layout);
+		
+		Util.initAdmob(this);
 
 		bindAddButton();
 		bindBackButton();

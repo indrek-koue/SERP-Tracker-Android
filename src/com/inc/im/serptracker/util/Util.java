@@ -1,5 +1,9 @@
 package com.inc.im.serptracker.util;
 
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
+import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.access.AsyncDownloaderInhouseAds;
 
 import android.app.Activity;
@@ -14,6 +18,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Util {
+
+	public static void initAdmob(Activity a) {
+
+		AdView adView = new AdView(a, AdSize.BANNER, "a14e6777b9a798c");
+
+		// Lookup your LinearLayout assuming it’s been given
+		// the attribute android:id="@+id/mainLayout"
+		LinearLayout layout = (LinearLayout) a.findViewById(R.id.admob_banner);
+
+		// Add the adView to it
+		layout.addView(adView);
+
+		// Initiate a generic request to load it with an ad
+		AdRequest adRequest = new AdRequest();
+		adView.loadAd(adRequest);
+	}
 
 	public static void setKeywordLimit(final int limit, EditText et,
 			final String messageOnLimit, final Context con) {

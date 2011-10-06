@@ -4,8 +4,16 @@
 	android:scrollbars="none" android:layout_width="fill_parent"
 	android:layout_height="fill_parent" android:background="@drawable/app_bg">
 
+
+
 	<LinearLayout android:orientation="vertical"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+		<!-- ADMOB -->
+		<LinearLayout android:layout_height="wrap_content"
+			android:id="@+id/admob_banner" android:layout_width="fill_parent"
+			android:orientation="vertical" android:gravity="center">
+		</LinearLayout>
 
 		<TextView android:text="@string/about_title_news_and_updates"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"

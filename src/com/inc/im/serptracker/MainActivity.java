@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import com.bugsense.trace.BugSenseHandler;
 import com.flurry.android.FlurryAgent;
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
 import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.UserProfile;
@@ -48,9 +51,11 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity_layout);
 
-		// bugsense error tracking
-		//BugSenseHandler.setup(this, "dd278c2d");
+		BugSenseHandler.setup(this, "dd278c2d");
 
+		Util.initAdmob(this);
+
+		// inhouse notification
 		Util.loadInHouseAds(((LinearLayout) findViewById(R.id.inhouseAds)),
 				((TextView) findViewById(R.id.inhouseAdsText)),
 				MainActivity.this, getString(R.string.ad_text_input_path), true);
@@ -58,6 +63,7 @@ public class MainActivity extends Activity {
 		// init spinner + loads data form db
 		initSpinner();
 
+		// bind buttons
 		bindRunButton();
 		MainActivityHelper.bindMenuBarButtons(this);
 
