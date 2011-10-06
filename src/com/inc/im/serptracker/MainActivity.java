@@ -13,20 +13,13 @@ import com.inc.im.serptracker.util.MainActivityHelper;
 import com.inc.im.serptracker.util.Util;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -56,12 +49,11 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.main_activity_layout);
 
 		// bugsense error tracking
-		BugSenseHandler.setup(this, "dd278c2d");
+		//BugSenseHandler.setup(this, "dd278c2d");
 
 		Util.loadInHouseAds(((LinearLayout) findViewById(R.id.inhouseAds)),
 				((TextView) findViewById(R.id.inhouseAdsText)),
-				MainActivity.this, getString(R.string.ad_text_input_path),
-				false);
+				MainActivity.this, getString(R.string.ad_text_input_path), true);
 
 		// init spinner + loads data form db
 		initSpinner();

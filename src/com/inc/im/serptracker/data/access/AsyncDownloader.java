@@ -1,6 +1,5 @@
 package com.inc.im.serptracker.data.access;
 
-import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +18,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class AsyncDownloader extends
@@ -33,7 +31,7 @@ public class AsyncDownloader extends
 	private final String WEBSITE;
 	private ProgressDialog progressDialog;
 
-	private String flurryExportParameters;
+	private String flurryExportParameters = "";
 	private int itemCount;
 	private long start;
 
@@ -109,50 +107,6 @@ public class AsyncDownloader extends
 		// save new ranks
 		for (Keyword k : input)
 			new DbAdapter(a).updateKeywordRank(k, k.newRank);
-		// ArrayList<String> toDisplay = new ArrayList<String>();
-		//
-		// for (Keyword k : input) {
-		//
-		// // not ranked
-		// if (k.newRank == 0) {
-		// toDisplay.add(k.value + a.getString(R.string._not_ranked_));
-		// // ranked
-		// } else {
-		// // save new rank
-		// if (!new DbAdapter(a).updateKeywordRank(k, k.newRank))
-		// Log.e("MY", "keyword rank update failed: " + k.value);
-		//
-		// // show user
-		// int valueChange = k.rank - k.newRank;
-		//
-		// // -2 = error
-		// // -1 = new?
-		// // 0 = not ranked
-		//
-		// String ready = "";
-		// String sign = valueChange > 0 ? "+" : "";
-		//
-		// // is ranked and value change exists and is not new show long
-		// // info
-		//
-		// if (k.rank == -2) {
-		// ready = k.value + "["
-		// + a.getString(R.string.error_please_try_again)
-		// + "]";
-		// }
-		// else if (k.rank != 0 && valueChange != 0 && k.rank != -1) {
-		// ready = String.format("%s [ %d ] %s%d", k.value, k.newRank,
-		// sign, valueChange);
-		// } else
-		// ready = String.format("%s [ %d ]", k.value, k.newRank);
-		//
-		// toDisplay.add(ready);
-		//
-		// }
-		// }// for
-
-		// lv.setAdapter(new ArrayAdapter<String>(a,
-		// R.layout.main_activity_listview_item, R.id.textView1, toDisplay));
 
 		progressDialog.dismiss();
 
@@ -235,10 +189,8 @@ public class AsyncDownloader extends
 
 		Document doc = null;
 		try {
-			// Log.i("MY", "Q-URL:" + generateEscapedQueryString(keyword,
-			// false));
 
-			String ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.122 Safari/534.30";
+			//String ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.122 Safari/534.30";
 
 			doc = Jsoup.connect(generateEscapedQueryString(keyword, false))
 					.userAgent("Apache-HttpClient/UNAVAILABLE (java 1.4)")

@@ -100,20 +100,17 @@ public class AboutActivity extends Activity {
 
 						Intent intent = new Intent(Intent.ACTION_SEND);
 
-						intent.setData(Uri.parse("mailto:"
-								+ getString(R.string.dev_email)));
-
 						// old send email
-						// intent.setType("text/plain");
+						 intent.setType("text/plain");
 						//
-						// intent.putExtra(Intent.EXTRA_EMAIL,
-						// new String[] { getString(R.string.dev_email) });
+						intent.putExtra(Intent.EXTRA_EMAIL,
+								new String[] { getString(R.string.dev_email) });
+
 						intent.putExtra(Intent.EXTRA_SUBJECT,
 								getString(R.string.app_name));
 						//
 						// // in order to not crash with other than emails apps?
-						// intent.putExtra(android.content.Intent.EXTRA_TEXT,
-						// "");
+						intent.putExtra(android.content.Intent.EXTRA_TEXT, "");
 
 						try {
 							startActivity(Intent.createChooser(intent,

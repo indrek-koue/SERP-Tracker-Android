@@ -27,14 +27,12 @@ public class AsyncDownloaderInhouseAds extends
 	LinearLayout ll;
 	Activity a;
 
-	public AsyncDownloaderInhouseAds(
-			LinearLayout ll, Activity a) {
+	public AsyncDownloaderInhouseAds(LinearLayout ll, Activity a) {
 		super();
-		tv = (TextView)ll.findViewById(R.id.inhouseAdsText);
+		tv = (TextView) ll.findViewById(R.id.inhouseAdsText);
 		this.ll = ll;
 		this.a = a;
 	}
-
 
 	@Override
 	protected InhouseAd doInBackground(String... params) {
@@ -66,27 +64,30 @@ public class AsyncDownloaderInhouseAds extends
 		}
 
 		// TODO: make xml based ad parser
+		// &&ENTER URL HERE&&
+		// %%ENTER TEXT HERE%%
 
 		InhouseAd ad = null;
 
-		if (result != null && result.length() > 5) {
+		if (result != null && result.length() > 5 && result.contains("%%")) {
 
 			String text = result.substring(result.indexOf("%%") + 2,
 					result.lastIndexOf("%%"));
-			String link = result.substring(result.indexOf("&&") + 2,
-					result.lastIndexOf("&&"));
-			
-			//if cant find tags, then don't show any ads
-			if (result.indexOf("%%") == -1 || result.indexOf("&&") == -1)
-				ad = null;
-			else
+
+			ad = new InhouseAd("", text);
+
+			if (result.contains("&&")) {
+				String link = result.substring(result.indexOf("&&") + 2,
+						result.lastIndexOf("&&"));
 				ad = new InhouseAd(link, text);
+			}
 
 		}
 
 		return ad;
 
 	}
+	
 
 	@Override
 	protected void onPostExecute(final InhouseAd ad) {
@@ -94,23 +95,23 @@ public class AsyncDownloaderInhouseAds extends
 		if (ad == null) {
 			return;
 		}
-		
+
 		ll.setVisibility(View.VISIBLE);
 
 		tv.setText(ad.text);
-		
-		ll.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
+		if (!ad.url.equals(""))
+			ll.setOnClickListener(new View.OnClickListener() {
 
-				Intent intent = new Intent(Intent.ACTION_VIEW);
-				intent.setData(Uri.parse(ad.url));
-				a.startActivity(intent);
+				@Override
+				public void onClick(View v) {
 
-			}
-		});
+					Intent intent = new Intent(Intent.ACTION_VIEW);
+					intent.setData(Uri.parse(ad.url));
+					a.startActivity(intent);
 
+				}
+			});
 
 	}
 
