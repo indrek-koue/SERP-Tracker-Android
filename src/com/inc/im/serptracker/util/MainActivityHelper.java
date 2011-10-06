@@ -18,14 +18,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.inc.im.serptracker.AboutActivity;
 import com.inc.im.serptracker.InsertWebsiteActivity;
 import com.inc.im.serptracker.ManageWebsitesActivity;
 import com.inc.im.serptracker.PreferencesActivity;
 import com.inc.im.serptracker.R;
-import com.inc.im.serptracker.R.id;
-import com.inc.im.serptracker.R.layout;
-import com.inc.im.serptracker.R.string;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.UserProfile;
 import com.inc.im.serptracker.data.access.DbAdapter;
@@ -44,7 +42,7 @@ public class MainActivityHelper {
 				// 0 - empty field in DB - new
 				// -1 - not ranked in top 100
 				// -2 - error getting data
-				
+
 				if ((k.newRank == -1 && k.oldRank == 0)
 						|| (k.newRank == 0 && k.oldRank == -1)
 						|| k.newRank == -1) {
@@ -221,6 +219,8 @@ public class MainActivityHelper {
 											.getString(R.string.market_details_id_com_inc_im_serptracker)));
 									a.startActivity(intent);
 
+									FlurryAgent.onEvent("rate us dialog: YES");
+
 								}
 							})
 					.setNegativeButton(a.getString(R.string.cancel),
@@ -229,6 +229,8 @@ public class MainActivityHelper {
 										int id) {
 
 									dialog.dismiss();
+
+									FlurryAgent.onEvent("rate us dialog: NO");
 
 								}
 							});

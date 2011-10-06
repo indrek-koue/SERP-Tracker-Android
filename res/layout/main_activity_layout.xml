@@ -7,13 +7,16 @@
 	<LinearLayout android:layout_height="wrap_content"
 		android:id="@+id/inhouseAds" android:layout_width="fill_parent"
 		android:orientation="vertical" android:gravity="center"
-		android:background="@color/red" android:visibility="gone">
+		android:visibility="gone" android:background="@color/red">
+		<TextView android:layout_width="wrap_content" android:text="Featured message"
+			android:layout_height="wrap_content" android:textSize="9dip"
+			android:textColor="@color/white"></TextView>
+
 
 		<TextView android:id="@+id/inhouseAdsText"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:textSize="16dip"
-			android:textColor="@color/white" android:layout_marginTop="6dip"
-			android:layout_marginBottom="6dip"></TextView>
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textSize="16dip" android:textColor="@color/white"
+			android:layout_marginBottom="3dip" android:text="ad load failure"></TextView>
 
 	</LinearLayout>
 
@@ -69,7 +72,7 @@
 			<TextView android:text="@string/menubar_manage" android:id="@+id/textView2"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:textColor="@android:color/white" android:gravity="center"></TextView>
-				
+
 		</LinearLayout>
 
 		<!-- SETTINGS -->
@@ -85,7 +88,7 @@
 				android:id="@+id/textView3" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:textColor="@android:color/white"
 				android:gravity="center"></TextView>
-				
+
 		</LinearLayout>
 
 

@@ -88,9 +88,6 @@ public class Util {
 		if (enabled)
 			new AsyncDownloaderInhouseAds(adBox, a).execute(sourcePath);
 
-		// ads.execute(sourcePath);
-
-		// ads.execute(a.getString(R.string.ad_text_input_path));
 	}
 
 }
