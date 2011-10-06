@@ -63,11 +63,19 @@ public class MainActivityHelper {
 					int valueChange = k.oldRank - k.newRank;
 					String ready = "";
 
-					if (valueChange != 0 && k.newRank != 0 && k.oldRank != 0) {
-						// show with value change
-						String sign = valueChange > 0 ? "+" : "";
-						ready = String.format("%s [ %d ] %s%d", k.value,
-								k.newRank, sign, valueChange);
+					if (valueChange != 0 && k.newRank != 0) {
+
+						// keyword first run
+						if (k.oldRank == 0) {
+							ready = String.format("%s [ %d ]", k.value,
+									k.newRank);
+						} else {
+							// show with value change
+							String sign = valueChange > 0 ? "+" : "";
+							ready = String.format("%s [ %d ] %s%d", k.value,
+									k.newRank, sign, valueChange);
+						}
+
 					} else {
 						// value change is 0 - no point to show it with +/-
 						ready = String.format("%s [ %d ]", k.value, k.oldRank);
