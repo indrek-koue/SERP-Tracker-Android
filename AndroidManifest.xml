@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.inc.im.serptracker" android:versionCode="9"
-	android:versionName="0.97" android:installLocation="auto">
+	package="com.inc.im.serptracker" android:versionCode="10"
+	android:versionName="1.0" android:installLocation="auto">
 
-	<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="8" />
+	<uses-sdk android:minSdkVersion="4" />
 
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
