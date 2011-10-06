@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="hello">Hallo Welt, MinuActivity!</string>
-	<string name="app_name">SEO SERP Tracker</string>
 	<string name="profile_edit_page_delete">Löschen</string>
 	<string name="there_are_no_email_clients_installed_">Es gibt keine E-Mail-Clients installiert.</string>
 	<string name="send_mail">E-Mail senden</string>
 	<string name="spinner_default_selection">Wählen Sie eine Website ...</string>
 	<string name="no_websites_to_manage_please_add_a_website">Keine Websites zu verwalten. Bitte fügen Sie eine Website</string>
 	<string name="no_active_internet_connection_please_check_your_settings">Keine Netzwerkverbindung aktiv ist. Bitte überprüfen Sie Ihre Einstellungen</string>
-	<string name="like_this_app_rate_us_on_android_market_">Wie diese Anwendung? Bewerten Sie uns auf Android market!</string>
-	<string name="sure_">Gewiss!</string>
+	<string name="like_this_app_rate_us_on_android_market_">Gefällt Ihnen diese Anwendung? Bewerten Sie uns auf Android-Markt!</string>
+	<string name="sure_">Ja!</string>
 	<string name="cancel">Stornieren</string>
 	<string name="inspect_dialog_title">Inspektion Stichworte</string>
 	<string name="inspect_dialog_fist_msg">Starten, bitte warten</string>
-	<string name="profile_keywords_are_missing_how_s_thats_possible_">&quot;Profil Stichworte fehlen - wie geht es möglich das ist?&quot;</string>
+	<string name="profile_keywords_are_missing_how_s_thats_possible_">Profil Stichworte fehlen - wie das möglich ist?</string>
 	<string name="please_select_a_profile">Bitte wählen Sie ein Profil</string>
-	<string name="beta_version_doesn_t_have_keyword_limit_enjoy">&quot;Im Moment gibt es keine Keyword-Limit, zu genießen&quot;</string>
+	<string name="beta_version_doesn_t_have_keyword_limit_enjoy">Im Moment gibt es keine Keyword-Grenze, genießen</string>
 	<string name="please_enter_some_keywords">Bitte geben Sie einige Schlüsselwörter</string>
 	<string name="website_address_is_too_short_or_invalid">Adresse der Website ist zu kurz oder ungültig</string>
-	<string name="beta_version_doesn_t_have_website_count_limit_enjoy">&quot;Im Moment gibt es keine Website Zählgrenze, genießen&quot;</string>
+	<string name="beta_version_doesn_t_have_website_count_limit_enjoy">Im Moment gibt es keine Website Zählgrenze, genießen</string>
 	<string name="website_added_successfuly">Webseite erfolgreich hinzugefügt</string>
 	<string name="website_add_failure">Hinzufügen Webseite Ausfall</string>
 	<string name="website_">Webseite</string>
@@ -35,20 +33,19 @@
 	<string name="address_of_your_website">Adresse Ihrer Website</string>
 	<string name="www_example_com">www.example.com</string>
 	<string name="keywords_to_track">Keywords zu verfolgen</string>
-	<string name="example_keyword_1_nexample_keyword_2">Beispiel Schlüsselwort 1\nBeispiel Schlüsselwort 2\nBeispiel Schlüsselwort 3\n...\nBeispiel Keyword-n</string>
+	<string name="example_keyword_1_nexample_keyword_2">Beispiel Suchbegriff 1 \ nBeispiel Schlagwort 2 \ nBeispiel Schlüsselwort 3 \ n. .. \ nBeispiel Schlüsselwort n</string>
 	<string name="insert">Einfügen</string>
 	<string name="back">Zurück</string>
 	<string name="about_title_news_and_updates">News und Aktuelles</string>
-	<string name="send_email_to_dev">Senden Sie eine E-Mail an mich!</string>
 	<string name="address">Adresse</string>
 	<string name="save">Sparen</string>
 	<string name="not_ranked">nicht eingestuft</string>
 	<string name="error1_input_keywords_are_null">ERROR1: input Schlüsselwörter sind null</string>
-	<string name="_not_ranked_">[Nicht bewertet]</string>
 	<string name="keyword_">Stichwort</string>
 	<string name="free_version_limit_5_keywords_per_website">Kostenlose Version Grenze: 5 Keywords pro Seite</string>
-	<string name="google_is_trademark_of_google_inc_this_application_is_built_on_google_custom_search_api_and_does_not_infringe_google_search_terms_of_service_">DISCLAIMER: Google ist ein Warenzeichen der Google Inc.. Diese Anwendung basiert auf Google Custom Search API gebaut und nicht gegen Google Search Nutzungsbedingungen</string>
 	<string name="search_engine">Search Engine</string>
 	<string name="delete_all_data">Alle Daten löschen</string>
 	<string name="resets_all_application_internal_data">Setzt alle Anwendung interner Daten</string>
+	<string name="legal_information">Rechtliche Hinweise</string>
+	<string name="error_please_try_again">Fehler, bitte versuchen Sie es erneut</string>
 </resources>
