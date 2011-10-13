@@ -251,7 +251,7 @@ public class AsyncDownloader extends
 
 		Log.d("MY", "results count:" + allResults.size());
 
-		if (allResults == null) {
+		if (allResults.size() == 0) {
 
 			Log.w("MY", "downloaded allResults h3 first a is null");
 			FlurryAgent.onError("MINOR-EX",
@@ -260,7 +260,7 @@ public class AsyncDownloader extends
 
 			keyword.newRank = -2;
 
-			return allResults;
+			return null;
 		}
 
 		return allResults;
