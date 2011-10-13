@@ -33,6 +33,7 @@ public class MainActivity extends Activity {
 
 	private ArrayList<UserProfile> data;
 	private Boolean menuBarIsVisible = true;
+	private AdView adView;
 
 	@Override
 	public void onStart() {
@@ -53,7 +54,7 @@ public class MainActivity extends Activity {
 
 		BugSenseHandler.setup(this, "dd278c2d");
 
-		Util.initAdmob(this);
+		adView = Util.loadAdmob(this);
 
 		// inhouse notification
 		Util.loadInHouseAds(((LinearLayout) findViewById(R.id.inhouseAds)),
@@ -67,6 +68,12 @@ public class MainActivity extends Activity {
 		bindRunButton();
 		MainActivityHelper.bindMenuBarButtons(this);
 
+	}
+
+	@Override
+	protected void onDestroy() {
+		adView.destroy();
+		super.onDestroy();
 	}
 
 	@Override

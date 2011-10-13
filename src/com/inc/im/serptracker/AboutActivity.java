@@ -1,6 +1,7 @@
 package com.inc.im.serptracker;
 
 import com.flurry.android.FlurryAgent;
+import com.google.ads.AdView;
 import com.inc.im.serptracker.data.access.AsyncDownloaderNews;
 import com.inc.im.serptracker.util.Util;
 
@@ -17,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class AboutActivity extends Activity {
+	
+	private AdView adView;
 
 	@Override
 	public void onStart() {
@@ -31,12 +34,18 @@ public class AboutActivity extends Activity {
 	}
 
 	@Override
+	protected void onDestroy() {
+		adView.destroy();
+		super.onDestroy();
+	}
+	
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.about_layout);
 
-		Util.initAdmob(this);
-		
+		adView = Util.loadAdmob(this);
+
 		AsyncDownloaderNews newsDownloader = new AsyncDownloaderNews(
 				((ProgressBar) findViewById(R.id.progressBar1)),
 				((TextView) findViewById(R.id.textView1)));
@@ -104,7 +113,7 @@ public class AboutActivity extends Activity {
 						Intent intent = new Intent(Intent.ACTION_SEND);
 
 						// old send email
-						 intent.setType("text/plain");
+						intent.setType("text/plain");
 						//
 						intent.putExtra(Intent.EXTRA_EMAIL,
 								new String[] { getString(R.string.dev_email) });

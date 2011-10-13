@@ -188,41 +188,79 @@ public class AsyncDownloader extends
 			return null;
 
 		Document doc = null;
+
+		// String ua =
+		// "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.122 Safari/534.30";
+		String ua = "Apache-HttpClient/UNAVAILABLE (java 1.4)";
+		// .userAgent("Apache-HttpClient/UNAVAILABLE (java 1.4)")
+
+		// try1
 		try {
 
-			//String ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.122 Safari/534.30";
-
 			doc = Jsoup.connect(generateEscapedQueryString(keyword, false))
-					.userAgent("Apache-HttpClient/UNAVAILABLE (java 1.4)")
+					.userAgent(ua).header("Accept", "text/plain")
 					.timeout(TIMEOUT).get();
 
 		} catch (Exception e1) {
 			Log.e("MY", e1.toString());
-			
-			keyword.newRank = -2;
-
+			FlurryAgent.onError("JSOUP D EX", e1.toString(), "AsyncDownloader");
 		}
+
+		// try 2
+		if (doc == null)
+			try {
+
+				doc = Jsoup.connect(generateEscapedQueryString(keyword, false))
+						.userAgent(ua).header("Accept", "text/plain")
+						.timeout(TIMEOUT).get();
+
+			} catch (Exception e1) {
+				Log.e("MY", e1.toString());
+				FlurryAgent.onError("JSOUP D EX", e1.toString(),
+						"AsyncDownloader");
+			}
+
+		// try 3
+		if (doc == null)
+			try {
+
+				doc = Jsoup.connect(generateEscapedQueryString(keyword, false))
+						.userAgent(ua).header("Accept", "text/plain")
+						.timeout(TIMEOUT).get();
+
+			} catch (Exception e1) {
+				Log.e("MY", e1.toString());
+				FlurryAgent.onError("JSOUP D EX", e1.toString(),
+						"AsyncDownloader");
+			}
 
 		if (doc == null) {
 			Log.w("MY", "download is null");
-			FlurryAgent.onError("MINOR-EX", "JSOUP download is null",
-					"AsyncDownloader");
-			
+			FlurryAgent
+					.onError(
+							"NO RANK",
+							"USER didn't receive any rankings for that keyword even after 3 tries",
+							"AsyncDownloader");
+
 			keyword.newRank = -2;
-		
+
 			return null;
 		}
 
 		Elements allResults = doc.select("h3 > a");
+
+		Log.d("MY", "results count:" + allResults.size());
+
 		if (allResults == null) {
+
 			Log.w("MY", "downloaded allResults h3 first a is null");
 			FlurryAgent.onError("MINOR-EX",
 					"JSOUP download h3 first a select is null",
 					"AsyncDownloader");
-			
+
 			keyword.newRank = -2;
-			
-			return null;
+
+			return allResults;
 		}
 
 		return allResults;

@@ -52,6 +52,7 @@
 	<string name="resets_all_application_internal_data">Resets all application internal data</string>
 	<string name="legal_information">Legal Information</string>
 	<string name="error_please_try_again">Error, please try again</string>
+	<string name="region">Region</string>
 </resources>
 
 

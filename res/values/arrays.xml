@@ -3,6 +3,9 @@
     <string-array name="SearchEngines">
         <item>Google™</item>
     </string-array>
+    <string-array name="localize">
+        <item>Global (Google.com)</item>
+    </string-array>
 
     
 </resources>

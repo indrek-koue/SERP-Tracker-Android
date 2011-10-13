@@ -19,8 +19,23 @@ import android.widget.Toast;
 
 public class Util {
 
-	public static void initAdmob(Activity a) {
+//	public static void initAdmob(Activity a) {
+//
+//		AdView adView = new AdView(a, AdSize.BANNER, "a14e6777b9a798c");
+//
+//		// Lookup your LinearLayout assuming it’s been given
+//		// the attribute android:id="@+id/mainLayout"
+//		LinearLayout layout = (LinearLayout) a.findViewById(R.id.admob_banner);
+//
+//		// Add the adView to it
+//		layout.addView(adView);
+//
+//		// Initiate a generic request to load it with an ad
+//		AdRequest adRequest = new AdRequest();
+//		adView.loadAd(adRequest);
+//	}
 
+	public static AdView loadAdmob(Activity a) {
 		AdView adView = new AdView(a, AdSize.BANNER, "a14e6777b9a798c");
 
 		// Lookup your LinearLayout assuming it’s been given
@@ -33,6 +48,8 @@ public class Util {
 		// Initiate a generic request to load it with an ad
 		AdRequest adRequest = new AdRequest();
 		adView.loadAd(adRequest);
+
+		return adView;
 	}
 
 	public static void setKeywordLimit(final int limit, EditText et,
