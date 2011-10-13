@@ -5,5 +5,8 @@
 	<ListPreference android:key="prefSearchEngine"
 		android:summary="Google™" android:title="@string/search_engine"
 		android:entries="@array/SearchEngines" android:entryValues="@array/SearchEngines"></ListPreference>
+	<ListPreference android:key="prefLocalize"
+		android:summary="Google.com" android:title="@string/region"
+		android:entries="@array/localize" android:entryValues="@array/localize"></ListPreference>
 
 </PreferenceScreen>

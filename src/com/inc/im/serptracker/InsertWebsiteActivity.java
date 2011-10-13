@@ -9,10 +9,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
+import com.google.ads.AdView;
 import com.inc.im.serptracker.data.access.DbAdapter;
 import com.inc.im.serptracker.util.Util;
 
 public class InsertWebsiteActivity extends Activity {
+	
+	private AdView adView;
 
 	@Override
 	public void onStart() {
@@ -27,18 +30,25 @@ public class InsertWebsiteActivity extends Activity {
 	}
 
 	@Override
+	protected void onDestroy() {
+		adView.destroy();
+		super.onDestroy();
+	}
+	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.insertprofile_activity_layout);
-		
-		Util.initAdmob(this);
+
+		adView = Util.loadAdmob(this);
 
 		bindAddButton();
 		bindBackButton();
 
 		// keyword limit disabled
 		Util.setKeywordLimit(-1, (EditText) findViewById(R.id.editText2),
-				getString(R.string.free_version_limit_5_keywords_per_website), getBaseContext());
+				getString(R.string.free_version_limit_5_keywords_per_website),
+				getBaseContext());
 
 	}
 

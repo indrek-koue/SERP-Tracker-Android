@@ -3,6 +3,7 @@ package com.inc.im.serptracker;
 import java.util.ArrayList;
 
 import com.flurry.android.FlurryAgent;
+import com.google.ads.AdView;
 import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.UserProfile;
@@ -25,6 +26,7 @@ public class ManageWebsitesActivity extends Activity {
 
 	ArrayList<UserProfile> data;
 	int selectedUserProfileId;
+	private AdView adView;
 
 	@Override
 	public void onStart() {
@@ -39,11 +41,17 @@ public class ManageWebsitesActivity extends Activity {
 	}
 
 	@Override
+	protected void onDestroy() {
+		adView.destroy();
+		super.onDestroy();
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.manage_profiles_layout);
 
-		Util.initAdmob(this);
+		adView = Util.loadAdmob(this);
 
 		initSpinner();
 
