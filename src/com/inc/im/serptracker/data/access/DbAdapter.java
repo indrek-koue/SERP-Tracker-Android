@@ -231,7 +231,7 @@ public class DbAdapter {
 						KEY_KEYWORDS_TABLE_PARENTID + " = " + profileId, null,
 						null, null, null);
 
-				if (keywordsCur != null) {
+				if (keywordsCur != null && keywordsCur.getColumnCount() > 0) {
 					// profile has keywords
 
 					keywordsCur.moveToFirst();
