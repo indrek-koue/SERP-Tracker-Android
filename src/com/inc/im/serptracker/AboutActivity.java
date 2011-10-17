@@ -12,13 +12,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class AboutActivity extends Activity {
-	
+
 	private AdView adView;
 
 	@Override
@@ -38,7 +39,7 @@ public class AboutActivity extends Activity {
 		adView.destroy();
 		super.onDestroy();
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -104,38 +105,42 @@ public class AboutActivity extends Activity {
 	}
 
 	private void bindSendEmailToDevButton() {
-		((Button) findViewById(R.id.button1))
-				.setOnClickListener(new View.OnClickListener() {
 
-					@Override
-					public void onClick(View v) {
+		OnClickListener onClick = new View.OnClickListener() {
 
-						Intent intent = new Intent(Intent.ACTION_SEND);
+			@Override
+			public void onClick(View v) {
 
-						// old send email
-						intent.setType("text/plain");
-						//
-						intent.putExtra(Intent.EXTRA_EMAIL,
-								new String[] { getString(R.string.dev_email) });
+				Intent intent = new Intent(Intent.ACTION_SEND);
 
-						intent.putExtra(Intent.EXTRA_SUBJECT,
-								getString(R.string.app_name));
-						//
-						// // in order to not crash with other than emails apps?
-						intent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+				// old send email
+				intent.setType("message/rfc822");
+				//
+				intent.putExtra(Intent.EXTRA_EMAIL,
+						new String[] { getString(R.string.dev_email) });
 
-						try {
-							startActivity(Intent.createChooser(intent,
-									getString(R.string.send_mail)));
-						} catch (android.content.ActivityNotFoundException ex) {
-							Toast.makeText(
-									getBaseContext(),
-									R.string.there_are_no_email_clients_installed_,
-									Toast.LENGTH_SHORT).show();
-						}
+				intent.putExtra(Intent.EXTRA_SUBJECT,
+						getString(R.string.app_name));
+				//
+				// // in order to not crash with other than emails apps?
+				intent.putExtra(android.content.Intent.EXTRA_TEXT, "");
 
-					}
-				});
+				try {
+					startActivity(Intent.createChooser(intent,
+							getString(R.string.send_mail)));
+				} catch (android.content.ActivityNotFoundException ex) {
+					Toast.makeText(getBaseContext(),
+							R.string.there_are_no_email_clients_installed_,
+							Toast.LENGTH_SHORT).show();
+				}
+
+			}
+		};
+
+		((Button) findViewById(R.id.button1)).setOnClickListener(onClick);
+		((Button) findViewById(R.id.btnReportWrongRanking))
+				.setOnClickListener(onClick);
+
 	}
 
 }

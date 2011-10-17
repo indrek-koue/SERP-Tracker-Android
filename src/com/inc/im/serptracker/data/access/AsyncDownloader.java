@@ -13,6 +13,7 @@ import com.flurry.android.FlurryAgent;
 import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.util.MainActivityHelper;
+import com.inc.im.serptracker.util.Parser;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -23,22 +24,18 @@ import android.widget.ListView;
 public class AsyncDownloader extends
 		AsyncTask<ArrayList<Keyword>, Integer, ArrayList<Keyword>> {
 
-	private final int TIMEOUT = 10000;
-	private final int DCOUNT = 100;
-
 	private Activity a;
 	public ListView lv;
 	private final String WEBSITE;
 	private ProgressDialog progressDialog;
 
-	private String flurryExportParameters = "";
 	private int itemCount;
 	private long start;
 
 	public AsyncDownloader(Activity a, ListView lv, String searchable) {
 		this.a = a;
 		this.lv = lv;
-		this.WEBSITE = removePrefix(searchable);
+		this.WEBSITE = Parser.removePrefix(searchable);
 	}
 
 	@Override
@@ -60,32 +57,33 @@ public class AsyncDownloader extends
 
 		// count items for the load screen
 		itemCount = keywords[0].size();
+		ArrayList<Keyword> result = new ArrayList<Keyword>();
 
 		for (int counter = 0; counter < keywords[0].size(); counter++) {
-			Keyword keyword = keywords[0].get(counter);
 
 			if (!progressDialog.isShowing())
 				return null;
 
-			Elements allResults = downloadJsoapParseH3FirstA(keyword);
+			Keyword keyword = keywords[0].get(counter);
 
-			if (allResults != null) {
-				removeNotValidUrls(allResults);
-				bindIntoCustomElementKeyword(keyword, allResults);
-			}
+			//Elements raw = Download.H3FirstA(keyword);
 
-			int progress = counter;
-			publishProgress(++progress);
+			Elements raw = Parser.parse(keyword, Download.H3FirstA(keyword));
+			
+			// find WEBSITE in H3FirstA and save ranking into keyword
+			if (raw != null)
+				Parser.getRanking(keyword, raw, WEBSITE);
 
-			// not found / ranked
-			if (keyword.newRank == 0)
-				keyword.newRank = -1;
+			result.add(keyword);
+
+			// int progress = counter;
+			publishProgress(counter + 1);
 
 		}
 
-		flurryLogging();
+		flurryLogging(result);
 
-		return keywords[0];
+		return result;
 
 	}
 
@@ -122,53 +120,11 @@ public class AsyncDownloader extends
 
 	}
 
-	public void bindIntoCustomElementKeyword(Keyword keyword,
-			Elements allResults) {
+	public void flurryLogging(ArrayList<Keyword> result) {
+		String values = "";
 
-		if (keyword == null)
-			return;
-
-		for (int i = 0; i < allResults.size(); i++) {
-			Element singleResult = allResults.get(i);
-
-			if (singleResult != null) {
-
-				String singleResultAnchor = singleResult.text();
-				String singleResultUrl = singleResult.attr("href");
-
-				// if cointains url and is not set yet
-				if (singleResultUrl.contains(WEBSITE) && keyword.newRank == 0) {
-
-					keyword.newRank = i;
-					keyword.anchorText = singleResultAnchor;
-					keyword.url = singleResultUrl;
-
-					// save flurry output
-					flurryExportParameters += i + "";
-
-				}
-			}
-		} // for links in keyword
-
-		flurryExportParameters += ":";
-	}
-
-	public void removeNotValidUrls(Elements allResults) {
-
-		// remove not valid urls
-		for (int i = 0; i < allResults.size(); i++)
-			if (allResults.get(i).attr("href").startsWith("/search?q=")
-					|| allResults.get(i).attr("href").startsWith("/aclk?")) {
-				allResults.remove(i);
-			}
-
-		// loging - remove
-		if (allResults.size() != 100)
-			Log.w("MY", "WARNING: results after delete != 100, instead:"
-					+ allResults.size());
-	}
-
-	public void flurryLogging() {
+		for (Keyword k : result)
+			values += k.newRank + ":";
 
 		HashMap<String, String> parameters = new HashMap<String, String>();
 		parameters.put("num of keywords", String.valueOf(itemCount));
@@ -176,110 +132,16 @@ public class AsyncDownloader extends
 				String.valueOf(System.currentTimeMillis() - start));
 		parameters.put("avg time per keyword", String.valueOf((System
 				.currentTimeMillis() - start) / itemCount));
-		parameters.put("results", String.valueOf(flurryExportParameters));
+		parameters.put("results", String.valueOf(values));
 
 		FlurryAgent.onEvent("download", parameters);
-
 	}
 
-	private Elements downloadJsoapParseH3FirstA(Keyword keyword) {
-
-		if (keyword == null)
-			return null;
-
-		Document doc = null;
-
-		// String ua =
-		// "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.122 Safari/534.30";
-		String ua = "Apache-HttpClient/UNAVAILABLE (java 1.4)";
-		// .userAgent("Apache-HttpClient/UNAVAILABLE (java 1.4)")
-
-		// try1
-		try {
-
-			doc = Jsoup.connect(generateEscapedQueryString(keyword, false))
-					.userAgent(ua).header("Accept", "text/plain")
-					.timeout(TIMEOUT).get();
-
-		} catch (Exception e1) {
-			Log.e("MY", e1.toString());
-			FlurryAgent.onError("JSOUP D EX", e1.toString(), "AsyncDownloader");
-		}
-
-		// try 2
-		if (doc == null)
-			try {
-
-				doc = Jsoup.connect(generateEscapedQueryString(keyword, false))
-						.userAgent(ua).header("Accept", "text/plain")
-						.timeout(TIMEOUT).get();
-
-			} catch (Exception e1) {
-				Log.e("MY", e1.toString());
-				FlurryAgent.onError("JSOUP D EX", e1.toString(),
-						"AsyncDownloader");
-			}
-
-		// try 3
-		if (doc == null)
-			try {
-
-				doc = Jsoup.connect(generateEscapedQueryString(keyword, false))
-						.userAgent(ua).header("Accept", "text/plain")
-						.timeout(TIMEOUT).get();
-
-			} catch (Exception e1) {
-				Log.e("MY", e1.toString());
-				FlurryAgent.onError("JSOUP D EX", e1.toString(),
-						"AsyncDownloader");
-			}
-
-		if (doc == null) {
-			Log.w("MY", "download is null");
-			FlurryAgent
-					.onError(
-							"NO RANK",
-							"USER didn't receive any rankings for that keyword even after 3 tries",
-							"AsyncDownloader");
-
-			keyword.newRank = -2;
-
-			return null;
-		}
-
-		Elements allResults = doc.select("h3 > a");
-
-		Log.d("MY", "results count:" + allResults.size());
-
-		if (allResults.size() == 0) {
-
-			Log.w("MY", "downloaded allResults h3 first a is null");
-			FlurryAgent.onError("MINOR-EX",
-					"JSOUP download h3 first a select is null",
-					"AsyncDownloader");
-
-			keyword.newRank = -2;
-
-			return null;
-		}
-
-		return allResults;
-	}
-
-	public String generateEscapedQueryString(Keyword k, Boolean noMobile) {
-		if (noMobile)
-			return "http://www.google.com/search?num=" + DCOUNT + "&nomo=1&q="
-					+ URLEncoder.encode(k.value);
-		else
-			return "http://www.google.com/search?num=" + DCOUNT + "&q="
-					+ URLEncoder.encode(k.value);
-	}
-
-	public String removePrefix(String searchable) {
-
-		String result = searchable.replace("http://", "").replace("www.", "");
-
-		return result;
-	}
+//	public String removePrefix(String searchable) {
+//
+//		String result = searchable.replace("http://", "").replace("www.", "");
+//
+//		return result;
+//	}
 
 }
