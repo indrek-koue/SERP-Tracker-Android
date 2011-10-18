@@ -57,6 +57,11 @@ public class Parser {
 
 		for (int i = 0; i < allResults.size(); i++) {
 			Element singleResult = allResults.get(i);
+			Log.d("MY", i + ". " + singleResult.attr("href"));
+		}
+
+		for (int i = 0; i < allResults.size(); i++) {
+			Element singleResult = allResults.get(i);
 
 			if (keyword.newRank != 0)
 				return;
@@ -69,7 +74,22 @@ public class Parser {
 				// if cointains url and is not set yet
 				if (singleResultUrl.contains(WEBSITE)) {
 
-					keyword.newRank = i + 1;
+					if (allResults.size() <= DCOUNT) {
+						// HUSTON WE HAVE TO JUSTIFY RANK
+						// there is a authority link with sub links somewhere
+						// probably
+
+						keyword.newRank = i + 1;
+					} else {
+
+						int overTheNormal = allResults.size() - DCOUNT;
+						int newRank = i + 1 - overTheNormal;
+
+						if (newRank <= 0)
+							newRank = 1;
+
+						keyword.newRank = newRank;
+					}
 					keyword.anchorText = singleResultAnchor;
 					keyword.url = singleResultUrl;
 
@@ -92,20 +112,14 @@ public class Parser {
 	public static void removeNotValidUrls(Elements allResults) {
 
 		// remove ad urls
-		for (int i = 0; i < allResults.size(); i++)
-			if (allResults.get(i).attr("href").startsWith("/search?q=")
-					|| allResults.get(i).attr("href").startsWith("/aclk?")) {
+		for (int i = 0; i < allResults.size(); i++) {
+
+			String temp = allResults.get(i).attr("href");
+			// if (temp.startsWith("/search?q=") || temp.startsWith("/aclk?")) {
+			if (temp.startsWith("/")) {
 				allResults.remove(i);
 			}
-
-		// TODO: remove first place multible combos ex. keyword:adobe
-		String first = removePrefix(allResults.get(0).attr("href"));
-
-		String temp = first.substring(0, first.indexOf("/"));
-		Log.d("MY", temp);
-
-		// if first 7 are same, then remove 6
-		// if x links with same domain are in row, remove all except one
+		}
 
 		// loging - remove
 		if (allResults.size() != 100)
