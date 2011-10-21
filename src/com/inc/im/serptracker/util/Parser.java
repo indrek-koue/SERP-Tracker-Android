@@ -25,6 +25,9 @@ public class Parser {
 	 */
 	public static Elements parse(Keyword keyword, Document doc) {
 
+		if(doc==null)
+			return null;
+		
 		Elements allResults = doc.select("h3 > a");
 
 		if (allResults == null || allResults.size() == 0) {
@@ -52,7 +55,7 @@ public class Parser {
 	public static void getRanking(Keyword keyword, Elements allResults,
 			String WEBSITE) {
 
-		if (keyword == null)
+		if (keyword == null || allResults == null)
 			return;
 
 		for (int i = 0; i < allResults.size(); i++) {
