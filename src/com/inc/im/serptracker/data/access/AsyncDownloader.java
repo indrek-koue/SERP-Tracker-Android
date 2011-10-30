@@ -124,6 +124,11 @@ public class AsyncDownloader extends
 		if (!progressDialog.isShowing())
 			return;
 
+//		// for testing
+//
+//		input.get(0).newRank = 99;
+//		input.get(0).oldRank = -88;
+
 		lv.setAdapter(new MainActivityListAdapter(a, input));
 
 		// MainActivityHelper.bindResultListView(a, lv, input);

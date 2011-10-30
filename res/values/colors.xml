@@ -8,6 +8,10 @@
 	<color name="lgray">#EEE</color>
 	<color name="dgray">#333</color>
 <color name="red">#C70000</color>
+<color name="green">#3bd200</color>
+<color name="red2">#f40101</color>
+<color name="dgreen">#248000</color>
+<color name="dred">#860000</color>
 
 
 </resources>

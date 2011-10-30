@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainActivityListAdapter extends BaseAdapter {
@@ -68,10 +69,50 @@ public class MainActivityListAdapter extends BaseAdapter {
 		String newRank = Integer.toString(k.newRank);
 		String oldRank = Integer.toString(k.oldRank);
 
+		tvRankOld.setTextColor(R.color.dred);
+		
+		ImageView iv = (ImageView) convertView.findViewById(R.id.imageView1);
+
+		if (k.newRank > k.oldRank) {
+			iv.setBackgroundResource(R.drawable.down);
+			tvRankOld.setVisibility(View.VISIBLE);
+			tvRankOld.setTextColor(con.getResources().getColor(R.color.dred));
+		} else if (k.newRank < k.oldRank) {
+			iv.setBackgroundResource(R.drawable.up);
+			tvRankOld.setVisibility(View.VISIBLE);
+			tvRankOld.setTextColor(con.getResources().getColor(R.color.green));
+		} else {
+			iv.setVisibility(View.GONE);
+			tvRankOld.setVisibility(View.GONE);
+		}
+
+		// special cases
+		// 0 - empty field in DB - new
+		// -1 - not ranked in top 100
+		// -2 - error getting data
+
+		if (k.newRank == 0) {
+			iv.setVisibility(View.GONE);
+			tvRankOld.setVisibility(View.GONE);
+
+		}
+
+		if (k.newRank == -1) {
+			iv.setVisibility(View.GONE);
+			tvRankOld.setVisibility(View.GONE);
+			tvRank.setText("not ranked");
+		}
+
+		if (k.newRank == -1) {
+			iv.setVisibility(View.GONE);
+			tvRankOld.setVisibility(View.GONE);
+			tvRank.setText("error");
+		}
+
 		tvKeyword.setText(keyword);
 		tvRank.setText(newRank);
-		tvRankOld.setText(oldRank);
 
+		tvRankOld.setText(oldRank);
 		return convertView;
 	}
 }
