@@ -9,6 +9,7 @@ import org.jsoup.select.Elements;
 import android.util.Log;
 
 import com.inc.im.serptracker.data.Keyword;
+import com.inc.im.serptracker.data.access.Download;
 
 public class Parser {
 
@@ -23,11 +24,14 @@ public class Parser {
 	 *            - find h3 > a in here
 	 * @return Elements of results
 	 */
-	public static Elements parse(Keyword keyword, Document doc) {
+	public static Elements parse(Keyword keyword) {
 
-		if(doc==null)
+		Document doc = Download.H3FirstA(keyword);
+
+		// @added ver 1.3 - exception fix
+		if (doc == null)
 			return null;
-		
+
 		Elements allResults = doc.select("h3 > a");
 
 		if (allResults == null || allResults.size() == 0) {
@@ -43,31 +47,33 @@ public class Parser {
 	}
 
 	/**
-	 * Calculates ranking from allResults by WEBSITE and saves to keyword
-	 * 
-	 * @param keyword
-	 *            results saved here
 	 * @param allResults
-	 *            where to find user ranking
+	 *            where to find
 	 * @param WEBSITE
-	 *            by what find user ranking
+	 *            what to find
 	 */
-	public static void getRanking(Keyword keyword, Elements allResults,
+	public static Keyword getRanking(Keyword keyword, Elements allResults,
 			String WEBSITE) {
 
 		if (keyword == null || allResults == null)
-			return;
+			return null;
 
+		// logging
 		for (int i = 0; i < allResults.size(); i++) {
 			Element singleResult = allResults.get(i);
 			Log.d("MY", i + ". " + singleResult.attr("href"));
 		}
 
+		Keyword result = new Keyword(keyword.keyword);
+		result.oldRank = keyword.oldRank;
+		result.id = keyword.id;
+
 		for (int i = 0; i < allResults.size(); i++) {
+
 			Element singleResult = allResults.get(i);
 
-			if (keyword.newRank != 0)
-				return;
+			if (result.newRank != 0)
+				return result;
 
 			if (singleResult != null) {
 
@@ -78,12 +84,15 @@ public class Parser {
 				if (singleResultUrl.contains(WEBSITE)) {
 
 					if (allResults.size() <= DCOUNT) {
-						// HUSTON WE HAVE TO JUSTIFY RANK
+
+						result.newRank = i + 1;
+
+						// keyword.newRank = i + 1;
+					} else {
+
+						// WE HAVE TO JUSTIFY RANK
 						// there is a authority link with sub links somewhere
 						// probably
-
-						keyword.newRank = i + 1;
-					} else {
 
 						int overTheNormal = allResults.size() - DCOUNT;
 						int newRank = i + 1 - overTheNormal;
@@ -91,10 +100,10 @@ public class Parser {
 						if (newRank <= 0)
 							newRank = 1;
 
-						keyword.newRank = newRank;
+						result.newRank = newRank;
 					}
-					keyword.anchorText = singleResultAnchor;
-					keyword.url = singleResultUrl;
+					result.anchorText = singleResultAnchor;
+					result.url = singleResultUrl;
 
 				}
 
@@ -102,8 +111,10 @@ public class Parser {
 		} // for links in keyword
 
 		// not ranked
-		if (keyword.newRank == 0)
-			keyword.newRank = -1;
+		if (result.newRank == 0)
+			result.newRank = -1;
+
+		return result;
 
 	}
 
@@ -133,10 +144,10 @@ public class Parser {
 	public static String generateEscapedQueryString(Keyword k, Boolean noMobile) {
 		if (noMobile)
 			return "http://www.google.com/search?num=" + DCOUNT + "&nomo=1&q="
-					+ URLEncoder.encode(k.value);
+					+ URLEncoder.encode(k.keyword);
 		else
 			return "http://www.google.com/search?num=" + DCOUNT + "&q="
-					+ URLEncoder.encode(k.value);
+					+ URLEncoder.encode(k.keyword);
 	}
 
 	public static String removePrefix(String searchable) {

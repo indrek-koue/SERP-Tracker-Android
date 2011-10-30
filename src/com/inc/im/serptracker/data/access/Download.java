@@ -20,10 +20,10 @@ public class Download {
 	private final static int PAUSE = 500;
 	private final static String ua = "Apache-HttpClient/UNAVAILABLE (java 1.4)";
 
-	
 	/**
 	 * 
-	 * @param keyword used to generate URL for download
+	 * @param keyword
+	 *            used to generate URL for download
 	 * @return downloaded document from Google
 	 */
 	public static Document H3FirstA(Keyword keyword) {
@@ -68,11 +68,7 @@ public class Download {
 
 		if (doc == null) {
 			Log.w("MY", "download is null");
-			FlurryAgent
-					.onError(
-							"NO RANK",
-							"USER didn't receive any rankings for that keyword even after 3 tries",
-							"AsyncDownloader");
+			FlurryAgent.onEvent("NO RANK after 3 tries");
 
 			keyword.newRank = -2;
 

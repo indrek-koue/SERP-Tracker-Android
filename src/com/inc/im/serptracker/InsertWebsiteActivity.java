@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.google.ads.AdView;
-import com.inc.im.serptracker.data.access.DbAdapter;
+import com.inc.im.serptracker.adapters.DbAdapter;
 import com.inc.im.serptracker.util.Util;
 
 public class InsertWebsiteActivity extends Activity {

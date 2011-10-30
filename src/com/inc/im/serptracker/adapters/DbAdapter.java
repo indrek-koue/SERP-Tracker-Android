@@ -1,4 +1,4 @@
-package com.inc.im.serptracker.data.access;
+package com.inc.im.serptracker.adapters;
 
 import java.util.ArrayList;
 
@@ -91,7 +91,7 @@ public class DbAdapter {
 
 			ContentValues initialValuesKeywords = new ContentValues();
 			initialValuesKeywords
-					.put(KEY_KEYWORDS_TABLE_KEYWORD, keyword.value);
+					.put(KEY_KEYWORDS_TABLE_KEYWORD, keyword.keyword);
 			initialValuesKeywords.put(KEY_KEYWORDS_TABLE_PARENTID, idToUpdate);
 
 			Long l = mDb.insert(TABLE_KEYWORDS, null, initialValuesKeywords);
@@ -141,7 +141,7 @@ public class DbAdapter {
 
 				ContentValues initialValuesKeywords = new ContentValues();
 				initialValuesKeywords.put(KEY_KEYWORDS_TABLE_KEYWORD,
-						keyword.value);
+						keyword.keyword);
 				initialValuesKeywords
 						.put(KEY_KEYWORDS_TABLE_PARENTID, parentId);
 
@@ -204,6 +204,8 @@ public class DbAdapter {
 
 	public ArrayList<UserProfile> loadAllProfiles() {
 
+		Log.i("MY", "load all profiles from DB");
+		
 		ArrayList<UserProfile> profiles = null;
 
 		open();
@@ -238,16 +240,24 @@ public class DbAdapter {
 
 					do {
 
-						int id = keywordsCur.getInt(keywordsCur
-								.getColumnIndex(KEY_KEYWORDS_TABLE_ID));
+						try {
+							int id = keywordsCur.getInt(keywordsCur
+									.getColumnIndex(KEY_KEYWORDS_TABLE_ID));
 
-						String keyword = keywordsCur.getString(keywordsCur
-								.getColumnIndex(KEY_KEYWORDS_TABLE_KEYWORD));
+							String keyword = keywordsCur
+									.getString(keywordsCur
+											.getColumnIndex(KEY_KEYWORDS_TABLE_KEYWORD));
 
-						int rank = keywordsCur.getInt(keywordsCur
-								.getColumnIndex(KEY_KEYWORDS_TABLE_POSTION));
+							int rank = keywordsCur
+									.getInt(keywordsCur
+											.getColumnIndex(KEY_KEYWORDS_TABLE_POSTION));
 
-						keywords.add(new Keyword(id, keyword, rank));
+							keywords.add(new Keyword(id, keyword, rank));
+
+						} catch (Exception e) {
+							Log.e("MY", "dbatapter parsing from cursor error: "
+									+ e.toString());
+						}
 
 					} while (keywordsCur.moveToNext());
 

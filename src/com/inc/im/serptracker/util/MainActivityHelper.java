@@ -24,77 +24,77 @@ import com.inc.im.serptracker.InsertWebsiteActivity;
 import com.inc.im.serptracker.ManageWebsitesActivity;
 import com.inc.im.serptracker.PreferencesActivity;
 import com.inc.im.serptracker.R;
+import com.inc.im.serptracker.adapters.DbAdapter;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.UserProfile;
-import com.inc.im.serptracker.data.access.DbAdapter;
 
 public class MainActivityHelper {
 
-	public static ArrayList<String> bindResultListView(Activity a,
-			ListView listView, ArrayList<Keyword> keywords) {
-
-		ArrayList<String> keywordsToBind = new ArrayList<String>();
-
-		if (keywords != null) {
-
-			for (Keyword k : keywords) {
-
-				// 0 - empty field in DB - new
-				// -1 - not ranked in top 100
-				// -2 - error getting data
-
-				if ((k.newRank == -1 && k.oldRank == 0)
-						|| (k.newRank == 0 && k.oldRank == -1)
-						|| k.newRank == -1) {
-					// not ranked
-					keywordsToBind.add(k.value + " ["
-							+ a.getString(R.string.not_ranked) + "]");
-				} else if (k.newRank == -2) {
-					// error
-					keywordsToBind.add(k.value + " ["
-							+ a.getString(R.string.error_please_try_again)
-							+ "]");
-				} else if (k.newRank == 0 && k.oldRank == 0) {
-					// new keyword
-					keywordsToBind.add(k.value);
-				} else {
-
-					// keyword has a rank - is it new or old?
-					int valueChange = k.oldRank - k.newRank;
-					String ready = "";
-
-					if (valueChange != 0 && k.newRank != 0) {
-
-						// keyword first run
-						if (k.oldRank == 0) {
-							ready = String.format("%s [ %d ]", k.value,
-									k.newRank);
-						} else {
-							// show with value change
-							String sign = valueChange > 0 ? "+" : "";
-							ready = String.format("%s [ %d ] %s%d", k.value,
-									k.newRank, sign, valueChange);
-						}
-
-					} else {
-						// value change is 0 - no point to show it with +/-
-						ready = String.format("%s [ %d ]", k.value, k.oldRank);
-					}
-
-					keywordsToBind.add(ready);
-					// keywordsToBind.add(k.value + " [" + k.rank + "] ");
-				}
-			}
-
-			listView.setAdapter(new ArrayAdapter<String>(a,
-					R.layout.main_activity_listview_item, R.id.textView1,
-					keywordsToBind));
-
-		}
-
-		return keywordsToBind;
-
-	}
+//	public static ArrayList<String> bindResultListView(Activity a,
+//			ListView listView, ArrayList<Keyword> keywords) {
+//
+//		ArrayList<String> keywordsToBind = new ArrayList<String>();
+//
+//		if (keywords != null) {
+//
+//			for (Keyword k : keywords) {
+//
+//				// 0 - empty field in DB - new
+//				// -1 - not ranked in top 100
+//				// -2 - error getting data
+//
+//				if ((k.newRank == -1 && k.oldRank == 0)
+//						|| (k.newRank == 0 && k.oldRank == -1)
+//						|| k.newRank == -1) {
+//					// not ranked
+//					keywordsToBind.add(k.keyword + " ["
+//							+ a.getString(R.string.not_ranked) + "]");
+//				} else if (k.newRank == -2) {
+//					// error
+//					keywordsToBind.add(k.keyword + " ["
+//							+ a.getString(R.string.error_please_try_again)
+//							+ "]");
+//				} else if (k.newRank == 0 && k.oldRank == 0) {
+//					// new keyword
+//					keywordsToBind.add(k.keyword);
+//				} else {
+//
+//					// keyword has a rank - is it new or old?
+//					int valueChange = k.oldRank - k.newRank;
+//					String ready = "";
+//
+//					if (valueChange != 0 && k.newRank != 0) {
+//
+//						// keyword first run
+//						if (k.oldRank == 0) {
+//							ready = String.format("%s [ %d ]", k.keyword,
+//									k.newRank);
+//						} else {
+//							// show with value change
+//							String sign = valueChange > 0 ? "+" : "";
+//							ready = String.format("%s [ %d ] %s%d", k.keyword,
+//									k.newRank, sign, valueChange);
+//						}
+//
+//					} else {
+//						// value change is 0 - no point to show it with +/-
+//						ready = String.format("%s [ %d ]", k.keyword, k.oldRank);
+//					}
+//
+//					keywordsToBind.add(ready);
+//					// keywordsToBind.add(k.value + " [" + k.rank + "] ");
+//				}
+//			}
+//
+//			listView.setAdapter(new ArrayAdapter<String>(a,
+//					R.layout.main_activity_listview_item, R.id.textView1,
+//					keywordsToBind));
+//
+//		}
+//
+//		return keywordsToBind;
+//
+//	}
 
 	public static ArrayList<Keyword> findKeywordsByName(
 			ArrayList<UserProfile> data, int spinnerSelectedValueNr) {
