@@ -11,6 +11,8 @@ import org.jsoup.select.Elements;
 
 import com.flurry.android.FlurryAgent;
 import com.inc.im.serptracker.R;
+import com.inc.im.serptracker.adapters.DbAdapter;
+import com.inc.im.serptracker.adapters.MainActivityListAdapter;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.util.MainActivityHelper;
 import com.inc.im.serptracker.util.Parser;
@@ -20,6 +22,10 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ListView;
+
+// 0 - empty field in DB - new
+// -1 - not ranked in top 100
+// -2 - error getting data
 
 public class AsyncDownloader extends
 		AsyncTask<ArrayList<Keyword>, Integer, ArrayList<Keyword>> {
@@ -61,20 +67,38 @@ public class AsyncDownloader extends
 
 		for (int counter = 0; counter < keywords[0].size(); counter++) {
 
+			Keyword keyword = keywords[0].get(counter);
+
 			if (!progressDialog.isShowing())
 				return null;
 
-			Keyword keyword = keywords[0].get(counter);
+			// download and parse h3first
+			Elements raw = Parser.parse(keyword);
 
-			//Elements raw = Download.H3FirstA(keyword);
+			// find WEBSITE ranking in raw
+			if (raw != null) {
 
-			Elements raw = Parser.parse(keyword, Download.H3FirstA(keyword));
-			
-			// find WEBSITE in H3FirstA and save ranking into keyword
-			if (raw != null)
-				Parser.getRanking(keyword, raw, WEBSITE);
+				// NB! has to return keyword because i need the anchor/link also
+				// for premium
 
-			result.add(keyword);
+				Log.e("MY", keyword.id + "");
+				Keyword updatedKeyword = Parser.getRanking(keyword, raw,
+						WEBSITE);
+				// keyword.newRank = newRank;
+				if (updatedKeyword != null) {
+					Log.i("MY",
+							"Result download success: "
+									+ updatedKeyword.toString());
+					result.add(updatedKeyword);
+
+				} else {
+					// nothing found = add old back
+					result.add(keyword);
+				}
+			} else {
+				// nothing downloaded = add old back
+				result.add(keyword);
+			}
 
 			// int progress = counter;
 			publishProgress(counter + 1);
@@ -100,11 +124,17 @@ public class AsyncDownloader extends
 		if (!progressDialog.isShowing())
 			return;
 
-		MainActivityHelper.bindResultListView(a, lv, input);
+		lv.setAdapter(new MainActivityListAdapter(a, input));
+
+		// MainActivityHelper.bindResultListView(a, lv, input);
 
 		// save new ranks
 		for (Keyword k : input)
-			new DbAdapter(a).updateKeywordRank(k, k.newRank);
+			if (new DbAdapter(a).updateKeywordRank(k, k.newRank))
+				Log.i("MY", k.keyword
+						+ " save to db update success, new rank: " + k.newRank);
+			else
+				Log.i("MY", k.keyword + " save to db update failed");
 
 		progressDialog.dismiss();
 
@@ -137,11 +167,11 @@ public class AsyncDownloader extends
 		FlurryAgent.onEvent("download", parameters);
 	}
 
-//	public String removePrefix(String searchable) {
-//
-//		String result = searchable.replace("http://", "").replace("www.", "");
-//
-//		return result;
-//	}
+	// public String removePrefix(String searchable) {
+	//
+	// String result = searchable.replace("http://", "").replace("www.", "");
+	//
+	// return result;
+	// }
 
 }

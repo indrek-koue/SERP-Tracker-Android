@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import com.flurry.android.FlurryAgent;
 import com.google.ads.AdView;
 import com.inc.im.serptracker.R;
+import com.inc.im.serptracker.adapters.DbAdapter;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.UserProfile;
-import com.inc.im.serptracker.data.access.DbAdapter;
 import com.inc.im.serptracker.util.Util;
 
 import android.app.Activity;
@@ -250,9 +250,9 @@ public class ManageWebsitesActivity extends Activity {
 
 		for (int i = 0; i < keywords.size(); i++)
 			if (i != keywords.size() - 1)
-				keyWordsToPopulate += keywords.get(i).value + "\n";
+				keyWordsToPopulate += keywords.get(i).keyword + "\n";
 			else
-				keyWordsToPopulate += keywords.get(i).value;
+				keyWordsToPopulate += keywords.get(i).keyword;
 		((EditText) findViewById(R.id.editText2)).setText(keyWordsToPopulate);
 
 	}

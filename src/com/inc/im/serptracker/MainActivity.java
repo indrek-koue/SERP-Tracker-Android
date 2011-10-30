@@ -8,10 +8,11 @@ import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 import com.google.ads.AdView;
 import com.inc.im.serptracker.R;
+import com.inc.im.serptracker.adapters.DbAdapter;
+import com.inc.im.serptracker.adapters.MainActivityListAdapter;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.UserProfile;
 import com.inc.im.serptracker.data.access.AsyncDownloader;
-import com.inc.im.serptracker.data.access.DbAdapter;
 import com.inc.im.serptracker.util.MainActivityHelper;
 import com.inc.im.serptracker.util.Util;
 
@@ -219,8 +220,11 @@ public class MainActivity extends Activity {
 			// -1 because 0 index holds default text
 			UserProfile selectedUser = data.get(spinnerSelectedItemIndex - 1);
 
-			MainActivityHelper.bindResultListView(this, listView,
-					selectedUser.keywords);
+			listView.setAdapter(new MainActivityListAdapter(getBaseContext(),
+					selectedUser.keywords));
+
+			// MainActivityHelper.bindResultListView(this, listView,
+			// selectedUser.keywords);
 		} else {
 			listView.setAdapter(new ArrayAdapter<String>(getBaseContext(),
 					R.layout.main_activity_listview_item));
