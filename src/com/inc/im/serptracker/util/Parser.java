@@ -35,8 +35,13 @@ public class Parser {
 		Elements allResults = doc.select("h3 > a");
 
 		if (allResults == null || allResults.size() == 0) {
-			Log.w("MY", "downloaded allResults h3 first a is null");
+			Log.e("MY", "downloaded allResults h3 first a is null");
 			keyword.newRank = -2;
+			Log.e("MY", doc.text());
+
+			// debug
+			for (Element e : doc.select("h3"))
+				Log.e("MY", e.text());
 
 			return null;
 		}
@@ -59,10 +64,10 @@ public class Parser {
 			return null;
 
 		// logging
-		for (int i = 0; i < allResults.size(); i++) {
-			Element singleResult = allResults.get(i);
-			Log.d("MY", i + ". " + singleResult.attr("href"));
-		}
+		// for (int i = 0; i < allResults.size(); i++) {
+		// Element singleResult = allResults.get(i);
+		// Log.d("MY", i + ". " + singleResult.attr("href"));
+		// }
 
 		Keyword result = new Keyword(keyword.keyword);
 		result.oldRank = keyword.oldRank;
