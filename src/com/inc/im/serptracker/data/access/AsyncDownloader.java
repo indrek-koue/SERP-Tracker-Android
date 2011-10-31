@@ -81,7 +81,6 @@ public class AsyncDownloader extends
 				// NB! has to return keyword because i need the anchor/link also
 				// for premium
 
-				Log.e("MY", keyword.id + "");
 				Keyword updatedKeyword = Parser.getRanking(keyword, raw,
 						WEBSITE);
 				// keyword.newRank = newRank;

@@ -47,31 +47,30 @@ public class MainActivityListAdapter extends BaseAdapter {
 		// inflate from layout
 		// bind values
 
-		if (convertView == null) {
+		View v = convertView;
+
+		if (v == null) {
 			// convertView = new
 
 			LayoutInflater inf = (LayoutInflater) con
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-			convertView = inf.inflate(R.layout.main_activity_listview_item,
-					null);
+			v = inf.inflate(R.layout.main_activity_listview_item, null);
 		}
 
 		Keyword k = input.get(position);
 
-		TextView tvKeyword = (TextView) convertView
-				.findViewById(R.id.textView1);
-		TextView tvRank = (TextView) convertView.findViewById(R.id.textView2);
-		TextView tvRankOld = (TextView) convertView
-				.findViewById(R.id.textView3);
+		TextView tvKeyword = (TextView) v.findViewById(R.id.textView1);
+		TextView tvRank = (TextView) v.findViewById(R.id.textView2);
+		TextView tvRankOld = (TextView) v.findViewById(R.id.textView3);
 
 		String keyword = k.keyword;
 		String newRank = Integer.toString(k.newRank);
 		String oldRank = Integer.toString(k.oldRank);
 
 		tvRankOld.setTextColor(R.color.dred);
-		
-		ImageView iv = (ImageView) convertView.findViewById(R.id.imageView1);
+
+		ImageView iv = (ImageView) v.findViewById(R.id.imageView1);
 
 		if (k.newRank > k.oldRank) {
 			iv.setBackgroundResource(R.drawable.down);
@@ -86,33 +85,65 @@ public class MainActivityListAdapter extends BaseAdapter {
 			tvRankOld.setVisibility(View.GONE);
 		}
 
+		tvKeyword.setText(keyword);
+		tvRank.setText(newRank);
+		tvRankOld.setText(oldRank);
+
 		// special cases
 		// 0 - empty field in DB - new
 		// -1 - not ranked in top 100
 		// -2 - error getting data
 
 		if (k.newRank == 0) {
-			iv.setVisibility(View.GONE);
-			tvRankOld.setVisibility(View.GONE);
+			if (k.oldRank == 0) {
+
+				// just added
+				tvRank.setVisibility(View.GONE);
+				iv.setVisibility(View.GONE);
+				tvRankOld.setVisibility(View.GONE);
+			} else {
+				// has been used before (has oldrank) and started from
+				// mainscreen first time
+				tvRank.setText(oldRank);
+				iv.setVisibility(View.GONE);
+				tvRankOld.setVisibility(View.GONE);
+
+				if (k.oldRank == -1) {
+					iv.setVisibility(View.GONE);
+					tvRankOld.setVisibility(View.GONE);
+					tvRank.setText("100+");
+				}
+
+				if (k.oldRank == -2) {
+					// hide image + old rank
+					iv.setVisibility(View.GONE);
+					tvRankOld.setVisibility(View.GONE);
+
+					// display error msg
+					tvRank.setText("error");
+					tvRank.setTextColor(con.getResources().getColor(
+							R.color.dred));
+				}
+			}
 
 		}
 
 		if (k.newRank == -1) {
 			iv.setVisibility(View.GONE);
 			tvRankOld.setVisibility(View.GONE);
-			tvRank.setText("not ranked");
+			tvRank.setText("100+");
 		}
 
-		if (k.newRank == -1) {
+		if (k.newRank == -2) {
+			// hide image + old rank
 			iv.setVisibility(View.GONE);
 			tvRankOld.setVisibility(View.GONE);
+
+			// display error msg
 			tvRank.setText("error");
+			tvRank.setTextColor(con.getResources().getColor(R.color.dred));
 		}
 
-		tvKeyword.setText(keyword);
-		tvRank.setText(newRank);
-
-		tvRankOld.setText(oldRank);
-		return convertView;
+		return v;
 	}
 }
