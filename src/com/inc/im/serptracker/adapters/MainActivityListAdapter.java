@@ -111,7 +111,7 @@ public class MainActivityListAdapter extends BaseAdapter {
 				if (k.oldRank == -1) {
 					iv.setVisibility(View.GONE);
 					tvRankOld.setVisibility(View.GONE);
-					tvRank.setText("100+");
+					tvRank.setText("-");
 				}
 
 				if (k.oldRank == -2) {
@@ -131,7 +131,7 @@ public class MainActivityListAdapter extends BaseAdapter {
 		if (k.newRank == -1) {
 			iv.setVisibility(View.GONE);
 			tvRankOld.setVisibility(View.GONE);
-			tvRank.setText("100+");
+			tvRank.setText("-");
 		}
 
 		if (k.newRank == -2) {

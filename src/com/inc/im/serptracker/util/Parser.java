@@ -1,11 +1,16 @@
 package com.inc.im.serptracker.util;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URLEncoder;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import android.os.Environment;
 import android.util.Log;
 
 import com.inc.im.serptracker.data.Keyword;
@@ -38,10 +43,27 @@ public class Parser {
 			Log.e("MY", "downloaded allResults h3 first a is null");
 			keyword.newRank = -2;
 			Log.e("MY", doc.text());
+			Log.e("MY", doc.text().length() + "");
+			Log.e("MY", Environment.getExternalStorageDirectory() + "");
+
+			File f = new File(Environment.getExternalStorageDirectory(),
+					"log.txt");
+
+			try {
+				FileWriter filenew = new FileWriter(
+						Environment.getExternalStorageDirectory() + "log.txt");
+				BufferedWriter bw = new BufferedWriter(filenew);
+				bw.write(doc.toString());
+				bw.close();
+			} catch (IOException e) {
+				Log.e("MY", e.toString());
+			}
 
 			// debug
-			for (Element e : doc.select("h3"))
-				Log.e("MY", e.text());
+			// for (Element e : doc.select("h3"))
+			// Log.e("MY", e.text());
+
+			// File f = new
 
 			return null;
 		}
@@ -63,11 +85,11 @@ public class Parser {
 		if (keyword == null || allResults == null)
 			return null;
 
-		// logging
-		// for (int i = 0; i < allResults.size(); i++) {
-		// Element singleResult = allResults.get(i);
-		// Log.d("MY", i + ". " + singleResult.attr("href"));
-		// }
+		 //logging
+		 for (int i = 0; i < allResults.size(); i++) {
+		 Element singleResult = allResults.get(i);
+		 Log.i("MY", i + ". " + singleResult.attr("href"));
+		 }
 
 		Keyword result = new Keyword(keyword.keyword);
 		result.oldRank = keyword.oldRank;

@@ -17,7 +17,7 @@ import com.inc.im.serptracker.util.Parser;
 public class Download {
 
 	private final static int TIMEOUT = 10000;
-	private final static int PAUSE = 5000;
+	private final static int PAUSE = 2000;
 	private final static String ua = "Apache-HttpClient/UNAVAILABLE (java 1.4)";
 
 	/**
@@ -35,7 +35,7 @@ public class Download {
 
 		// try1
 		try {
-Log.d("MY", "try");
+			Log.d("MY", "try1");
 			doc = download(keyword, ua);
 
 		} catch (Exception e1) {
@@ -45,7 +45,7 @@ Log.d("MY", "try");
 		// try 2
 		if (doc == null)
 			try {
-				Log.d("MY", "try");
+				Log.d("MY", "try2");
 				Thread.sleep(PAUSE);
 				doc = download(keyword, ua);
 
@@ -57,7 +57,7 @@ Log.d("MY", "try");
 		// try 3
 		if (doc == null)
 			try {
-				Log.d("MY", "try");
+				Log.d("MY", "try3");
 				Thread.sleep(PAUSE);
 				doc = download(keyword, ua);
 
@@ -68,7 +68,7 @@ Log.d("MY", "try");
 
 		if (doc == null)
 			try {
-				Log.d("MY", "try");
+				Log.d("MY", "try4");
 				Thread.sleep(PAUSE);
 				doc = download(keyword, ua);
 
@@ -79,7 +79,7 @@ Log.d("MY", "try");
 
 		if (doc == null)
 			try {
-				Log.d("MY", "try");
+				Log.d("MY", "try5");
 				Thread.sleep(PAUSE);
 				doc = download(keyword, ua);
 
@@ -90,7 +90,7 @@ Log.d("MY", "try");
 
 		if (doc == null)
 			try {
-				Log.d("MY", "try");
+				Log.d("MY", "try6");
 				Thread.sleep(PAUSE);
 				doc = download(keyword, ua);
 
@@ -100,7 +100,7 @@ Log.d("MY", "try");
 			}
 
 		if (doc == null) {
-			Log.w("MY", "222download is null");
+			Log.e("MY", "download is null");
 			FlurryAgent.onEvent("NO RANK after 3 tries");
 
 			keyword.newRank = -2;
