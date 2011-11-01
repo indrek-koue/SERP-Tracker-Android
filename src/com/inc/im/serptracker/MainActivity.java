@@ -1,5 +1,7 @@
 package com.inc.im.serptracker;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import com.bugsense.trace.BugSenseHandler;
@@ -17,7 +19,11 @@ import com.inc.im.serptracker.util.MainActivityHelper;
 import com.inc.im.serptracker.util.Util;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -53,7 +59,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity_layout);
 
-		BugSenseHandler.setup(this, "dd278c2d");
+		// BugSenseHandler.setup(this, "dd278c2d");
 
 		adView = Util.loadAdmob(this);
 
@@ -212,21 +218,66 @@ public class MainActivity extends Activity {
 
 	public void bindListViewItems(int spinnerSelectedItemIndex) {
 
-		ListView listView = (ListView) findViewById(R.id.listview_result);
+		ListView lv = (ListView) findViewById(R.id.listview_result);
 
 		if (spinnerSelectedItemIndex > 0 && data != null
 				&& spinnerSelectedItemIndex <= data.size()) {
 
 			// -1 because 0 index holds default text
-			UserProfile selectedUser = data.get(spinnerSelectedItemIndex - 1);
+			final UserProfile selectedUser = data
+					.get(spinnerSelectedItemIndex - 1);
 
-			listView.setAdapter(new MainActivityListAdapter(getBaseContext(),
+			lv.setAdapter(new MainActivityListAdapter(getBaseContext(),
 					selectedUser.keywords));
+
+			lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int arg2, long arg3) {
+
+					Keyword selectedKeyword = selectedUser.keywords.get(arg2);
+
+					Toast.makeText(getBaseContext(),
+							"Verify link ranking with web browser",
+							Toast.LENGTH_LONG).show();
+
+					try {
+						Toast.makeText(
+								getBaseContext(),
+								"www.google.com/seach?q="
+										+ URLEncoder.encode(
+												selectedKeyword.keyword,
+												"UTF-8"), Toast.LENGTH_LONG)
+								.show();
+					} catch (UnsupportedEncodingException e) {
+						Log.e("MY", e.toString());
+						e.printStackTrace();
+					}
+
+					// Toast.makeText(
+					// getBaseContext(),
+					// "Note: "
+					// + selectedUser.url
+					// + "is highlighted using system default theme",
+					// Toast.LENGTH_LONG).show();
+
+					Intent i = new Intent(MainActivity.this,
+							VerifyWebView.class);
+					i.putExtra("keyword", selectedKeyword.keyword);
+					i.putExtra("url", selectedUser.url);
+
+					startActivity(i);
+
+				}
+			});
 
 			// MainActivityHelper.bindResultListView(this, listView,
 			// selectedUser.keywords);
 		} else {
-			listView.setAdapter(new ArrayAdapter<String>(getBaseContext(),
+
+			// clear
+			lv.setAdapter(new ArrayAdapter<String>(getBaseContext(),
 					R.layout.main_activity_listview_item));
 		}
 
