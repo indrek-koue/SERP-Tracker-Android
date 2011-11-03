@@ -99,7 +99,7 @@ public class DbAdapter {
 
 			// reset keyword ranking values
 			ContentValues val = new ContentValues();
-			val.put(KEY_KEYWORDS_TABLE_POSTION, -1);
+			val.put(KEY_KEYWORDS_TABLE_POSTION, 0);
 
 			int rowsAff = mDb.update(TABLE_KEYWORDS, val, profile.id + " = "
 					+ KEY_KEYWORDS_TABLE_PARENTID, null);

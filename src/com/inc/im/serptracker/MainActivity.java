@@ -100,7 +100,7 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-		LinearLayout lv = (LinearLayout) findViewById(R.id.linearLayout2);
+		LinearLayout lv = (LinearLayout) findViewById(R.id.menuBar);
 
 		if (keyCode == KeyEvent.KEYCODE_MENU)
 			if (menuBarIsVisible) {
@@ -230,47 +230,7 @@ public class MainActivity extends Activity {
 			lv.setAdapter(new MainActivityListAdapter(getBaseContext(),
 					selectedUser.keywords));
 
-			lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int arg2, long arg3) {
-
-					Keyword selectedKeyword = selectedUser.keywords.get(arg2);
-
-					Toast.makeText(getBaseContext(),
-							"Verify link ranking with web browser",
-							Toast.LENGTH_LONG).show();
-
-					try {
-						Toast.makeText(
-								getBaseContext(),
-								"www.google.com/seach?q="
-										+ URLEncoder.encode(
-												selectedKeyword.keyword,
-												"UTF-8"), Toast.LENGTH_LONG)
-								.show();
-					} catch (UnsupportedEncodingException e) {
-						Log.e("MY", e.toString());
-						e.printStackTrace();
-					}
-
-					// Toast.makeText(
-					// getBaseContext(),
-					// "Note: "
-					// + selectedUser.url
-					// + "is highlighted using system default theme",
-					// Toast.LENGTH_LONG).show();
-
-					Intent i = new Intent(MainActivity.this,
-							VerifyWebView.class);
-					i.putExtra("keyword", selectedKeyword.keyword);
-					i.putExtra("url", selectedUser.url);
-
-					startActivity(i);
-
-				}
-			});
+			addVerifyUserRankingPremium(lv, selectedUser);
 
 			// MainActivityHelper.bindResultListView(this, listView,
 			// selectedUser.keywords);
@@ -281,6 +241,51 @@ public class MainActivity extends Activity {
 					R.layout.main_activity_listview_item));
 		}
 
+	}
+
+	private void addVerifyUserRankingPremium(ListView lv,
+			final UserProfile selectedUser) {
+		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+
+				Keyword selectedKeyword = selectedUser.keywords.get(arg2);
+
+				Toast.makeText(getBaseContext(),
+						"Verify link ranking with web browser",
+						Toast.LENGTH_LONG).show();
+
+				try {
+					Toast.makeText(
+							getBaseContext(),
+							"www.google.com/seach?q="
+									+ URLEncoder.encode(
+											selectedKeyword.keyword,
+											"UTF-8"), Toast.LENGTH_LONG)
+							.show();
+				} catch (UnsupportedEncodingException e) {
+					Log.e("MY", e.toString());
+					e.printStackTrace();
+				}
+
+				// Toast.makeText(
+				// getBaseContext(),
+				// "Note: "
+				// + selectedUser.url
+				// + "is highlighted using system default theme",
+				// Toast.LENGTH_LONG).show();
+
+				Intent i = new Intent(MainActivity.this,
+						VerifyWebView.class);
+				i.putExtra("keyword", selectedKeyword.keyword);
+				i.putExtra("url", selectedUser.url);
+
+				startActivity(i);
+
+			}
+		});
 	}
 
 	public String getSpinnerSelectedValue() {
