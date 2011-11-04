@@ -31,6 +31,14 @@ public class Keyword {
 		this.oldRank = rank;
 	}
 
+	public Keyword(int id, String value, int rank, String anchor, String url) {
+		this.id = id;
+		this.keyword = value;
+		this.oldRank = rank;
+		this.anchorText = anchor;
+		this.url = url;
+	}
+
 	@Override
 	public String toString() {
 		return id + ":" + keyword + ":old=" + oldRank + ":new=" + newRank

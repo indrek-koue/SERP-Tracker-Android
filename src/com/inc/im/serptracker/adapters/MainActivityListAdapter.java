@@ -76,10 +76,11 @@ public class MainActivityListAdapter extends BaseAdapter {
 		ImageView iv = (ImageView) v.findViewById(R.id.imageView1);
 
 		// debugg
-//		k.newRank = new Random().nextInt(100);
-//		k.oldRank = new Random().nextInt(100);
+		// k.newRank = new Random().nextInt(100);
+		// k.oldRank = new Random().nextInt(100);
 
-		Log.d("MY", k.keyword + ":" + k.newRank + " " + k.oldRank);
+		Log.i("MY", k.keyword + " newRank:" + k.newRank + " oldRank:"
+				+ k.oldRank);
 		// k.oldRank != 0 is for when comes from edit page or just entered
 		// keyword first run
 		if (k.newRank > k.oldRank && k.oldRank != 0) {
@@ -102,7 +103,7 @@ public class MainActivityListAdapter extends BaseAdapter {
 
 		tvKeyword.setText(keyword);
 		tvRank.setText(newRank);
-		tvRankOld.setText(Math.abs(rankChange)+"");
+		tvRankOld.setText(Math.abs(rankChange) + "");
 
 		// special cases
 		// 0 - empty field in DB - new

@@ -123,23 +123,27 @@ public class AsyncDownloader extends
 		if (!progressDialog.isShowing())
 			return;
 
-//		// for testing
-//
-//		input.get(0).newRank = 99;
-//		input.get(0).oldRank = -88;
+		// // for testing
+		//
+		// input.get(0).newRank = 99;
+		// input.get(0).oldRank = -88;
 
 		lv.setAdapter(new MainActivityListAdapter(a, input));
 
 		// MainActivityHelper.bindResultListView(a, lv, input);
 
 		// save new ranks
-		for (Keyword k : input)
+		for (Keyword k : input) {
 			if (new DbAdapter(a).updateKeywordRank(k, k.newRank))
 				Log.i("MY", k.keyword
 						+ " save to db update success, new rank: " + k.newRank);
 			else
-				Log.i("MY", k.keyword + " save to db update failed");
+				Log.e("MY", k.keyword + " save to db update failed");
 
+			// add extras - anchor & url
+			new DbAdapter(a).addExtraToKeyword(k);
+
+		}
 		progressDialog.dismiss();
 
 	}
