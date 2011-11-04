@@ -21,7 +21,9 @@ import com.inc.im.serptracker.util.Util;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -230,7 +232,7 @@ public class MainActivity extends Activity {
 			lv.setAdapter(new MainActivityListAdapter(getBaseContext(),
 					selectedUser.keywords));
 
-			addVerifyUserRankingPremium(lv, selectedUser);
+			addPremiumOnClick(lv, spinnerSelectedItemIndex);
 
 			// MainActivityHelper.bindResultListView(this, listView,
 			// selectedUser.keywords);
@@ -243,46 +245,64 @@ public class MainActivity extends Activity {
 
 	}
 
-	private void addVerifyUserRankingPremium(ListView lv,
-			final UserProfile selectedUser) {
+	private void addPremiumOnClick(ListView lv,
+			final int spinnerSelectedItemIndex) {
 		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
+					final int arg2, long arg3) {
 
-				Keyword selectedKeyword = selectedUser.keywords.get(arg2);
+				// -1 because first is default text
+				final UserProfile selectedUser = new DbAdapter(getBaseContext())
+						.loadAllProfiles().get(spinnerSelectedItemIndex - 1);
 
-				Toast.makeText(getBaseContext(),
-						"Verify link ranking with web browser",
-						Toast.LENGTH_LONG).show();
+				final Keyword k = selectedUser.keywords.get(arg2);
 
-				try {
-					Toast.makeText(
-							getBaseContext(),
-							"www.google.com/seach?q="
-									+ URLEncoder.encode(
-											selectedKeyword.keyword,
-											"UTF-8"), Toast.LENGTH_LONG)
-							.show();
-				} catch (UnsupportedEncodingException e) {
-					Log.e("MY", e.toString());
-					e.printStackTrace();
-				}
+				// display dialog
+				final CharSequence[] items = { "Verify ranking",
+						"ANCHOR: " + k.anchorText, "URL: " + k.url };
 
-				// Toast.makeText(
-				// getBaseContext(),
-				// "Note: "
-				// + selectedUser.url
-				// + "is highlighted using system default theme",
-				// Toast.LENGTH_LONG).show();
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						MainActivity.this);
+				builder.setTitle("Extra info for ranking");
+				builder.setItems(items, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int item) {
 
-				Intent i = new Intent(MainActivity.this,
-						VerifyWebView.class);
-				i.putExtra("keyword", selectedKeyword.keyword);
-				i.putExtra("url", selectedUser.url);
+						if (item == 0) {
+							// verify ranking
+							try {
+								Toast.makeText(
+										getBaseContext(),
+										"www.google.com/seach?q="
+												+ URLEncoder.encode(k.keyword,
+														"UTF-8"),
+										Toast.LENGTH_LONG).show();
+							} catch (UnsupportedEncodingException e) {
+								Log.e("MY", e.toString());
+								e.printStackTrace();
+							}
 
-				startActivity(i);
+							Intent i = new Intent(MainActivity.this,
+									VerifyWebView.class);
+							i.putExtra("keyword", k.keyword);
+							i.putExtra("url", selectedUser.url);
+
+							startActivity(i);
+
+						} else if (item == 1) {
+							Toast.makeText(getApplicationContext(),
+									k.anchorText, Toast.LENGTH_SHORT).show();
+						} else if (item == 2) {
+							startActivity(new Intent(Intent.ACTION_VIEW, Uri
+									.parse(selectedUser.keywords.get(arg2).url)));
+						}
+
+					}
+				});
+				AlertDialog alert = builder.create();
+
+				alert.show();
 
 			}
 		});

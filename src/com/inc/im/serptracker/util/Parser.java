@@ -42,12 +42,12 @@ public class Parser {
 		if (allResults == null || allResults.size() == 0) {
 			Log.e("MY", "downloaded allResults h3 first a is null");
 			keyword.newRank = -2;
-			Log.e("MY", doc.text());
-			Log.e("MY", doc.text().length() + "");
-			Log.e("MY", Environment.getExternalStorageDirectory() + "");
-
-			File f = new File(Environment.getExternalStorageDirectory(),
-					"log.txt");
+//			Log.e("MY", doc.text());
+//			Log.e("MY", doc.text().length() + "");
+//			Log.e("MY", Environment.getExternalStorageDirectory() + "");
+//
+//			File f = new File(Environment.getExternalStorageDirectory(),
+//					"log.txt");
 
 			try {
 				FileWriter filenew = new FileWriter(
@@ -86,10 +86,10 @@ public class Parser {
 			return null;
 
 		 //logging
-		 for (int i = 0; i < allResults.size(); i++) {
-		 Element singleResult = allResults.get(i);
-		 Log.i("MY", i + ". " + singleResult.attr("href"));
-		 }
+//		 for (int i = 0; i < allResults.size(); i++) {
+//		 Element singleResult = allResults.get(i);
+//		 Log.d("MY", i + ". " + singleResult.attr("href"));
+//		 }
 
 		Keyword result = new Keyword(keyword.keyword);
 		result.oldRank = keyword.oldRank;
@@ -104,7 +104,6 @@ public class Parser {
 
 			if (singleResult != null) {
 
-				String singleResultAnchor = singleResult.text();
 				String singleResultUrl = singleResult.attr("href");
 
 				// if cointains url and is not set yet
@@ -129,8 +128,8 @@ public class Parser {
 
 						result.newRank = newRank;
 					}
-					result.anchorText = singleResultAnchor;
-					result.url = singleResultUrl;
+					result.anchorText = singleResult.text();
+					result.url = singleResult.attr("href");
 
 				}
 

@@ -33,6 +33,12 @@ public class DbAdapter {
 	private static final String KEY_KEYWORDS_TABLE_POSTION = "position";
 	private static final String KEY_KEYWORDS_TABLE_PARENTID = "parentid";
 
+	private static final String TABLE_EXTRA = "profile_keywords_extra";
+	private static final String TABLE_ID = "_id";
+	private static final String KEY_EXTRA_PARENTID = "parentid";
+	private static final String KEY_EXTRA_ANCHOR = "anchor";
+	private static final String KEY_EXTRA_URL = "url";
+
 	private static final String PROFILE_TABLE_CREATE = "CREATE TABLE "
 			+ TABLE_PROFILE + " (" + KEY_PROFILE_TABLE_ID
 			+ " INTEGER PRIMARY KEY, " + KEY_PROFILE_TABLE_URL
@@ -43,6 +49,11 @@ public class DbAdapter {
 			+ " INTEGER PRIMARY KEY, " + KEY_KEYWORDS_TABLE_KEYWORD
 			+ " TEXT NOT NULL, " + KEY_KEYWORDS_TABLE_POSTION + " INTEGER, "
 			+ KEY_KEYWORDS_TABLE_PARENTID + " INTEGER NOT NULL);";
+
+	private static final String EXTRA_TABLE_CREATE = String
+			.format("CREATE TABLE %s ( %s INTEGER PRIMARY KEY, %s INTEGER NOT NULL,  %s TEXT NOT NULL, %s TEXT NOT NULL);",
+					TABLE_EXTRA, TABLE_ID, KEY_EXTRA_PARENTID,
+					KEY_EXTRA_ANCHOR, KEY_EXTRA_URL);
 
 	public DbAdapter(Context ctx) {
 		DbAdapter.mCtx = ctx;
@@ -58,6 +69,45 @@ public class DbAdapter {
 		mDbHelper.close();
 	}
 
+	public void addExtraToKeyword(Keyword k) {
+
+		if (k == null)
+			return;
+
+		open();
+		Cursor cur = mDb.query(TABLE_EXTRA,
+				new String[] { KEY_EXTRA_PARENTID }, KEY_EXTRA_PARENTID + " = "
+						+ k.id, null, null, null, null);
+
+		if (cur == null || cur.getCount() == 0) {
+			// does not exist = INSERT
+			Log.i("MY", "insert into extras:" + k.keyword + " anchor:"
+					+ k.anchorText + " url:" + k.url);
+			ContentValues initialValues = new ContentValues();
+			initialValues.put(KEY_EXTRA_PARENTID, k.id);
+			initialValues.put(KEY_EXTRA_ANCHOR, k.anchorText);
+			initialValues.put(KEY_EXTRA_URL, k.url);
+			if (mDb.insert(TABLE_EXTRA, null, initialValues) == -1)
+				Log.e("MY", "extra insert failed: " + k.keyword);
+
+		} else {
+			// EXISTS - UPDATE
+			Log.i("MY", "update extras:" + k.keyword + " anchor:"
+					+ k.anchorText + " url:" + k.url);
+			ContentValues initialValues = new ContentValues();
+			initialValues.put(KEY_EXTRA_ANCHOR, k.anchorText);
+			initialValues.put(KEY_EXTRA_URL, k.url);
+			if (mDb.update(TABLE_EXTRA, initialValues, KEY_EXTRA_PARENTID
+					+ " = " + k.id, null) != 1) {
+				Log.e("MY", "extra update conflict: " + k.keyword);
+			}
+
+		}
+
+		close();
+
+	}
+
 	public Boolean updateProfile(UserProfile profile) {
 
 		if (profile == null || profile.url == null || profile.id == 0
@@ -69,6 +119,7 @@ public class DbAdapter {
 		Boolean headerUpdateIsSuccess = false;
 		Boolean keywordUpdateIsSuccess = false;
 		Boolean keywordRankResetIsSuccess = false;
+		// Boolean keywordExtraResetIsSuccess = false;
 
 		int idToUpdate = profile.id;
 
@@ -86,12 +137,12 @@ public class DbAdapter {
 		numOfRowsAf = mDb.delete(TABLE_KEYWORDS, KEY_KEYWORDS_TABLE_PARENTID
 				+ " = " + idToUpdate, null);
 
-		// insert keywords
 		for (Keyword keyword : profile.keywords) {
 
+			// insert keywords
 			ContentValues initialValuesKeywords = new ContentValues();
-			initialValuesKeywords
-					.put(KEY_KEYWORDS_TABLE_KEYWORD, keyword.keyword);
+			initialValuesKeywords.put(KEY_KEYWORDS_TABLE_KEYWORD,
+					keyword.keyword);
 			initialValuesKeywords.put(KEY_KEYWORDS_TABLE_PARENTID, idToUpdate);
 
 			Long l = mDb.insert(TABLE_KEYWORDS, null, initialValuesKeywords);
@@ -100,10 +151,21 @@ public class DbAdapter {
 			// reset keyword ranking values
 			ContentValues val = new ContentValues();
 			val.put(KEY_KEYWORDS_TABLE_POSTION, 0);
-
-			int rowsAff = mDb.update(TABLE_KEYWORDS, val, profile.id + " = "
-					+ KEY_KEYWORDS_TABLE_PARENTID, null);
+			int rowsAff = mDb.update(TABLE_KEYWORDS, val,
+					KEY_KEYWORDS_TABLE_PARENTID + " = " + profile.id, null);
 			keywordRankResetIsSuccess = rowsAff != 0 ? true : false;
+
+			// reset keyword extras
+			// ContentValues valExtra = new ContentValues();
+			// valExtra.put(KEY_EXTRA_ANCHOR, "");
+			// valExtra.put(KEY_EXTRA_URL, "");
+			// mDb.update(TABLE_EXTRA, val, KEY_EXTRA_PARENTID + " = "
+			// + keyword.id, null);
+
+			// delete all
+			mDb.delete(TABLE_EXTRA, null, null);
+
+			// keywordExtraResetIsSuccess = rowsAffExtra != 0 ? true : false;
 
 		}
 
@@ -205,7 +267,6 @@ public class DbAdapter {
 	public ArrayList<UserProfile> loadAllProfiles() {
 
 		Log.i("MY", "load all profiles from DB");
-		
 		ArrayList<UserProfile> profiles = null;
 
 		open();
@@ -252,8 +313,44 @@ public class DbAdapter {
 									.getInt(keywordsCur
 											.getColumnIndex(KEY_KEYWORDS_TABLE_POSTION));
 
-							keywords.add(new Keyword(id, keyword, rank));
+							mDb.execSQL("CREATE TABLE IF NOT EXISTS "
+									+ String.format(
+											"%s ( %s INTEGER PRIMARY KEY, %s INTEGER NOT NULL,  %s TEXT NOT NULL, %s TEXT NOT NULL);",
+											TABLE_EXTRA, TABLE_ID,
+											KEY_EXTRA_PARENTID,
+											KEY_EXTRA_ANCHOR, KEY_EXTRA_URL));
 
+							// DO WE HAVE EXTRAS (ANCHOR/URL) in extra table?
+							Cursor extraCur = mDb.query(TABLE_EXTRA, null,
+									KEY_EXTRA_PARENTID + " = " + id, null,
+									null, null, null);
+
+							if (extraCur != null
+									&& extraCur.getColumnCount() > 0
+									&& extraCur.getCount() == 1) {
+
+								extraCur.moveToFirst();
+								//
+								// if (extraCur.getCount() != 1) {
+								// Log.w("MY", "row count for keyword "
+								// + keyword + " != 1");
+								// } else {
+
+								String anchor = extraCur.getString(extraCur
+										.getColumnIndex(KEY_EXTRA_ANCHOR));
+
+								String url = extraCur.getString(extraCur
+										.getColumnIndex(KEY_EXTRA_URL));
+								keywords.add(new Keyword(id, keyword, rank,
+										anchor, url));
+
+								// }
+
+							} else {
+								Log.w("MY", keyword + " no extras");
+								keywords.add(new Keyword(id, keyword, rank));
+
+							}
 						} catch (Exception e) {
 							Log.e("MY", "dbatapter parsing from cursor error: "
 									+ e.toString());
@@ -337,10 +434,11 @@ public class DbAdapter {
 			// where the creation of tables and the initial population of the
 			// tables should happen.
 
-			Log.i("MY", "PROFILE TABLE CREATE + KEYWORDS TABLE CREATE");
+			Log.i("MY",
+					"PROFILE TABLE CREATE + KEYWORDS TABLE CREATE + EXTRA TABLE CREATE");
 			db.execSQL(PROFILE_TABLE_CREATE);
 			db.execSQL(KEYWORDS_TABLE_CREATE);
-
+			db.execSQL(EXTRA_TABLE_CREATE);
 		}
 
 		@Override
