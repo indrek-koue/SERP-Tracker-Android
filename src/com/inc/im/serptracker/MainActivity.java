@@ -61,7 +61,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity_layout);
 
-		// BugSenseHandler.setup(this, "dd278c2d");
+		BugSenseHandler.setup(this, "dd278c2d");
 
 		adView = Util.loadAdmob(this);
 
@@ -232,10 +232,8 @@ public class MainActivity extends Activity {
 			lv.setAdapter(new MainActivityListAdapter(getBaseContext(),
 					selectedUser.keywords));
 
-			addPremiumOnClick(lv, spinnerSelectedItemIndex);
+			//addPremiumOnClick(lv, spinnerSelectedItemIndex);
 
-			// MainActivityHelper.bindResultListView(this, listView,
-			// selectedUser.keywords);
 		} else {
 
 			// clear
