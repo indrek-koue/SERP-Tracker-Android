@@ -141,7 +141,7 @@ public class AsyncDownloader extends
 				Log.e("MY", k.keyword + " save to db update failed");
 
 			// add extras - anchor & url
-			new DbAdapter(a).addExtraToKeyword(k);
+			//new DbAdapter(a).addExtraToKeyword(k);
 
 		}
 		progressDialog.dismiss();

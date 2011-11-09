@@ -69,44 +69,44 @@ public class DbAdapter {
 		mDbHelper.close();
 	}
 
-	public void addExtraToKeyword(Keyword k) {
-
-		if (k == null)
-			return;
-
-		open();
-		Cursor cur = mDb.query(TABLE_EXTRA,
-				new String[] { KEY_EXTRA_PARENTID }, KEY_EXTRA_PARENTID + " = "
-						+ k.id, null, null, null, null);
-
-		if (cur == null || cur.getCount() == 0) {
-			// does not exist = INSERT
-			Log.i("MY", "insert into extras:" + k.keyword + " anchor:"
-					+ k.anchorText + " url:" + k.url);
-			ContentValues initialValues = new ContentValues();
-			initialValues.put(KEY_EXTRA_PARENTID, k.id);
-			initialValues.put(KEY_EXTRA_ANCHOR, k.anchorText);
-			initialValues.put(KEY_EXTRA_URL, k.url);
-			if (mDb.insert(TABLE_EXTRA, null, initialValues) == -1)
-				Log.e("MY", "extra insert failed: " + k.keyword);
-
-		} else {
-			// EXISTS - UPDATE
-			Log.i("MY", "update extras:" + k.keyword + " anchor:"
-					+ k.anchorText + " url:" + k.url);
-			ContentValues initialValues = new ContentValues();
-			initialValues.put(KEY_EXTRA_ANCHOR, k.anchorText);
-			initialValues.put(KEY_EXTRA_URL, k.url);
-			if (mDb.update(TABLE_EXTRA, initialValues, KEY_EXTRA_PARENTID
-					+ " = " + k.id, null) != 1) {
-				Log.e("MY", "extra update conflict: " + k.keyword);
-			}
-
-		}
-
-		close();
-
-	}
+	// public void addExtraToKeyword(Keyword k) {
+	//
+	// if (k == null)
+	// return;
+	//
+	// open();
+	// Cursor cur = mDb.query(TABLE_EXTRA,
+	// new String[] { KEY_EXTRA_PARENTID }, KEY_EXTRA_PARENTID + " = "
+	// + k.id, null, null, null, null);
+	//
+	// if (cur == null || cur.getCount() == 0) {
+	// // does not exist = INSERT
+	// Log.i("MY", "insert into extras:" + k.keyword + " anchor:"
+	// + k.anchorText + " url:" + k.url);
+	// ContentValues initialValues = new ContentValues();
+	// initialValues.put(KEY_EXTRA_PARENTID, k.id);
+	// initialValues.put(KEY_EXTRA_ANCHOR, k.anchorText);
+	// initialValues.put(KEY_EXTRA_URL, k.url);
+	// if (mDb.insert(TABLE_EXTRA, null, initialValues) == -1)
+	// Log.e("MY", "extra insert failed: " + k.keyword);
+	//
+	// } else {
+	// // EXISTS - UPDATE
+	// Log.i("MY", "update extras:" + k.keyword + " anchor:"
+	// + k.anchorText + " url:" + k.url);
+	// ContentValues initialValues = new ContentValues();
+	// initialValues.put(KEY_EXTRA_ANCHOR, k.anchorText);
+	// initialValues.put(KEY_EXTRA_URL, k.url);
+	// if (mDb.update(TABLE_EXTRA, initialValues, KEY_EXTRA_PARENTID
+	// + " = " + k.id, null) != 1) {
+	// Log.e("MY", "extra update conflict: " + k.keyword);
+	// }
+	//
+	// }
+	//
+	// close();
+	//
+	// }
 
 	public Boolean updateProfile(UserProfile profile) {
 
@@ -163,7 +163,7 @@ public class DbAdapter {
 			// + keyword.id, null);
 
 			// delete all
-			mDb.delete(TABLE_EXTRA, null, null);
+			//mDb.delete(TABLE_EXTRA, null, null);
 
 			// keywordExtraResetIsSuccess = rowsAffExtra != 0 ? true : false;
 
@@ -266,10 +266,13 @@ public class DbAdapter {
 
 	public ArrayList<UserProfile> loadAllProfiles() {
 
+
+
 		Log.i("MY", "load all profiles from DB");
 		ArrayList<UserProfile> profiles = null;
 
 		open();
+		mDb.execSQL("DROP TABLE IF EXISTS " + TABLE_EXTRA);
 
 		Cursor profileHeaderCur = mDb.query(TABLE_PROFILE, null, null, null,
 				null, null, null);
@@ -313,44 +316,39 @@ public class DbAdapter {
 									.getInt(keywordsCur
 											.getColumnIndex(KEY_KEYWORDS_TABLE_POSTION));
 
-							mDb.execSQL("CREATE TABLE IF NOT EXISTS "
-									+ String.format(
-											"%s ( %s INTEGER PRIMARY KEY, %s INTEGER NOT NULL,  %s TEXT NOT NULL, %s TEXT NOT NULL);",
-											TABLE_EXTRA, TABLE_ID,
-											KEY_EXTRA_PARENTID,
-											KEY_EXTRA_ANCHOR, KEY_EXTRA_URL));
+							// mDb.execSQL("CREATE TABLE IF NOT EXISTS "
+							// + String.format(
+							// "%s ( %s INTEGER PRIMARY KEY, %s INTEGER NOT NULL,  %s TEXT NOT NULL, %s TEXT NOT NULL);",
+							// TABLE_EXTRA, TABLE_ID,
+							// KEY_EXTRA_PARENTID,
+							// KEY_EXTRA_ANCHOR, KEY_EXTRA_URL));
 
 							// DO WE HAVE EXTRAS (ANCHOR/URL) in extra table?
-							Cursor extraCur = mDb.query(TABLE_EXTRA, null,
-									KEY_EXTRA_PARENTID + " = " + id, null,
-									null, null, null);
-
-							if (extraCur != null
-									&& extraCur.getColumnCount() > 0
-									&& extraCur.getCount() == 1) {
-
-								extraCur.moveToFirst();
-								//
-								// if (extraCur.getCount() != 1) {
-								// Log.w("MY", "row count for keyword "
-								// + keyword + " != 1");
-								// } else {
-
-								String anchor = extraCur.getString(extraCur
-										.getColumnIndex(KEY_EXTRA_ANCHOR));
-
-								String url = extraCur.getString(extraCur
-										.getColumnIndex(KEY_EXTRA_URL));
-								keywords.add(new Keyword(id, keyword, rank,
-										anchor, url));
-
-								// }
-
-							} else {
-								Log.w("MY", keyword + " no extras");
-								keywords.add(new Keyword(id, keyword, rank));
-
-							}
+							// Cursor extraCur = mDb.query(TABLE_EXTRA, null,
+							// KEY_EXTRA_PARENTID + " = " + id, null,
+							// null, null, null);
+							//
+							// if (extraCur != null
+							// && extraCur.getColumnCount() > 0
+							// && extraCur.getCount() == 1) {
+							//
+							// extraCur.moveToFirst();
+							//
+							// String anchor = extraCur.getString(extraCur
+							// .getColumnIndex(KEY_EXTRA_ANCHOR));
+							//
+							// String url = extraCur.getString(extraCur
+							// .getColumnIndex(KEY_EXTRA_URL));
+							// keywords.add(new Keyword(id, keyword, rank,
+							// anchor, url));
+							//
+							// // }
+							//
+							// } else {
+							// Log.w("MY", keyword + " no extras");
+							keywords.add(new Keyword(id, keyword, rank));
+							//
+							// }
 						} catch (Exception e) {
 							Log.e("MY", "dbatapter parsing from cursor error: "
 									+ e.toString());

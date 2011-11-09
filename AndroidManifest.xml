@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
     package="com.inc.im.serptracker"
-    android:versionCode="15"
+    android:versionCode="16"
     android:versionName="1.30" >
 
     <uses-sdk android:minSdkVersion="7" />
