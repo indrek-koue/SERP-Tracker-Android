@@ -42,28 +42,6 @@ public class Parser {
 		if (allResults == null || allResults.size() == 0) {
 			Log.e("MY", "downloaded allResults h3 first a is null");
 			keyword.newRank = -2;
-//			Log.e("MY", doc.text());
-//			Log.e("MY", doc.text().length() + "");
-//			Log.e("MY", Environment.getExternalStorageDirectory() + "");
-//
-//			File f = new File(Environment.getExternalStorageDirectory(),
-//					"log.txt");
-
-			try {
-				FileWriter filenew = new FileWriter(
-						Environment.getExternalStorageDirectory() + "log.txt");
-				BufferedWriter bw = new BufferedWriter(filenew);
-				bw.write(doc.toString());
-				bw.close();
-			} catch (IOException e) {
-				Log.e("MY", e.toString());
-			}
-
-			// debug
-			// for (Element e : doc.select("h3"))
-			// Log.e("MY", e.text());
-
-			// File f = new
 
 			return null;
 		}
