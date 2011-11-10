@@ -141,7 +141,7 @@ public class AsyncDownloader extends
 				Log.e("MY", k.keyword + " save to db update failed");
 
 			// add extras - anchor & url
-			//new DbAdapter(a).addExtraToKeyword(k);
+			// new DbAdapter(a).addExtraToKeyword(k);
 
 		}
 		progressDialog.dismiss();
@@ -159,8 +159,12 @@ public class AsyncDownloader extends
 	}
 
 	public void flurryLogging(ArrayList<Keyword> result) {
-		String values = "";
 
+		// ver 1.31 fix
+		if (result == null)
+			return;
+
+		String values = "";
 		for (Keyword k : result)
 			values += k.newRank + ":";
 
@@ -168,9 +172,15 @@ public class AsyncDownloader extends
 		parameters.put("num of keywords", String.valueOf(itemCount));
 		parameters.put("total time",
 				String.valueOf(System.currentTimeMillis() - start));
-		parameters.put("avg time per keyword", String.valueOf((System
-				.currentTimeMillis() - start) / itemCount));
-		parameters.put("results", String.valueOf(values));
+
+		// ver 1.31 fix
+		if ((System.currentTimeMillis() - start) != 0 && itemCount != 0)
+			parameters.put(
+					"avg time per keyword",
+					String.valueOf((System.currentTimeMillis() - start)
+							/ itemCount));
+
+		parameters.put("results", values);
 
 		FlurryAgent.onEvent("download", parameters);
 	}
