@@ -69,44 +69,65 @@ public class DbAdapter {
 		mDbHelper.close();
 	}
 
-	// public void addExtraToKeyword(Keyword k) {
-	//
-	// if (k == null)
-	// return;
-	//
-	// open();
-	// Cursor cur = mDb.query(TABLE_EXTRA,
-	// new String[] { KEY_EXTRA_PARENTID }, KEY_EXTRA_PARENTID + " = "
-	// + k.id, null, null, null, null);
-	//
-	// if (cur == null || cur.getCount() == 0) {
-	// // does not exist = INSERT
-	// Log.i("MY", "insert into extras:" + k.keyword + " anchor:"
-	// + k.anchorText + " url:" + k.url);
-	// ContentValues initialValues = new ContentValues();
-	// initialValues.put(KEY_EXTRA_PARENTID, k.id);
-	// initialValues.put(KEY_EXTRA_ANCHOR, k.anchorText);
-	// initialValues.put(KEY_EXTRA_URL, k.url);
-	// if (mDb.insert(TABLE_EXTRA, null, initialValues) == -1)
-	// Log.e("MY", "extra insert failed: " + k.keyword);
-	//
-	// } else {
-	// // EXISTS - UPDATE
-	// Log.i("MY", "update extras:" + k.keyword + " anchor:"
-	// + k.anchorText + " url:" + k.url);
-	// ContentValues initialValues = new ContentValues();
-	// initialValues.put(KEY_EXTRA_ANCHOR, k.anchorText);
-	// initialValues.put(KEY_EXTRA_URL, k.url);
-	// if (mDb.update(TABLE_EXTRA, initialValues, KEY_EXTRA_PARENTID
-	// + " = " + k.id, null) != 1) {
-	// Log.e("MY", "extra update conflict: " + k.keyword);
-	// }
-	//
-	// }
-	//
-	// close();
-	//
-	// }
+	public void addExtraToKeyword(Keyword k) {
+
+		if (k == null)
+			return;
+
+		open();
+
+		deleteFromExtrasTableById(k.id);
+
+		Cursor cur = mDb.query(TABLE_EXTRA,
+				new String[] { KEY_EXTRA_PARENTID }, KEY_EXTRA_PARENTID + " = "
+						+ k.id, null, null, null, null);
+
+		if (cur == null || cur.getCount() == 0) {
+			// does not exist = INSERT
+			Log.i("MY", "insert into extras:" + k.keyword + " anchor:"
+					+ k.anchorText + " url:" + k.url);
+			ContentValues initialValues = new ContentValues();
+			initialValues.put(KEY_EXTRA_PARENTID, k.id);
+			initialValues.put(KEY_EXTRA_ANCHOR, k.anchorText);
+			initialValues.put(KEY_EXTRA_URL, k.url);
+			if (mDb.insert(TABLE_EXTRA, null, initialValues) == -1)
+				Log.e("MY", "extra insert failed: " + k.keyword);
+		} else {
+			Log.e("MY", "there is already an row extra for this keyword");
+		}
+
+		// } else {
+		// // EXISTS - UPDATE
+		// Log.i("MY", "update extras:" + k.keyword + " anchor:"
+		// + k.anchorText + " url:" + k.url);
+		// ContentValues initialValues = new ContentValues();
+		// initialValues.put(KEY_EXTRA_ANCHOR, k.anchorText);
+		// initialValues.put(KEY_EXTRA_URL, k.url);
+		// if (mDb.update(TABLE_EXTRA, initialValues, KEY_EXTRA_PARENTID
+		// + " = " + k.id, null) != 1) {
+		// Log.e("MY", "extra update conflict: " + k.keyword);
+		// }
+		//
+		// }
+
+		close();
+
+	}
+
+	private Boolean deleteFromExtrasTableById(int keywordId) {
+
+		// mDb.execSQL("DELETE FROM " + TABLE_EXTRA + " WHERE "
+		// + KEY_EXTRA_PARENTID + "=" + keywordId);
+		//
+		open();
+
+		int rowsAff = mDb.delete(TABLE_EXTRA, KEY_EXTRA_PARENTID + "="
+				+ keywordId, null);
+
+		close();
+		return rowsAff != 0 ? true : false;
+
+	}
 
 	public Boolean updateProfile(UserProfile profile) {
 
@@ -155,6 +176,8 @@ public class DbAdapter {
 					KEY_KEYWORDS_TABLE_PARENTID + " = " + profile.id, null);
 			keywordRankResetIsSuccess = rowsAff != 0 ? true : false;
 
+			addExtraToKeyword(keyword);
+
 			// reset keyword extras
 			// ContentValues valExtra = new ContentValues();
 			// valExtra.put(KEY_EXTRA_ANCHOR, "");
@@ -163,7 +186,7 @@ public class DbAdapter {
 			// + keyword.id, null);
 
 			// delete all
-			//mDb.delete(TABLE_EXTRA, null, null);
+			// mDb.delete(TABLE_EXTRA, null, null);
 
 			// keywordExtraResetIsSuccess = rowsAffExtra != 0 ? true : false;
 
@@ -237,6 +260,9 @@ public class DbAdapter {
 		int numOfRowsAfKeywords = mDb.delete(TABLE_KEYWORDS,
 				KEY_KEYWORDS_TABLE_PARENTID + " = " + profile.id, null);
 
+		for (Keyword k : profile.keywords)
+			deleteFromExtrasTableById(k.id);
+
 		close();
 
 		Boolean profileDeleteSuccess = numOfRowsAfProfile != 0 ? true : false;
@@ -266,13 +292,10 @@ public class DbAdapter {
 
 	public ArrayList<UserProfile> loadAllProfiles() {
 
-
-
 		Log.i("MY", "load all profiles from DB");
 		ArrayList<UserProfile> profiles = null;
 
 		open();
-		mDb.execSQL("DROP TABLE IF EXISTS " + TABLE_EXTRA);
 
 		Cursor profileHeaderCur = mDb.query(TABLE_PROFILE, null, null, null,
 				null, null, null);
@@ -316,39 +339,12 @@ public class DbAdapter {
 									.getInt(keywordsCur
 											.getColumnIndex(KEY_KEYWORDS_TABLE_POSTION));
 
-							// mDb.execSQL("CREATE TABLE IF NOT EXISTS "
-							// + String.format(
-							// "%s ( %s INTEGER PRIMARY KEY, %s INTEGER NOT NULL,  %s TEXT NOT NULL, %s TEXT NOT NULL);",
-							// TABLE_EXTRA, TABLE_ID,
-							// KEY_EXTRA_PARENTID,
-							// KEY_EXTRA_ANCHOR, KEY_EXTRA_URL));
+							String anchor = getExtraAnchorById(id);
+							String url = getExtraUrlById(id);
 
-							// DO WE HAVE EXTRAS (ANCHOR/URL) in extra table?
-							// Cursor extraCur = mDb.query(TABLE_EXTRA, null,
-							// KEY_EXTRA_PARENTID + " = " + id, null,
-							// null, null, null);
-							//
-							// if (extraCur != null
-							// && extraCur.getColumnCount() > 0
-							// && extraCur.getCount() == 1) {
-							//
-							// extraCur.moveToFirst();
-							//
-							// String anchor = extraCur.getString(extraCur
-							// .getColumnIndex(KEY_EXTRA_ANCHOR));
-							//
-							// String url = extraCur.getString(extraCur
-							// .getColumnIndex(KEY_EXTRA_URL));
-							// keywords.add(new Keyword(id, keyword, rank,
-							// anchor, url));
-							//
-							// // }
-							//
-							// } else {
-							// Log.w("MY", keyword + " no extras");
-							keywords.add(new Keyword(id, keyword, rank));
-							//
-							// }
+							keywords.add(new Keyword(id, keyword, rank, anchor,
+									url));
+
 						} catch (Exception e) {
 							Log.e("MY", "dbatapter parsing from cursor error: "
 									+ e.toString());
@@ -356,7 +352,7 @@ public class DbAdapter {
 
 					} while (keywordsCur.moveToNext());
 
-					// done - now repeat
+					// one profile done, not let's get next one
 					profiles.add(new UserProfile(profileId, profileUrl,
 							keywords));
 
@@ -371,15 +367,39 @@ public class DbAdapter {
 
 	}
 
+	private String getExtraUrlById(int id) {
+
+		Cursor cur = mDb.query(TABLE_EXTRA, null,
+				KEY_EXTRA_PARENTID + "=" + id, null, null, null, null);
+
+		if (cur != null && cur.getCount() > 0 && cur.getColumnCount() > 0)
+			return cur.getString(cur.getColumnIndex(KEY_EXTRA_URL));
+
+		return "error getExtraUrlById";
+	}
+
+	private String getExtraAnchorById(int id) {
+
+		Cursor cur = mDb.query(TABLE_EXTRA, null,
+				KEY_EXTRA_PARENTID + "=" + id, null, null, null, null);
+
+		if (cur != null && cur.getCount() > 0 && cur.getColumnCount() > 0)
+			return cur.getString(cur.getColumnIndex(KEY_EXTRA_ANCHOR));
+
+		return "error getExtraAnchorById";
+	}
+
 	public void trunkTables() {
 
 		open();
 
 		mDb.execSQL("drop table if exists " + TABLE_PROFILE);
 		mDb.execSQL("drop table if exists " + TABLE_KEYWORDS);
+		mDb.execSQL("drop table if exists " + TABLE_EXTRA);
 
 		mDb.execSQL(PROFILE_TABLE_CREATE);
 		mDb.execSQL(KEYWORDS_TABLE_CREATE);
+		mDb.execSQL(EXTRA_TABLE_CREATE);
 
 		close();
 
