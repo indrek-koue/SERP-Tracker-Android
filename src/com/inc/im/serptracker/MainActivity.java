@@ -88,19 +88,19 @@ public class MainActivity extends Activity {
 		super.onDestroy();
 	}
 
-	// @Override
-	// protected void onResume() {
-	// super.onResume();
-	//
-	// // load default value on spinner
-	// initSpinner();
-	//
-	// // clear listview
-	// ((ListView) findViewById(R.id.listview_result))
-	// .setAdapter(new ArrayAdapter<String>(getBaseContext(),
-	// R.layout.main_activity_listview_item));
-	//
-	// }
+	 @Override
+	 protected void onResume() {
+	 super.onResume();
+	
+	 // load default value on spinner
+	 initSpinner();
+	
+	 // clear listview
+	 ((ListView) findViewById(R.id.listview_result))
+	 .setAdapter(new ArrayAdapter<String>(getBaseContext(),
+	 R.layout.main_activity_listview_item));
+	
+	 }
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
