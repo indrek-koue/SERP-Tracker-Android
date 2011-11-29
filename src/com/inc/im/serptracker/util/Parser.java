@@ -10,6 +10,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import android.app.Activity;
 import android.os.Environment;
 import android.util.Log;
 
@@ -29,9 +30,9 @@ public class Parser {
 	 *            - find h3 > a in here
 	 * @return Elements of results
 	 */
-	public static Elements parse(Keyword keyword) {
+	public static Elements parse(Activity a, Keyword keyword) {
 
-		Document doc = Download.H3FirstA(keyword);
+		Document doc = Download.H3FirstA(a, keyword);
 
 		// @added ver 1.3 - exception fix
 		if (doc == null)
@@ -143,15 +144,6 @@ public class Parser {
 		if (allResults.size() != 100)
 			Log.w("MY", "WARNING: results after delete != 100, instead:"
 					+ allResults.size());
-	}
-
-	public static String generateEscapedQueryString(Keyword k, Boolean noMobile) {
-		if (noMobile)
-			return "http://www.google.com/search?num=" + DCOUNT + "&nomo=1&q="
-					+ URLEncoder.encode(k.keyword);
-		else
-			return "http://www.google.com/search?num=" + DCOUNT + "&q="
-					+ URLEncoder.encode(k.keyword);
 	}
 
 	public static String removePrefix(String searchable) {

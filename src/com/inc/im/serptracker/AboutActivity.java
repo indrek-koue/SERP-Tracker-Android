@@ -138,8 +138,8 @@ public class AboutActivity extends Activity {
 		};
 
 		((Button) findViewById(R.id.button1)).setOnClickListener(onClick);
-		((Button) findViewById(R.id.btnReportWrongRanking))
-				.setOnClickListener(onClick);
+//		((Button) findViewById(R.id.btnReportWrongRanking))
+//				.setOnClickListener(onClick);
 
 	}
 

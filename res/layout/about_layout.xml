@@ -27,9 +27,9 @@
 			android:layout_height="wrap_content" android:textSize="20dip"
 			android:textColor="@color/lgray" android:layout_marginBottom="25dip"></TextView>
 
-		<Button android:text="@string/report_wrong_ranking" android:id="@+id/btnReportWrongRanking"
+<!-- 		<Button android:text="@string/report_wrong_ranking" android:id="@+id/btnReportWrongRanking"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:background="@drawable/cancle_button" style="@style/ButtonText"></Button>
+			android:background="@drawable/cancle_button" style="@style/ButtonText"></Button> -->
 
 		<Button android:text="@string/send_email_to_dev" android:id="@+id/button1"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
