@@ -3,6 +3,7 @@ package com.inc.im.serptracker;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,8 +15,9 @@ import com.inc.im.serptracker.adapters.DbAdapter;
 import com.inc.im.serptracker.util.Util;
 
 public class InsertWebsiteActivity extends Activity {
-	
+
 	private AdView adView;
+	private Boolean isPremium;
 
 	@Override
 	public void onStart() {
@@ -31,10 +33,11 @@ public class InsertWebsiteActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		adView.destroy();
+		if (adView != null)
+			adView.destroy();
 		super.onDestroy();
 	}
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -45,11 +48,28 @@ public class InsertWebsiteActivity extends Activity {
 		bindAddButton();
 		bindBackButton();
 
-		// keyword limit disabled
-		Util.setKeywordLimit(-1, (EditText) findViewById(R.id.editText2),
-				getString(R.string.free_version_limit_5_keywords_per_website),
-				getBaseContext());
+		isPremium = Boolean.parseBoolean(getString(R.string.isPremium));
 
+		// keyword limit disabled
+
+		if (!isPremium) {
+			// Util.setKeywordLimit(-1, (EditText) findViewById(R.id.editText2),
+			// getString(R.string.free_version_limit_5_keywords_per_website),
+			// getBaseContext());
+			// else{
+
+			int keywordLimit = Integer
+					.parseInt(getString(R.string.keywordLimit));
+
+			Util.setKeywordLimit(
+					keywordLimit,
+					(EditText) findViewById(R.id.editText2),
+					getString(R.string.free_version_limit_5_keywords_per_website),
+					getBaseContext());
+
+			Log.d("MY", "free user, keyword limit: " + keywordLimit);
+
+		}
 	}
 
 	public void bindBackButton() {
@@ -97,6 +117,23 @@ public class InsertWebsiteActivity extends Activity {
 						}
 
 						// insert
+						int limit = Integer
+								.parseInt(getString(R.string.profileLimit));
+
+						if (!isPremium
+								&& new DbAdapter(getBaseContext())
+										.loadAllProfiles().size() > limit) {
+
+							Toast.makeText(
+									getBaseContext(),
+									"Free version supports only "
+											+ limit
+											+ " websites. Would you like to buy the premium version to bypass this?",
+									Toast.LENGTH_LONG).show();
+							return;
+
+						}
+
 						if (new DbAdapter(getBaseContext()).insertOrUpdate(
 								inputSite, keyword, 0)) {
 							Toast.makeText(
@@ -114,5 +151,4 @@ public class InsertWebsiteActivity extends Activity {
 					}
 				});
 	}
-
 }
