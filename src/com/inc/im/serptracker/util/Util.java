@@ -4,7 +4,7 @@ import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 import com.google.ads.AdView;
 import com.inc.im.serptracker.R;
-import com.inc.im.serptracker.data.access.AsyncDownloaderInhouseAds;
+//import com.inc.im.serptracker.data.access.AsyncDownloaderInhouseAds;
 
 import android.app.Activity;
 import android.content.Context;
@@ -119,12 +119,12 @@ public class Util {
 
 	}
 
-	public static void loadInHouseAds(LinearLayout adBox, TextView adText,
-			Activity a, String sourcePath, Boolean enabled) {
-
-		if (enabled)
-			new AsyncDownloaderInhouseAds(adBox, a).execute(sourcePath);
-
-	}
+//	public static void loadInHouseAds(LinearLayout adBox, TextView adText,
+//			Activity a, String sourcePath, Boolean enabled) {
+//
+//		if (enabled)
+//			new AsyncDownloaderInhouseAds(adBox, a).execute(sourcePath);
+//
+//	}
 
 }

@@ -25,6 +25,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -65,10 +66,11 @@ public class MainActivity extends Activity {
 
 		adView = Util.loadAdmob(this);
 
+		// DECIDED TO REMOVE @ 29.11.2011
 		// inhouse notification
-		Util.loadInHouseAds(((LinearLayout) findViewById(R.id.inhouseAds)),
-				((TextView) findViewById(R.id.inhouseAdsText)),
-				MainActivity.this, getString(R.string.ad_text_input_path), true);
+		// Util.loadInHouseAds(((LinearLayout) findViewById(R.id.inhouseAds)),
+		// ((TextView) findViewById(R.id.inhouseAdsText)),
+		// MainActivity.this, getString(R.string.ad_text_input_path), true);
 
 		// init spinner + loads data form db
 		initSpinner();
@@ -85,19 +87,19 @@ public class MainActivity extends Activity {
 		super.onDestroy();
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		// load default value on spinner
-		initSpinner();
-
-		// clear listview
-		((ListView) findViewById(R.id.listview_result))
-				.setAdapter(new ArrayAdapter<String>(getBaseContext(),
-						R.layout.main_activity_listview_item));
-
-	}
+	// @Override
+	// protected void onResume() {
+	// super.onResume();
+	//
+	// // load default value on spinner
+	// initSpinner();
+	//
+	// // clear listview
+	// ((ListView) findViewById(R.id.listview_result))
+	// .setAdapter(new ArrayAdapter<String>(getBaseContext(),
+	// R.layout.main_activity_listview_item));
+	//
+	// }
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -232,7 +234,8 @@ public class MainActivity extends Activity {
 			lv.setAdapter(new MainActivityListAdapter(getBaseContext(),
 					selectedUser.keywords));
 
-			//addPremiumOnClick(lv, spinnerSelectedItemIndex);
+			if (Boolean.parseBoolean(getString(R.string.isPremium)))
+				addPremiumOnClick(lv, spinnerSelectedItemIndex);
 
 		} else {
 
@@ -245,6 +248,7 @@ public class MainActivity extends Activity {
 
 	private void addPremiumOnClick(ListView lv,
 			final int spinnerSelectedItemIndex) {
+
 		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
@@ -258,7 +262,7 @@ public class MainActivity extends Activity {
 				final Keyword k = selectedUser.keywords.get(arg2);
 
 				// display dialog
-				final CharSequence[] items = { "Verify ranking",
+				final CharSequence[] items = { "View",
 						"ANCHOR: " + k.anchorText, "URL: " + k.url };
 
 				AlertDialog.Builder builder = new AlertDialog.Builder(
@@ -268,11 +272,20 @@ public class MainActivity extends Activity {
 					public void onClick(DialogInterface dialog, int item) {
 
 						if (item == 0) {
-							// verify ranking
+
+							// first reserved for verify ranking
 							try {
+
+								String userSearchEngine = PreferenceManager
+										.getDefaultSharedPreferences(
+												MainActivity.this).getString(
+												"prefLocalize", "Google.com");
+
 								Toast.makeText(
 										getBaseContext(),
-										"www.google.com/seach?q="
+										"www."
+												+ userSearchEngine
+												+ "/seach?q="
 												+ URLEncoder.encode(k.keyword,
 														"UTF-8"),
 										Toast.LENGTH_LONG).show();
@@ -287,11 +300,14 @@ public class MainActivity extends Activity {
 							i.putExtra("url", selectedUser.url);
 
 							startActivity(i);
-
 						} else if (item == 1) {
+
+							// second reserved for show ancho
 							Toast.makeText(getApplicationContext(),
 									k.anchorText, Toast.LENGTH_SHORT).show();
+
 						} else if (item == 2) {
+							// third reserved for visit url
 							startActivity(new Intent(Intent.ACTION_VIEW, Uri
 									.parse(selectedUser.keywords.get(arg2).url)));
 						}

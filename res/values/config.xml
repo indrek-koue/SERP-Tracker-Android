@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="isPremium">false</string>
+    <string name="isPremium">true</string>
 
 </resources>
