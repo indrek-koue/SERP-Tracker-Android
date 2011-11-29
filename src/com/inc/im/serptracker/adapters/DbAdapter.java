@@ -74,27 +74,29 @@ public class DbAdapter {
 		if (k == null)
 			return;
 
-		open();
+		// open();
 
 		deleteFromExtrasTableById(k.id);
 
-		Cursor cur = mDb.query(TABLE_EXTRA,
-				new String[] { KEY_EXTRA_PARENTID }, KEY_EXTRA_PARENTID + " = "
-						+ k.id, null, null, null, null);
+		// Cursor cur = mDb.query(TABLE_EXTRA,
+		// new String[] { KEY_EXTRA_PARENTID }, KEY_EXTRA_PARENTID + " = "
+		// + k.id, null, null, null, null);
+		//
+		// if (cur == null || cur.getCount() == 0) {
+		// does not exist = INSERT
 
-		if (cur == null || cur.getCount() == 0) {
-			// does not exist = INSERT
-			Log.i("MY", "insert into extras:" + k.keyword + " anchor:"
-					+ k.anchorText + " url:" + k.url);
-			ContentValues initialValues = new ContentValues();
-			initialValues.put(KEY_EXTRA_PARENTID, k.id);
-			initialValues.put(KEY_EXTRA_ANCHOR, k.anchorText);
-			initialValues.put(KEY_EXTRA_URL, k.url);
-			if (mDb.insert(TABLE_EXTRA, null, initialValues) == -1)
-				Log.e("MY", "extra insert failed: " + k.keyword);
-		} else {
-			Log.e("MY", "there is already an row extra for this keyword");
-		}
+		Log.d("MY", "ADD extra:" + k.keyword + " anchor:"
+				+ k.anchorText + " url:" + k.url);
+
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(KEY_EXTRA_PARENTID, k.id);
+		initialValues.put(KEY_EXTRA_ANCHOR, k.anchorText);
+		initialValues.put(KEY_EXTRA_URL, k.url);
+		if (mDb.insert(TABLE_EXTRA, null, initialValues) == -1)
+			Log.e("MY", "extra insert failed: " + k.keyword);
+		// } else {
+		// Log.e("MY", "there is already an row extra for this keyword");
+		// }
 
 		// } else {
 		// // EXISTS - UPDATE
@@ -110,7 +112,7 @@ public class DbAdapter {
 		//
 		// }
 
-		close();
+		// close();
 
 	}
 
@@ -119,12 +121,15 @@ public class DbAdapter {
 		// mDb.execSQL("DELETE FROM " + TABLE_EXTRA + " WHERE "
 		// + KEY_EXTRA_PARENTID + "=" + keywordId);
 		//
-		open();
+		// open();
+
+		Log.d("MY", "delete from " + TABLE_EXTRA + " where "
+				+ KEY_EXTRA_PARENTID + "=" + keywordId);
 
 		int rowsAff = mDb.delete(TABLE_EXTRA, KEY_EXTRA_PARENTID + "="
 				+ keywordId, null);
 
-		close();
+		// close();
 		return rowsAff != 0 ? true : false;
 
 	}
@@ -278,12 +283,18 @@ public class DbAdapter {
 
 		open();
 
+		
 		ContentValues val = new ContentValues();
 		val.put(KEY_KEYWORDS_TABLE_POSTION, newRank);
 
+		// save new rank
 		int numOfRowsAf = mDb.update(TABLE_KEYWORDS, val, KEY_KEYWORDS_TABLE_ID
 				+ " = " + k.id, null);
 
+		// save url/anchor
+		addExtraToKeyword(k);
+	
+		
 		close();
 
 		return numOfRowsAf != 0 ? true : false;
@@ -296,6 +307,12 @@ public class DbAdapter {
 		ArrayList<UserProfile> profiles = null;
 
 		open();
+
+		mDb.execSQL("CREATE TABLE IF NOT EXISTS "
+				+ String.format(
+						"%s ( %s INTEGER PRIMARY KEY, %s INTEGER NOT NULL,  %s TEXT NOT NULL, %s TEXT NOT NULL);",
+						TABLE_EXTRA, TABLE_ID, KEY_EXTRA_PARENTID,
+						KEY_EXTRA_ANCHOR, KEY_EXTRA_URL));
 
 		Cursor profileHeaderCur = mDb.query(TABLE_PROFILE, null, null, null,
 				null, null, null);
@@ -320,7 +337,8 @@ public class DbAdapter {
 						KEY_KEYWORDS_TABLE_PARENTID + " = " + profileId, null,
 						null, null, null);
 
-				if (keywordsCur != null && keywordsCur.getColumnCount() > 0) {
+				if (keywordsCur != null && keywordsCur.getColumnCount() > 0
+						&& keywordsCur.getCount() > 0) {
 					// profile has keywords
 
 					keywordsCur.moveToFirst();

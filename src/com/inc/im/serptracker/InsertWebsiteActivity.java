@@ -122,7 +122,7 @@ public class InsertWebsiteActivity extends Activity {
 
 						if (!isPremium
 								&& new DbAdapter(getBaseContext())
-										.loadAllProfiles().size() > limit) {
+										.loadAllProfiles().size() >= limit) {
 
 							Toast.makeText(
 									getBaseContext(),
