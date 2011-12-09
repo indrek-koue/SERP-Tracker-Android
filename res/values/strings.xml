@@ -54,6 +54,8 @@
 	<string name="error_please_try_again">Error, please try again</string>
 	<string name="region">Region</string>
 	<string name="report_wrong_ranking">Report wrong ranking</string>
+	<string name="yes">Yes</string>
+	<string name="market_details_id_com_inc_im_serptrackerpremium">market://details?id=com.inc.im.serptrackerpremium</string>
 </resources>
 
 

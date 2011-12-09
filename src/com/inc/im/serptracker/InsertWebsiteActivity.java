@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.flurry.android.FlurryAgent;
 import com.google.ads.AdView;
 import com.inc.im.serptracker.adapters.DbAdapter;
+import com.inc.im.serptracker.util.Premium;
 import com.inc.im.serptracker.util.Util;
 
 public class InsertWebsiteActivity extends Activity {
@@ -65,9 +66,7 @@ public class InsertWebsiteActivity extends Activity {
 					keywordLimit,
 					(EditText) findViewById(R.id.editText2),
 					getString(R.string.free_version_limit_5_keywords_per_website),
-					getBaseContext());
-
-			Log.d("MY", "free user, keyword limit: " + keywordLimit);
+					InsertWebsiteActivity.this);
 
 		}
 	}
@@ -124,12 +123,20 @@ public class InsertWebsiteActivity extends Activity {
 								&& new DbAdapter(getBaseContext())
 										.loadAllProfiles().size() >= limit) {
 
-							Toast.makeText(
-									getBaseContext(),
+							// Toast.makeText(
+							// getBaseContext(),
+							// "Free version supports only "
+							// + limit
+							// +
+							// " websites. Would you like to buy the premium version to bypass this?",
+							// Toast.LENGTH_LONG).show();
+
+							Premium.showBuyPremiumDialog(
 									"Free version supports only "
 											+ limit
 											+ " websites. Would you like to buy the premium version to bypass this?",
-									Toast.LENGTH_LONG).show();
+									InsertWebsiteActivity.this);
+
 							return;
 
 						}

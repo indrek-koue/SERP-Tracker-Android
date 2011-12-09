@@ -63,7 +63,7 @@ public class ManageWebsitesActivity extends Activity {
 		// -1 == disabled
 		Util.setKeywordLimit(-1, (EditText) findViewById(R.id.editText2),
 				getString(R.string.free_version_limit_5_keywords_per_website),
-				getBaseContext());
+				ManageWebsitesActivity.this);
 
 	}
 

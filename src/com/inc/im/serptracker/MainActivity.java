@@ -72,6 +72,8 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
+		//menu key hide/show menubar
+		
 		LinearLayout lv = (LinearLayout) findViewById(R.id.menuBar);
 
 		if (keyCode == KeyEvent.KEYCODE_MENU)

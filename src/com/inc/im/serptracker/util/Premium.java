@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.VerifyWebView;
 import com.inc.im.serptracker.adapters.DbAdapter;
@@ -102,4 +103,32 @@ public class Premium {
 		});
 	}
 
+	public static void showBuyPremiumDialog(String msg, final Activity a) {
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(a);
+		builder.setMessage(msg)
+				.setCancelable(true)
+				.setPositiveButton(a.getString(R.string.yes),
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								dialog.dismiss();
+								Intent intent = new Intent(Intent.ACTION_VIEW);
+								intent.setData(Uri.parse(a
+										.getString(R.string.market_details_id_com_inc_im_serptrackerpremium)));
+								a.startActivity(intent);
+
+							}
+						})
+				.setNegativeButton(a.getString(R.string.cancel),
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+
+								dialog.dismiss();
+
+							}
+						});
+		AlertDialog alert = builder.create();
+		alert.show();
+
+	}
 }

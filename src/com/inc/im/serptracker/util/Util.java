@@ -3,6 +3,7 @@ package com.inc.im.serptracker.util;
 import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 import com.google.ads.AdView;
+import com.inc.im.serptracker.InsertWebsiteActivity;
 import com.inc.im.serptracker.R;
 //import com.inc.im.serptracker.data.access.AsyncDownloaderInhouseAds;
 
@@ -20,7 +21,7 @@ public class Util {
 
 	public static AdView loadAdmob(Activity a) {
 
-		//if premium, don't show ad's
+		// if premium, don't show ad's
 		if (Boolean.parseBoolean(a.getString(R.string.isPremium)))
 			return null;
 
@@ -41,7 +42,7 @@ public class Util {
 	}
 
 	public static void setKeywordLimit(final int limit, EditText et,
-			final String messageOnLimit, final Context con) {
+			final String messageOnLimit, final Activity a) {
 
 		// if limit == -1, then disabled
 		if (limit == -1)
@@ -66,8 +67,12 @@ public class Util {
 					// about that
 					if (editTextRowCount >= limit) {
 
-						Toast.makeText(con, messageOnLimit, Toast.LENGTH_LONG)
-								.show();
+						// Toast.makeText(con, messageOnLimit,
+						// Toast.LENGTH_LONG)
+						// .show();
+
+						//show that free is limited and promote user to buyF
+						Premium.showBuyPremiumDialog(messageOnLimit, a);
 
 						// find the last break
 						int lastBreakIndex = text.lastIndexOf("\n");
@@ -106,6 +111,5 @@ public class Util {
 			return false;
 
 	}
-
 
 }
