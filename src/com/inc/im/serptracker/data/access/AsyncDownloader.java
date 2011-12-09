@@ -1,12 +1,8 @@
 package com.inc.im.serptracker.data.access;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.flurry.android.FlurryAgent;
@@ -14,7 +10,6 @@ import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.adapters.DbAdapter;
 import com.inc.im.serptracker.adapters.MainActivityListAdapter;
 import com.inc.im.serptracker.data.Keyword;
-import com.inc.im.serptracker.util.MainActivityHelper;
 import com.inc.im.serptracker.util.Parser;
 
 import android.app.Activity;

@@ -1,8 +1,6 @@
 package com.inc.im.serptracker.adapters;
 
 import java.util.ArrayList;
-import java.util.Random;
-
 import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.Keyword;
 

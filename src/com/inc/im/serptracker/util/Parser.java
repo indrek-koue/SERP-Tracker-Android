@@ -1,17 +1,10 @@
 package com.inc.im.serptracker.util;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.net.URLEncoder;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import android.app.Activity;
-import android.os.Environment;
 import android.util.Log;
 
 import com.inc.im.serptracker.data.Keyword;
