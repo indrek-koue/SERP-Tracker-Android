@@ -123,14 +123,6 @@ public class InsertWebsiteActivity extends Activity {
 								&& new DbAdapter(getBaseContext())
 										.loadAllProfiles().size() >= limit) {
 
-							// Toast.makeText(
-							// getBaseContext(),
-							// "Free version supports only "
-							// + limit
-							// +
-							// " websites. Would you like to buy the premium version to bypass this?",
-							// Toast.LENGTH_LONG).show();
-
 							Premium.showBuyPremiumDialog(
 									"Free version supports only "
 											+ limit
