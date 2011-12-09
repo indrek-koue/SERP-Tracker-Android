@@ -1,8 +1,5 @@
 package com.inc.im.serptracker.data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Keyword {
 
 	public int id;

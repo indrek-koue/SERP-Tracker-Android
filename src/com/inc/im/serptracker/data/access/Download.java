@@ -5,16 +5,12 @@ import java.net.URLEncoder;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import android.app.Activity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
 import com.inc.im.serptracker.data.Keyword;
-import com.inc.im.serptracker.util.Parser;
 
 public class Download {
 

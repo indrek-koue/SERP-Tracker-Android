@@ -10,14 +10,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 public class MainActivity extends Activity {
 
-	//private ArrayList<UserProfile> data;
 	private Boolean menuBarIsVisible = true;
 	private AdView adView;
 
@@ -42,12 +39,6 @@ public class MainActivity extends Activity {
 
 		adView = Util.loadAdmob(this);
 
-		// DECIDED TO REMOVE @ 29.11.2011
-		// inhouse notification
-		// Util.loadInHouseAds(((LinearLayout) findViewById(R.id.inhouseAds)),
-		// ((TextView) findViewById(R.id.inhouseAdsText)),
-		// MainActivity.this, getString(R.string.ad_text_input_path), true);
-
 		// init spinner + loads data form db
 		MainActivityHelper.initSpinner(this);
 
@@ -64,19 +55,19 @@ public class MainActivity extends Activity {
 		super.onDestroy();
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		// load default value on spinner
-		MainActivityHelper.initSpinner(this);
-
-		// clear listview
-		((ListView) findViewById(R.id.listview_result))
-				.setAdapter(new ArrayAdapter<String>(getBaseContext(),
-						R.layout.main_activity_listview_item));
-
-	}
+//	@Override
+//	protected void onResume() {
+//		super.onResume();
+//
+//		// load default value on spinner
+//		MainActivityHelper.initSpinner(this);
+//
+//		// clear listview
+//		((ListView) findViewById(R.id.listview_result))
+//				.setAdapter(new ArrayAdapter<String>(getBaseContext(),
+//						R.layout.main_activity_listview_item));
+//
+//	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -95,40 +86,6 @@ public class MainActivity extends Activity {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	// public void initSpinner() {
-	//
-	// data = new DbAdapter(getBaseContext()).loadAllProfiles();
-	// Spinner spinner = (Spinner) findViewById(R.id.spinner_profile);
-	//
-	// ArrayList<String> spinnerValues = new ArrayList<String>();
-	// spinnerValues.add(getString(R.string.spinner_default_selection));
-	//
-	// // generate spinner values
-	// if (data != null)
-	// for (UserProfile u : data)
-	// spinnerValues.add(u.url + "[" + u.keywords.size() + "]");
-	//
-	// spinner.setAdapter(new ArrayAdapter<String>(getBaseContext(),
-	// R.layout.main_activity_spinner_item, R.id.textView1,
-	// spinnerValues));
-	//
-	// spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-	//
-	// @Override
-	// public void onItemSelected(AdapterView<?> adapter, View arg1,
-	// int index, long arg3) {
-	//
-	// MainActivityListAdapterHelper.bindListViewItems(
-	// MainActivity.this, data, index);
-	//
-	// }
-	//
-	// @Override
-	// public void onNothingSelected(AdapterView<?> arg0) {
-	//
-	// }
-	// });
-	// }
 
 	private void bindRunButton() {
 
@@ -142,186 +99,5 @@ public class MainActivity extends Activity {
 					}
 				});
 	}
-
-	// @SuppressWarnings("unchecked")
-	// public void runButtonLogic() {
-	// if (!Util.internetConnectionExists(getBaseContext())) {
-	// Toast.makeText(
-	// getBaseContext(),
-	// getString(R.string.no_active_internet_connection_please_check_your_settings),
-	// Toast.LENGTH_LONG).show();
-	//
-	// return;
-	// }
-	//
-	// // default not selected
-	// if (!MainActivityHelper.getSpinnerSelectedValue(
-	// MainActivity.this).equals(
-	// getString(R.string.spinner_default_selection))) {
-	//
-	// // counter for rate-us-dialog
-	// if (MainActivityHelper.rateUsDialog(
-	// MainActivity.this, 15, 50))
-	// return;
-	//
-	// int spinnerSelectedValueNr = MainActivityHelper
-	// .getSpinnerSelectedIndex(MainActivity.this) - 1;
-	//
-	// if (data == null
-	// || spinnerSelectedValueNr >= data.size()
-	// || spinnerSelectedValueNr < 0)
-	// return;
-	//
-	// // find keywords by name
-	// ArrayList<Keyword> keywords = MainActivityHelper
-	// .findKeywordsByName(data,
-	// spinnerSelectedValueNr);
-	//
-	// if (keywords != null) {
-	//
-	// // start download
-	// new AsyncDownloader(
-	// MainActivity.this,
-	// (ListView) findViewById(R.id.listview_result),
-	// data.get(spinnerSelectedValueNr).url)
-	// .execute(keywords);
-	// }
-	//
-	// else {
-	// Toast.makeText(
-	// getBaseContext(),
-	// getString(R.string.profile_keywords_are_missing_how_s_thats_possible_),
-	// Toast.LENGTH_SHORT).show();
-	// }
-	//
-	// } else {
-	//
-	// Toast.makeText(
-	// getBaseContext(),
-	// getString(R.string.please_select_a_profile),
-	// Toast.LENGTH_SHORT).show();
-	//
-	// } // if empty selected
-	// }
-
-	// public void bindListViewItems(int spinnerSelectedItemIndex) {
-	//
-	// ListView lv = (ListView) findViewById(R.id.listview_result);
-	//
-	// if (spinnerSelectedItemIndex > 0 && data != null
-	// && spinnerSelectedItemIndex <= data.size()) {
-	//
-	// // -1 because 0 index holds default text
-	// final UserProfile selectedUser = data
-	// .get(spinnerSelectedItemIndex - 1);
-	//
-	// lv.setAdapter(new MainActivityListAdapter(getBaseContext(),
-	// selectedUser.keywords));
-	//
-	// if (Boolean.parseBoolean(getString(R.string.isPremium)))
-	// addPremiumOnClick(lv, spinnerSelectedItemIndex);
-	//
-	// } else {
-	//
-	// // clear
-	// lv.setAdapter(new ArrayAdapter<String>(getBaseContext(),
-	// R.layout.main_activity_listview_item));
-	// }
-	//
-	// }
-
-	// private void addPremiumOnClick(ListView lv,
-	// final int spinnerSelectedItemIndex) {
-	//
-	// lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-	//
-	// @Override
-	// public void onItemClick(AdapterView<?> arg0, View arg1,
-	// final int arg2, long arg3) {
-	//
-	// // -1 because first is default text
-	// final UserProfile selectedUser = new DbAdapter(getBaseContext())
-	// .loadAllProfiles().get(spinnerSelectedItemIndex - 1);
-	//
-	// final Keyword k = selectedUser.keywords.get(arg2);
-	//
-	// // display dialog
-	// final CharSequence[] items = { "View",
-	// "ANCHOR: " + k.anchorText, "URL: " + k.url };
-	//
-	// AlertDialog.Builder builder = new AlertDialog.Builder(
-	// MainActivity.this);
-	// builder.setTitle("Extra info for ranking");
-	// builder.setItems(items, new DialogInterface.OnClickListener() {
-	// public void onClick(DialogInterface dialog, int item) {
-	//
-	// if (item == 0) {
-	//
-	// // first reserved for verify ranking
-	// try {
-	//
-	// String userSearchEngine = PreferenceManager
-	// .getDefaultSharedPreferences(
-	// MainActivity.this).getString(
-	// "prefLocalize", "Google.com");
-	//
-	// Toast.makeText(
-	// getBaseContext(),
-	// "www."
-	// + userSearchEngine
-	// + "/seach?q="
-	// + URLEncoder.encode(k.keyword,
-	// "UTF-8"),
-	// Toast.LENGTH_LONG).show();
-	// } catch (UnsupportedEncodingException e) {
-	// Log.e("MY", e.toString());
-	// e.printStackTrace();
-	// }
-	//
-	// Intent i = new Intent(MainActivity.this,
-	// VerifyWebView.class);
-	// i.putExtra("keyword", k.keyword);
-	// i.putExtra("url", selectedUser.url);
-	//
-	// startActivity(i);
-	// } else if (item == 1) {
-	//
-	// // second reserved for show ancho
-	// Toast.makeText(getApplicationContext(),
-	// k.anchorText, Toast.LENGTH_SHORT).show();
-	//
-	// } else if (item == 2) {
-	// // third reserved for visit url
-	// startActivity(new Intent(Intent.ACTION_VIEW, Uri
-	// .parse(selectedUser.keywords.get(arg2).url)));
-	// }
-	//
-	// }
-	// });
-	// AlertDialog alert = builder.create();
-	//
-	// alert.show();
-	//
-	// }
-	// });
-	// }
-
-	// public String getSpinnerSelectedValue() {
-	//
-	// Object o = ((Spinner) findViewById(R.id.spinner_profile))
-	// .getSelectedItem();
-	// if (o != null)
-	// return o.toString();
-	// else
-	// return "";
-	//
-	// }
-	//
-	// public int getSpinnerSelectedIndex() {
-	//
-	// return ((Spinner) findViewById(R.id.spinner_profile))
-	// .getSelectedItemPosition();
-	//
-	// }
 
 }
