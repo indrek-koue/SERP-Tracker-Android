@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="flurry_api_key">LCFV3QMWQDCW9VRBU14R</string>
-	<string name="app_news_get_path">http://www.thedroidproject.com/_app/SERPTracker/apptext.txt
-	</string>
-	<string name="ad_text_input_path">http://www.thedroidproject.com/_app/SERPTracker/ad.txt
-	</string>
+	<string name="app_news_get_path">http://www.thedroidproject.com/_app/SERPTracker/apptext.txt</string>
 	<string name="dev_email">support@thedroidproject.com</string>
 	<string name="market_details_id_com_inc_im_serptracker">market://details?id=com.inc.im.serptracker</string>
+	<string name="market_details_id_com_inc_im_serptrackerpremium">market://details?id=com.inc.im.serptrackerpremium</string>
 </resources>

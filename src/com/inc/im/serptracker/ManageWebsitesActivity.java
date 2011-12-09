@@ -60,10 +60,19 @@ public class ManageWebsitesActivity extends Activity {
 		bindBackButton();
 		bindDeleteButton();
 
-		// -1 == disabled
-		Util.setKeywordLimit(-1, (EditText) findViewById(R.id.editText2),
-				getString(R.string.free_version_limit_5_keywords_per_website),
-				ManageWebsitesActivity.this);
+		
+		if (!Boolean.parseBoolean(getString(R.string.isPremium))) {
+
+			int keywordLimit = Integer
+					.parseInt(getString(R.string.keywordLimit));
+
+			Util.setKeywordLimit(
+					keywordLimit,
+					(EditText) findViewById(R.id.editText2),
+					getString(R.string.free_version_limit_5_keywords_per_website),
+					ManageWebsitesActivity.this);
+
+		}
 
 	}
 
