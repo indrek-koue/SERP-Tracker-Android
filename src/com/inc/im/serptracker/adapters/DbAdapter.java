@@ -85,8 +85,8 @@ public class DbAdapter {
 		// if (cur == null || cur.getCount() == 0) {
 		// does not exist = INSERT
 
-		Log.d("MY", "ADD extra:" + k.keyword + " anchor:"
-				+ k.anchorText + " url:" + k.url);
+		Log.d("MY", "ADD extra:" + k.keyword + " anchor:" + k.anchorText
+				+ " url:" + k.url);
 
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_EXTRA_PARENTID, k.id);
@@ -283,7 +283,6 @@ public class DbAdapter {
 
 		open();
 
-		
 		ContentValues val = new ContentValues();
 		val.put(KEY_KEYWORDS_TABLE_POSTION, newRank);
 
@@ -293,8 +292,7 @@ public class DbAdapter {
 
 		// save url/anchor
 		addExtraToKeyword(k);
-	
-		
+
 		close();
 
 		return numOfRowsAf != 0 ? true : false;
@@ -390,8 +388,10 @@ public class DbAdapter {
 		Cursor cur = mDb.query(TABLE_EXTRA, null,
 				KEY_EXTRA_PARENTID + "=" + id, null, null, null, null);
 
-		if (cur != null && cur.getCount() > 0 && cur.getColumnCount() > 0)
+		if (cur != null && cur.getCount() > 0 && cur.getColumnCount() > 0) {
+			cur.moveToFirst();
 			return cur.getString(cur.getColumnIndex(KEY_EXTRA_URL));
+		}
 
 		return "error getExtraUrlById";
 	}
@@ -401,8 +401,12 @@ public class DbAdapter {
 		Cursor cur = mDb.query(TABLE_EXTRA, null,
 				KEY_EXTRA_PARENTID + "=" + id, null, null, null, null);
 
-		if (cur != null && cur.getCount() > 0 && cur.getColumnCount() > 0)
+		if (cur != null && cur.getCount() > 0 && cur.getColumnCount() > 0) {
+			cur.moveToFirst();
+
 			return cur.getString(cur.getColumnIndex(KEY_EXTRA_ANCHOR));
+
+		}
 
 		return "error getExtraAnchorById";
 	}
@@ -423,6 +427,15 @@ public class DbAdapter {
 
 	}
 
+	/**
+	 * @param inputSite
+	 *            - inserted or edited page url
+	 * @param keyword
+	 *            - all keywords on seperate rows
+	 * @param id
+	 *            - if is update then id != 0
+	 * @return - if was success
+	 */
 	public Boolean insertOrUpdate(String inputSite, String keyword, int id) {
 
 		String[] keywords = null;
