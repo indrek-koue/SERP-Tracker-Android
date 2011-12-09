@@ -49,6 +49,9 @@
 	<string name="region">Region</string>
 	<string name="report_wrong_ranking">Report wrong ranking</string>
 	<string name="yes">Yes</string>
+	<string name="premium_view_live_ranking">premium view live ranking</string>
+	<string name="premium_dialog_title">premium dialog title</string>
+	<string name="premium_show_anchor_dialog_title">Ranking link text (anchor)</string>
 	
 </resources>
 

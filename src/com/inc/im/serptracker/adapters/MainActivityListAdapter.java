@@ -46,17 +46,12 @@ public class MainActivityListAdapter extends BaseAdapter {
 
 		// inflate from layout
 		// bind values
-
 		View v = convertView;
-
-		// if (v == null) {
-		// convertView = new
 
 		LayoutInflater inf = (LayoutInflater) con
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		v = inf.inflate(R.layout.main_activity_listview_item, null);
-		// }
 
 		Keyword k = input.get(position);
 

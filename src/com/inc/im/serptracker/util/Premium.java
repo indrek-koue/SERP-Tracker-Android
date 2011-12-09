@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -45,12 +47,13 @@ public class Premium {
 				final Keyword k = selectedUser.keywords.get(arg2);
 
 				// display dialog
-				final CharSequence[] items = { "View",
-						"ANCHOR: " + k.anchorText, "URL: " + k.url };
+				final CharSequence[] items = {
+						a.getString(R.string.premium_view_live_ranking),
+						"LINK TEXT: " + k.anchorText, "VISIT LINK: " + k.url };
 
 				AlertDialog.Builder builder = new AlertDialog.Builder(a);
 
-				builder.setTitle("Extra info for ranking");
+				builder.setTitle(a.getString(R.string.premium_dialog_title));
 				builder.setItems(items, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int item) {
 
@@ -83,15 +86,38 @@ public class Premium {
 							a.startActivity(i);
 						} else if (item == 1) {
 
-							// second reserved for show ancho
-							Toast.makeText(a, k.anchorText, Toast.LENGTH_SHORT)
-									.show();
+							// second reserved for show anchor
+							// Toast.makeText(a, k.anchorText,
+							// Toast.LENGTH_SHORT)
+							// .show();
+							//
+							// start custom dialog with textbox with url inside
+
+							customDialogWithTextboxToShowAnchor(k.anchorText);
 
 						} else if (item == 2) {
 							// third reserved for visit url
 							a.startActivity(new Intent(Intent.ACTION_VIEW, Uri
 									.parse(selectedUser.keywords.get(arg2).url)));
 						}
+
+					}
+
+					private void customDialogWithTextboxToShowAnchor(
+							String anchorText) {
+
+						Dialog dialog = new Dialog(a);
+
+						dialog.setContentView(R.layout.premium_dialog_textbox);
+						dialog.setTitle(a
+								.getString(R.string.premium_show_anchor_dialog_title));
+
+						EditText et = (EditText) dialog
+								.findViewById(R.id.editText1);
+
+						et.setText(anchorText);
+
+						dialog.show();
 
 					}
 				});
