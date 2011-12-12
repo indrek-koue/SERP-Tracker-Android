@@ -5,10 +5,10 @@
 	<string name="there_are_no_email_clients_installed_">There are no email clients installed.</string>
 	<string name="spinner_default_selection">Select a website...</string>
 	<string name="no_websites_to_manage_please_add_a_website">No websites to manage. Please add a website</string>
-	<string name="no_active_internet_connection_please_check_your_settings">No active network connection. Please check your settings</string>
-	<string name="like_this_app_rate_us_on_android_market_">Like this app? Rate us on android market!</string>
-	<string name="sure_">Sure!</string>
-	<string name="cancel">Cancel</string>
+	<string name="no_active_internet_connection_please_check_your_settings">No active network connection. Please check your network settings</string>
+	<string name="like_this_app_rate_us_on_android_market_">Like this app? Rate us on Android™ market!</string> <!-- app=application, software program -->
+	<string name="sure_">Sure!</string> <!-- postive response -->
+	<string name="cancel">Cancel</string> <!-- aborts action -->
 	<string name="inspect_dialog_title">Inspecting keywords</string>
 	<string name="inspect_dialog_fist_msg">Starting, please wait</string>
 	<string name="please_select_a_profile">Please select a profile</string>
@@ -16,13 +16,13 @@
 	<string name="website_address_is_too_short_or_invalid">Website address is too short or invalid</string>
 	<string name="website_added_successfuly">Website add success</string>
 	<string name="website_add_failure">Website add failed</string>
-	<string name="website_">Website</string>
+	<string name="website_">Website</string> <!-- this message is combined with next one, ex: website (userwebsite) succesfully deleted -->
 	<string name="_succesfully_deleted">succesfully deleted</string>
 	<string name="delete_failed">Delete failed</string>
 	<string name="website_edited_successfuly">Website edit successful</string>
 	<string name="website_edit_failure">Website edit failed</string>
 	<string name="all_user_data_deleted">All user data deleted</string>
-	<string name="run_btton">Find Rankings</string>
+	<string name="run_btton">Find Rankings</string> <!--  main button which finds how selected website ranks in google for user inputed keywords -->
 	<string name="menubar_add">Add</string>
 	<string name="menubar_manage">Manage</string>
 	<string name="menubar_settings">Settings</string>
@@ -30,17 +30,17 @@
 	<string name="address_of_your_website">Address of your website</string>
 	<string name="www_example_com">www.example.com</string>
 	<string name="keywords_to_track">Keywords to track</string>
-	<string name="example_keyword_1_nexample_keyword_2">example keyword 1\nexample keyword 2\nexample keyword 3\n...\nexample keyword n</string>
+	<string name="example_keyword_1_nexample_keyword_2"> example keyword 1 \n example keyword 2 \n example keyword 3 \n ... \n example keyword n</string> <!-- ATTENTION: \n represents page breaks -->
 	<string name="insert">Insert</string>
 	<string name="back">Back</string>
 	<string name="about_title_news_and_updates">News and Updates</string>
-	<string name="send_email_to_dev">Send an email to me!</string>
+	<string name="send_email_to_dev">Send an email to me!</string> <!-- send developer email button -->
 	<string name="address">Address</string>
 	<string name="save">Save</string>
 	<string name="not_ranked">not ranked</string>
 	<string name="keyword_">Keyword </string>
-	<string name="free_version_limit_5_keywords_per_website">Free version is limited to 5 keywords per website. Would you like to buy premium to pass this limitation? (+ includes a lot of new features)</string>
-	<string name="google_is_trademark_of_google_inc_this_application_is_built_on_google_custom_search_api_and_does_not_infringe_google_search_terms_of_service_">DISCLAIMER: Google is trademark of Google inc. This application is built on Google Custom Search API and does not infringe Google Search terms of service</string>
+	<string name="free_version_limit_5_keywords_per_website">Free version is limited to 7 keywords per website. Would you like to buy premium to pass this limitation? (+ includes a lot of new features)</string>
+	<string name="google_is_trademark_of_google_inc_this_application_is_built_on_google_custom_search_api_and_does_not_infringe_google_search_terms_of_service_">Google is trademark of Google inc. This application is built on Google Custom Search API and does not infringe Google Search terms of service</string>
 	<string name="search_engine">Search Engine</string>
 	<string name="delete_all_data">Delete all data</string>
 	<string name="resets_all_application_internal_data">Resets all application internal data</string>
@@ -49,10 +49,13 @@
 	<string name="region">Region</string>
 	<string name="report_wrong_ranking">Report wrong ranking</string>
 	<string name="yes">Yes</string>
-	<string name="premium_view_live_ranking">premium view live ranking</string>
-	<string name="premium_dialog_title">premium dialog title</string>
-	<string name="premium_show_anchor_dialog_title">Ranking link text (anchor)</string>
-	
+	<string name="premium_view_live_ranking">View Live Ranking</string>
+	<string name="premium_dialog_title">Extra Information</string>
+	<string name="premium_show_anchor_dialog_title">Ranking Link Text (anchor)</string>
+	<string name="copyright_c_by_thedroidproject_com_the_software_is_provided_as_is_without_warranty_of_any_kind">Copyright (C) by TheDroidProject.com \n\n THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. \n\n By using this application you agree to the legal requirements mentioned above.</string>
+	<string name="selecting_locale_is_available_in_the_premium_version_would_you_like_to_buy_the_premium_version_">Selecting locale is available in the premium version. Would you like to buy the premium version?</string>
+	<string name="free_version_supports_only_">Free version supports only </string>
+	<string name="_websites_would_you_like_to_buy_the_premium_version_to_remove_this_limitation_"> websites. Would you like to buy the premium version to remove this limitation?</string>
 </resources>
 
 

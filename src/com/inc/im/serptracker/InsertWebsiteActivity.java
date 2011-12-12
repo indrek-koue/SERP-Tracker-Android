@@ -124,9 +124,9 @@ public class InsertWebsiteActivity extends Activity {
 										.loadAllProfiles().size() >= limit) {
 
 							Premium.showBuyPremiumDialog(
-									"Free version supports only "
+									getString(R.string.free_version_supports_only_)
 											+ limit
-											+ " websites. Would you like to buy the premium version to bypass this?",
+											+ getString(R.string._websites_would_you_like_to_buy_the_premium_version_to_remove_this_limitation_),
 									InsertWebsiteActivity.this);
 
 							return;

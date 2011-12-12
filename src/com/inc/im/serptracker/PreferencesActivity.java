@@ -3,6 +3,7 @@ package com.inc.im.serptracker;
 import com.flurry.android.FlurryAgent;
 import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.adapters.DbAdapter;
+import com.inc.im.serptracker.util.Premium;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -70,8 +71,8 @@ public class PreferencesActivity extends PreferenceActivity implements
 
 		pref.setSummary(pref.getValue());
 
-		Toast.makeText(getBaseContext(), "SELECTED: " + pref.getValue(),
-				Toast.LENGTH_SHORT).show();
+//		Toast.makeText(getBaseContext(), "SELECTED: " + pref.getValue(),
+//				Toast.LENGTH_SHORT).show();
 
 		this.onContentChanged();
 
@@ -108,19 +109,16 @@ public class PreferencesActivity extends PreferenceActivity implements
 								if (Boolean
 										.parseBoolean(getString(R.string.isPremium))) {
 
-									Toast.makeText(
-											getBaseContext(),
-											"is premium, value saved: "
-													+ newValue.toString(),
-											Toast.LENGTH_SHORT).show();
-
 									return true;
 
 								} else {
-									Toast.makeText(
-											getBaseContext(),
-											"This feature is available in the premium version. Would you like to buy the premium version?",
-											Toast.LENGTH_SHORT).show();
+									
+									Premium.showBuyPremiumDialog(getString(R.string.selecting_locale_is_available_in_the_premium_version_would_you_like_to_buy_the_premium_version_), PreferencesActivity.this);
+//									
+//									Toast.makeText(
+//											getBaseContext(),
+//											R.string.selecting_locale_is_available_in_the_premium_version_would_you_like_to_buy_the_premium_version_,
+//											Toast.LENGTH_SHORT).show();
 									return false;
 								}
 

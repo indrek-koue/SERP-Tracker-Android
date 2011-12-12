@@ -68,23 +68,17 @@ public class AboutActivity extends Activity {
 					@Override
 					public void onClick(View v) {
 
-						String msg = "Copyright (C) by TheDroidProject.com \n \n "
-								+ "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, "
-								+ "EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF "
-								+ "MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. "
-								+ "IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR "
-								+ "ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, "
-								+ "TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE "
-								+ "SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. \n\n"
-								+ "Google is trademark of Google inc. This application is built on Google "
-								+ "Custom Search API and does not infringe Google Search terms of service.";
+						String msg = getString(R.string.copyright_c_by_thedroidproject_com_the_software_is_provided_as_is_without_warranty_of_any_kind);
+
+						String msg2 = AboutActivity.this
+								.getString(R.string.google_is_trademark_of_google_inc_this_application_is_built_on_google_custom_search_api_and_does_not_infringe_google_search_terms_of_service_);
 
 						AlertDialog.Builder builder = new Builder(
 								AboutActivity.this);
 
 						builder.setTitle(getString(R.string.legal_information));
 
-						builder.setMessage(msg);
+						builder.setMessage(msg + "\n\n" + msg2);
 
 						builder.setCancelable(true);
 						builder.create().show();
