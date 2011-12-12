@@ -280,12 +280,12 @@ public class MainActivityHelper {
 						data.get(spinnerSelectedValueNr).url).execute(keywords);
 			}
 
-			else {
-				Toast.makeText(
-						a,
-						a.getString(R.string.profile_keywords_are_missing_how_s_thats_possible_),
-						Toast.LENGTH_SHORT).show();
-			}
+//			else {
+//				Toast.makeText(
+//						a,
+//						a.getString(R.string.profile_keywords_are_missing_how_s_thats_possible_),
+//						Toast.LENGTH_SHORT).show();
+//			}
 
 		} else {
 
