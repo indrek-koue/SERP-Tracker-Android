@@ -108,22 +108,18 @@ public class AboutActivity extends Activity {
 			public void onClick(View v) {
 
 				Intent intent = new Intent(Intent.ACTION_SEND);
-
-				// old send email
 				intent.setType("message/rfc822");
-				//
 				intent.putExtra(Intent.EXTRA_EMAIL,
 						new String[] { getString(R.string.dev_email) });
-
 				intent.putExtra(Intent.EXTRA_SUBJECT,
 						getString(R.string.app_name));
-				//
-				// // in order to not crash with other than emails apps?
+				
+				 // in order to not crash with other than emails apps?
 				intent.putExtra(android.content.Intent.EXTRA_TEXT, "");
 
 				try {
 					startActivity(Intent.createChooser(intent,
-							getString(R.string.send_mail)));
+							getString(R.string.send_email_to_dev)));
 				} catch (android.content.ActivityNotFoundException ex) {
 					Toast.makeText(getBaseContext(),
 							R.string.there_are_no_email_clients_installed_,

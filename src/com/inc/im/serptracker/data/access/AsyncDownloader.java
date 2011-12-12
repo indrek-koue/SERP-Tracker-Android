@@ -109,8 +109,8 @@ public class AsyncDownloader extends
 	protected void onPostExecute(ArrayList<Keyword> input) {
 
 		if (input == null) {
-			progressDialog.setMessage(a
-					.getString(R.string.error1_input_keywords_are_null));
+//			progressDialog.setMessage(a
+//					.getString(R.string.error1_input_keywords_are_null));
 			return;
 		}
 
