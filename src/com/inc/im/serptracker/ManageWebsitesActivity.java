@@ -69,7 +69,7 @@ public class ManageWebsitesActivity extends Activity {
 			Util.setKeywordLimit(
 					keywordLimit,
 					(EditText) findViewById(R.id.editText2),
-					getString(R.string.free_version_limit_5_keywords_per_website),
+					getString(R.string.free_version_limit_7_keywords_per_website),
 					ManageWebsitesActivity.this);
 
 		}

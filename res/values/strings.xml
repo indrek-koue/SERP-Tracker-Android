@@ -39,7 +39,7 @@
 	<string name="save">Save</string>
 	<string name="not_ranked">not ranked</string>
 	<string name="keyword_">Keyword </string>
-	<string name="free_version_limit_5_keywords_per_website">Free version is limited to 7 keywords per website. Would you like to buy premium to pass this limitation? (+ includes a lot of new features)</string>
+	<string name="free_version_limit_7_keywords_per_website">Free version is limited to 7 keywords per website. Would you like to buy premium to pass this limitation? (+ includes a lot of new features)</string>
 	<string name="google_is_trademark_of_google_inc_this_application_is_built_on_google_custom_search_api_and_does_not_infringe_google_search_terms_of_service_">Google is trademark of Google inc. This application is built on Google Custom Search API and does not infringe Google Search terms of service</string>
 	<string name="search_engine">Search Engine</string>
 	<string name="delete_all_data">Delete all data</string>
@@ -47,7 +47,6 @@
 	<string name="legal_information">Legal Information</string>
 	<string name="error_please_try_again">Error, please try again</string>
 	<string name="region">Region</string>
-	<string name="report_wrong_ranking">Report wrong ranking</string>
 	<string name="yes">Yes</string>
 	<string name="premium_view_live_ranking">View Live Ranking</string>
 	<string name="premium_dialog_title">Extra Information</string>
