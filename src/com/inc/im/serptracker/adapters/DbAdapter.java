@@ -80,65 +80,30 @@ public class DbAdapter {
 
 	public void addExtraToKeyword(Keyword k) {
 
-		if (k == null)
+		//dont add extras if keyword not ranked (extras == null)
+		if (k == null || k.newRank == -1 || k.newRank == -2)
 			return;
-
-		// open();
 
 		deleteFromExtrasTableById(k.id);
 
-		// Cursor cur = mDb.query(TABLE_EXTRA,
-		// new String[] { KEY_EXTRA_PARENTID }, KEY_EXTRA_PARENTID + " = "
-		// + k.id, null, null, null, null);
-		//
-		// if (cur == null || cur.getCount() == 0) {
-		// does not exist = INSERT
-
-		Log.d("MY", "ADD extra:" + k.keyword + " anchor:" + k.anchorText
-				+ " url:" + k.url);
+		 Log.d("MY", "ADD extra:" + k.keyword + " anchor:" + k.anchorText
+		 + " url:" + k.url);
 
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_EXTRA_PARENTID, k.id);
 		initialValues.put(KEY_EXTRA_ANCHOR, k.anchorText);
 		initialValues.put(KEY_EXTRA_URL, k.url);
+
 		if (mDb.insert(TABLE_EXTRA, null, initialValues) == -1)
 			Log.e("MY", "extra insert failed: " + k.keyword);
-		// } else {
-		// Log.e("MY", "there is already an row extra for this keyword");
-		// }
-
-		// } else {
-		// // EXISTS - UPDATE
-		// Log.i("MY", "update extras:" + k.keyword + " anchor:"
-		// + k.anchorText + " url:" + k.url);
-		// ContentValues initialValues = new ContentValues();
-		// initialValues.put(KEY_EXTRA_ANCHOR, k.anchorText);
-		// initialValues.put(KEY_EXTRA_URL, k.url);
-		// if (mDb.update(TABLE_EXTRA, initialValues, KEY_EXTRA_PARENTID
-		// + " = " + k.id, null) != 1) {
-		// Log.e("MY", "extra update conflict: " + k.keyword);
-		// }
-		//
-		// }
-
-		// close();
 
 	}
 
 	private Boolean deleteFromExtrasTableById(int keywordId) {
 
-		// mDb.execSQL("DELETE FROM " + TABLE_EXTRA + " WHERE "
-		// + KEY_EXTRA_PARENTID + "=" + keywordId);
-		//
-		// open();
-
-		Log.d("MY", "delete from " + TABLE_EXTRA + " where "
-				+ KEY_EXTRA_PARENTID + "=" + keywordId);
-
 		int rowsAff = mDb.delete(TABLE_EXTRA, KEY_EXTRA_PARENTID + "="
 				+ keywordId, null);
 
-		// close();
 		return rowsAff != 0 ? true : false;
 
 	}
@@ -154,7 +119,6 @@ public class DbAdapter {
 		Boolean headerUpdateIsSuccess = false;
 		Boolean keywordUpdateIsSuccess = false;
 		Boolean keywordRankResetIsSuccess = false;
-		// Boolean keywordExtraResetIsSuccess = false;
 
 		int idToUpdate = profile.id;
 
@@ -191,18 +155,6 @@ public class DbAdapter {
 			keywordRankResetIsSuccess = rowsAff != 0 ? true : false;
 
 			addExtraToKeyword(keyword);
-
-			// reset keyword extras
-			// ContentValues valExtra = new ContentValues();
-			// valExtra.put(KEY_EXTRA_ANCHOR, "");
-			// valExtra.put(KEY_EXTRA_URL, "");
-			// mDb.update(TABLE_EXTRA, val, KEY_EXTRA_PARENTID + " = "
-			// + keyword.id, null);
-
-			// delete all
-			// mDb.delete(TABLE_EXTRA, null, null);
-
-			// keywordExtraResetIsSuccess = rowsAffExtra != 0 ? true : false;
 
 		}
 
@@ -310,7 +262,6 @@ public class DbAdapter {
 
 	public ArrayList<UserProfile> loadAllProfiles() {
 
-		Log.i("MY", "load all profiles from DB");
 		ArrayList<UserProfile> profiles = new ArrayList<UserProfile>();
 
 		open();

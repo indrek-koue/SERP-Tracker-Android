@@ -84,17 +84,15 @@ public class AsyncDownloader extends
 
 				Keyword updatedKeyword = Parser.getRanking(keyword, raw,
 						WEBSITE);
+
 				// keyword.newRank = newRank;
 				if (updatedKeyword != null) {
-					Log.i("MY",
-							"Result download success: "
-									+ updatedKeyword.toString());
 					result.add(updatedKeyword);
-
 				} else {
 					// nothing found = add old back
 					result.add(keyword);
 				}
+
 			} else {
 				// nothing downloaded = add old back
 				result.add(keyword);
@@ -114,37 +112,20 @@ public class AsyncDownloader extends
 	@Override
 	protected void onPostExecute(ArrayList<Keyword> input) {
 
-		if (input == null) {
-			// progressDialog.setMessage(a
-			// .getString(R.string.error1_input_keywords_are_null));
+		if (input == null)
 			return;
-		}
 
 		// if progressdialog is canceled, dont show results
 		if (!progressDialog.isShowing())
 			return;
 
-		// // for testing
-		//
-		// input.get(0).newRank = 99;
-		// input.get(0).oldRank = -88;
-
 		lv.setAdapter(new MainActivityListAdapter(a, input));
 
-		// MainActivityHelper.bindResultListView(a, lv, input);
-
 		// save new ranks
-		for (Keyword k : input) {
-			if (new DbAdapter(a).updateKeywordRank(k, k.newRank))
-				Log.i("MY", k.keyword
-						+ " save to db update success, new rank: " + k.newRank);
-			else
+		for (Keyword k : input)
+			if (!new DbAdapter(a).updateKeywordRank(k, k.newRank))
 				Log.e("MY", k.keyword + " save to db update failed");
 
-			// add extras - anchor & url
-			// new DbAdapter(a).addExtraToKeyword(k);
-
-		}
 		progressDialog.dismiss();
 
 	}
