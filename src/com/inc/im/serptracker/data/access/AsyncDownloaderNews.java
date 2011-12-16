@@ -14,11 +14,15 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+/**
+ * Downloads news on about page asyncronosly from my persnal server through http
+ */
+
 public class AsyncDownloaderNews extends AsyncTask<String, Integer, String> {
 
 	ProgressBar pb;
 	TextView tv;
-	
+
 	public AsyncDownloaderNews(ProgressBar pb, TextView tv) {
 		super();
 		this.pb = pb;
@@ -66,7 +70,5 @@ public class AsyncDownloaderNews extends AsyncTask<String, Integer, String> {
 	protected void onPreExecute() {
 		pb.setVisibility(View.VISIBLE);
 	}
-	
-	
 
 }

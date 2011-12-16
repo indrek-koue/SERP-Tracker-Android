@@ -13,6 +13,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * 
+ * Custom adapter for main activity result list (added to include up/down arrow
+ * and different colors for result numbers)
+ * 
+ */
+
 public class MainActivityListAdapter extends BaseAdapter {
 
 	private Context con;

@@ -1,5 +1,9 @@
 package com.inc.im.serptracker.data;
 
+/**
+ * Keyword holder object
+ */
+
 public class Keyword {
 
 	public int id;
@@ -10,8 +14,6 @@ public class Keyword {
 
 	public String anchorText;
 	public String url;
-
-	// public List<String> searchEngineResults = new ArrayList<String>();
 
 	public Keyword(String value) {
 		this.keyword = value;

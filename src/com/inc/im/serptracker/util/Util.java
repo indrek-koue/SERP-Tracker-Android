@@ -17,6 +17,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+/**
+ * Variety of helper functions which doesn't belong to any group.
+ * 
+ */
+
 public class Util {
 
 	public static AdView loadAdmob(Activity a) {
@@ -71,7 +76,7 @@ public class Util {
 						// Toast.LENGTH_LONG)
 						// .show();
 
-						//show that free is limited and promote user to buyF
+						// show that free is limited and promote user to buyF
 						Premium.showBuyPremiumDialog(messageOnLimit, a);
 
 						// find the last break

@@ -12,6 +12,12 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+/**
+ * This class is used for the verify functionality of premium version to show
+ * user live ranking of their website in google realtime.
+ * 
+ */
+
 public class VerifyWebView extends Activity {
 
 	/** Called when the activity is first created. */
@@ -33,7 +39,6 @@ public class VerifyWebView extends Activity {
 			keywordEncoded = URLEncoder.encode(getIntent().getExtras()
 					.getString("keyword"), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -49,7 +54,7 @@ public class VerifyWebView extends Activity {
 				try {
 					Method m = WebView.class.getMethod("setFindIsUp",
 							Boolean.TYPE);
-					
+
 					m.invoke(view, true);
 
 				} catch (Throwable ignored) {

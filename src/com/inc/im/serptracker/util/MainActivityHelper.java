@@ -28,24 +28,16 @@ import com.inc.im.serptracker.ManageWebsitesActivity;
 import com.inc.im.serptracker.PreferencesActivity;
 import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.adapters.DbAdapter;
+import com.inc.im.serptracker.adapters.MainActivityListAdapter;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.UserProfile;
 import com.inc.im.serptracker.data.access.AsyncDownloader;
 
+/**
+ * Hold methods for helping out main activity.
+ */
+
 public class MainActivityHelper {
-
-	public static ArrayList<Keyword> findKeywordsByName(
-			ArrayList<UserProfile> data, int spinnerSelectedValueNr) {
-		ArrayList<Keyword> keywords = null;
-
-		for (UserProfile u : data) {
-			if (data.get(spinnerSelectedValueNr) != null)
-				if (u.url.equals(data.get(spinnerSelectedValueNr).url)
-						&& u.id == data.get(spinnerSelectedValueNr).id)
-					keywords = u.keywords;
-		}
-		return keywords;
-	}
 
 	public static void bindMenuBarButtons(final Activity a) {
 
@@ -74,7 +66,7 @@ public class MainActivityHelper {
 			@Override
 			public void onClick(View arg0) {
 
-				if (new DbAdapter(con).loadAllProfiles() == null) {
+				if (new DbAdapter(con).loadAllProfiles().size() == 0) {
 					Toast.makeText(
 							con,
 							a.getString(R.string.no_websites_to_manage_please_add_a_website),
@@ -140,7 +132,6 @@ public class MainActivityHelper {
 		int loadedCountFromPref = settings.getInt("minuMuutuja", 0);
 		int newNumber = loadedCountFromPref + 1;
 
-		Log.d("MY", loadedCountFromPref + "");
 		// write
 		SharedPreferences settings2 = a.getSharedPreferences("minuPref", 0);
 		SharedPreferences.Editor editor = settings2.edit();
@@ -188,6 +179,46 @@ public class MainActivityHelper {
 		return displayed;
 	}
 
+	public static void bindListViewItems(Activity a,
+			ArrayList<UserProfile> data, int spinnerSelectedItemIndex) {
+
+		ListView lv = (ListView) a.findViewById(R.id.listview_result);
+
+		if (spinnerSelectedItemIndex > 0 && data != null
+				&& spinnerSelectedItemIndex <= data.size()) {
+
+			// -1 because 0 index holds default text
+			final UserProfile selectedUser = data
+					.get(spinnerSelectedItemIndex - 1);
+
+			lv.setAdapter(new MainActivityListAdapter(a.getBaseContext(),
+					selectedUser.keywords));
+
+			if (Boolean.parseBoolean(a.getString(R.string.isPremium)))
+				Premium.addPremiumOnClick(a, spinnerSelectedItemIndex);
+
+		} else {
+
+			// clear
+			lv.setAdapter(new ArrayAdapter<String>(a,
+					R.layout.main_activity_listview_item));
+		}
+
+	}
+
+	public static ArrayList<Keyword> findKeywordsByName(
+			ArrayList<UserProfile> data, int spinnerSelectedValueNr) {
+		ArrayList<Keyword> keywords = null;
+
+		for (UserProfile u : data) {
+			if (data.get(spinnerSelectedValueNr) != null)
+				if (u.url.equals(data.get(spinnerSelectedValueNr).url)
+						&& u.id == data.get(spinnerSelectedValueNr).id)
+					keywords = u.keywords;
+		}
+		return keywords;
+	}
+
 	public static String getSpinnerSelectedValue(Activity a) {
 
 		Object o = ((Spinner) a.findViewById(R.id.spinner_profile))
@@ -229,7 +260,7 @@ public class MainActivityHelper {
 			public void onItemSelected(AdapterView<?> adapter, View arg1,
 					int index, long arg3) {
 
-				MainActivityListHelper.bindListViewItems(a, data, index);
+				bindListViewItems(a, data, index);
 
 			}
 
@@ -257,9 +288,10 @@ public class MainActivityHelper {
 
 			ArrayList<UserProfile> data = new DbAdapter(a).loadAllProfiles();
 
-			// counter for rate-us-dialog
-			if (MainActivityHelper.rateUsDialog(a, 15, 50))
-				return;
+			// counter for rate-us-dialog NB! Disabled for premium version!!!
+			if (!Boolean.parseBoolean(a.getString(R.string.isPremium)))
+				if (MainActivityHelper.rateUsDialog(a, 15, 50))
+					return;
 
 			int spinnerSelectedValueNr = MainActivityHelper
 					.getSpinnerSelectedIndex(a) - 1;
@@ -279,13 +311,6 @@ public class MainActivityHelper {
 						(ListView) a.findViewById(R.id.listview_result),
 						data.get(spinnerSelectedValueNr).url).execute(keywords);
 			}
-
-//			else {
-//				Toast.makeText(
-//						a,
-//						a.getString(R.string.profile_keywords_are_missing_how_s_thats_possible_),
-//						Toast.LENGTH_SHORT).show();
-//			}
 
 		} else {
 
