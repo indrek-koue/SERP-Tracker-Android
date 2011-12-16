@@ -2,6 +2,12 @@ package com.inc.im.serptracker.data;
 
 import java.util.ArrayList;
 
+
+/**
+ * Userprofile holder object
+ */
+
+
 public class UserProfile {
 
 	public int id;

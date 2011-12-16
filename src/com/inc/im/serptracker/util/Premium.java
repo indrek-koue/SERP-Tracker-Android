@@ -29,6 +29,11 @@ import com.inc.im.serptracker.adapters.DbAdapter;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.UserProfile;
 
+/**
+ * Holds functions for premium version.
+ * 
+ */
+
 public class Premium {
 
 	/**
@@ -53,10 +58,14 @@ public class Premium {
 
 				final Keyword k = selectedUser.keywords.get(arg2);
 
+				// if there isn't anchor/url to show, don't open dialog
+				if (k.url.equals("error getExtraUrlById"))
+					return;
+
 				// display dialog
 				final CharSequence[] items = {
 						a.getString(R.string.premium_view_live_ranking),
-						"LINK TEXT: " + k.anchorText, "VISIT LINK: " + k.url };
+						"ANCHOR: " + k.anchorText, "URL: " + k.url };
 
 				AlertDialog.Builder builder = new AlertDialog.Builder(a);
 
@@ -93,13 +102,7 @@ public class Premium {
 							a.startActivity(i);
 						} else if (item == 1) {
 
-							// second reserved for show anchor
-							// Toast.makeText(a, k.anchorText,
-							// Toast.LENGTH_SHORT)
-							// .show();
-							//
 							// start custom dialog with textbox with url inside
-
 							customDialogWithTextboxToShowAnchor(k.anchorText);
 
 						} else if (item == 2) {

@@ -10,6 +10,13 @@ import android.util.Log;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.access.Download;
 
+/**
+ * Parses raw document into objects using Jsoup parsing engine.
+ * 
+ * @author indrek
+ * 
+ */
+
 public class Parser {
 
 	private final static int DCOUNT = 100;
@@ -57,11 +64,11 @@ public class Parser {
 		if (keyword == null || allResults == null)
 			return null;
 
-		 //logging
-//		 for (int i = 0; i < allResults.size(); i++) {
-//		 Element singleResult = allResults.get(i);
-//		 Log.d("MY", i + ". " + singleResult.attr("href"));
-//		 }
+		// logging
+		// for (int i = 0; i < allResults.size(); i++) {
+		// Element singleResult = allResults.get(i);
+		// Log.d("MY", i + ". " + singleResult.attr("href"));
+		// }
 
 		Keyword result = new Keyword(keyword.keyword);
 		result.oldRank = keyword.oldRank;

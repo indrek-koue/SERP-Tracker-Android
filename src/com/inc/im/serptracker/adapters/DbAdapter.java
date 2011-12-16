@@ -14,6 +14,14 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * All interaction read/write/update/create logic to SQLite is done in this
+ * class
+ * 
+ * @see documentation file for database schema
+ * 
+ */
+
 public class DbAdapter {
 
 	private SQLiteDatabase mDb;
@@ -21,8 +29,7 @@ public class DbAdapter {
 	private DatabaseHelper mDbHelper;
 
 	private static final String DATABASE_NAME = "appdata";
-	//
-	private static final int DATABASE_VERSION = 2;
+	// private static final int DATABASE_VERSION = 2;
 	private static final String TABLE_PROFILE = "profile";
 	private static final String KEY_PROFILE_TABLE_ID = "_id";
 	private static final String KEY_PROFILE_TABLE_URL = "url";
@@ -322,8 +329,6 @@ public class DbAdapter {
 		if (profileHeaderCur != null && profileHeaderCur.getCount() != 0) {
 
 			profileHeaderCur.moveToFirst();
-
-			// profiles = new ArrayList<UserProfile>();
 
 			do {
 

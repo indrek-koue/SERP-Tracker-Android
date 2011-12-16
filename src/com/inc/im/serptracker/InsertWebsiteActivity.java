@@ -51,13 +51,7 @@ public class InsertWebsiteActivity extends Activity {
 
 		isPremium = Boolean.parseBoolean(getString(R.string.isPremium));
 
-		// keyword limit disabled
-
 		if (!isPremium) {
-			// Util.setKeywordLimit(-1, (EditText) findViewById(R.id.editText2),
-			// getString(R.string.free_version_limit_5_keywords_per_website),
-			// getBaseContext());
-			// else{
 
 			int keywordLimit = Integer
 					.parseInt(getString(R.string.keywordLimit));
@@ -125,7 +119,9 @@ public class InsertWebsiteActivity extends Activity {
 
 							Premium.showBuyPremiumDialog(
 									getString(R.string.free_version_supports_only_)
+											+ " "
 											+ limit
+											+ " "
 											+ getString(R.string._websites_would_you_like_to_buy_the_premium_version_to_remove_this_limitation_),
 									InsertWebsiteActivity.this);
 

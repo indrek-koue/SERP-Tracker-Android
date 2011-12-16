@@ -12,6 +12,11 @@ import android.util.Log;
 import com.flurry.android.FlurryAgent;
 import com.inc.im.serptracker.data.Keyword;
 
+/**
+ * All data is download through this class. Uses JSoup based on java networking
+ * to get the data.
+ */
+
 public class Download {
 
 	private final static int TIMEOUT = 10000;
@@ -74,7 +79,6 @@ public class Download {
 			return null;
 		}
 		return doc;
-		// return Parser.parse(keyword, doc);
 	}
 
 	private static Document download(Activity a, Keyword keyword, String ua)
@@ -92,8 +96,6 @@ public class Download {
 		String userSearchEngine = PreferenceManager
 				.getDefaultSharedPreferences(a).getString("prefLocalize",
 						"Google.com");
-		
-		Log.d("MY", "user selected engine: " + userSearchEngine);
 
 		return "http://www." + userSearchEngine + "/search?num=100&q="
 				+ URLEncoder.encode(k.keyword);
