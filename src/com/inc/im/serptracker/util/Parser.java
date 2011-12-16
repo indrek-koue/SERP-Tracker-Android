@@ -92,12 +92,26 @@ public class Parser {
 
 						result.newRank = i + 1;
 
-						// keyword.newRank = i + 1;
+						
+						for (int j = 0; j < allResults.size(); j++) {
+							Element singleResult2 = allResults.get(j);
+							Log.d("MY", j + ". " + singleResult2.attr("href"));
+						}
+						
 					} else {
 
 						// WE HAVE TO JUSTIFY RANK
 						// there is a authority link with sub links somewhere
 						// probably
+
+						Log.w("MY",
+								"link parse + delete is: " + allResults.size()
+										+ " but should be: " + DCOUNT
+										+ " OUTPUTING LINKS FOR DEBUGING:");
+						for (int j = 0; j < allResults.size(); j++) {
+							Element singleResult2 = allResults.get(j);
+							Log.w("MY", j + ". " + singleResult2.attr("href"));
+						}
 
 						int overTheNormal = allResults.size() - DCOUNT;
 						int newRank = i + 1 - overTheNormal;
@@ -124,7 +138,8 @@ public class Parser {
 	}
 
 	/**
-	 * Removes advertisements links
+	 * Removes advertisements links, meaning all local links meaning all links
+	 * starting with /
 	 * 
 	 * @param allResults
 	 */
@@ -133,17 +148,22 @@ public class Parser {
 		// remove ad urls
 		for (int i = 0; i < allResults.size(); i++) {
 
-			String temp = allResults.get(i).attr("href");
-			// if (temp.startsWith("/search?q=") || temp.startsWith("/aclk?")) {
-			if (temp.startsWith("/")) {
-				allResults.remove(i);
-			}
-		}
+			String link = allResults.get(i).attr("href").trim();
 
+			Boolean isInvalid = link.startsWith("/");
+
+			if (isInvalid) {
+				allResults.remove(i);
+				i--;
+
+			}
+
+		}
 		// loging - remove
 		if (allResults.size() != 100)
-			Log.w("MY", "WARNING: results after delete != 100, instead:"
-					+ allResults.size());
+			Log.w("MY",
+					"WARNING: results after internal link delete != 100, instead:"
+							+ allResults.size());
 	}
 
 	public static String removePrefix(String searchable) {
