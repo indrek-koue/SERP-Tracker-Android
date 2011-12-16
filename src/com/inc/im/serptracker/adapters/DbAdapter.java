@@ -66,7 +66,9 @@ public class DbAdapter {
 	}
 
 	public void close() {
-		mDbHelper.close();
+
+		if (mDbHelper != null)
+			mDbHelper.close();
 	}
 
 	public void addExtraToKeyword(Keyword k) {
@@ -302,10 +304,12 @@ public class DbAdapter {
 	public ArrayList<UserProfile> loadAllProfiles() {
 
 		Log.i("MY", "load all profiles from DB");
-		ArrayList<UserProfile> profiles = null;
+		ArrayList<UserProfile> profiles = new ArrayList<UserProfile>();
 
 		open();
 
+		// creating extra table if not exists because had that
+		// implemented/canceled in previous version
 		mDb.execSQL("CREATE TABLE IF NOT EXISTS "
 				+ String.format(
 						"%s ( %s INTEGER PRIMARY KEY, %s INTEGER NOT NULL,  %s TEXT NOT NULL, %s TEXT NOT NULL);",
@@ -319,7 +323,7 @@ public class DbAdapter {
 
 			profileHeaderCur.moveToFirst();
 
-			profiles = new ArrayList<UserProfile>();
+			// profiles = new ArrayList<UserProfile>();
 
 			do {
 

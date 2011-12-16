@@ -2,6 +2,7 @@ package com.inc.im.serptracker.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,6 +10,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -27,6 +31,9 @@ import com.inc.im.serptracker.data.UserProfile;
 
 public class Premium {
 
+	/**
+	 * Adds ranking result keyword on click premium features
+	 */
 	public static void addPremiumOnClick(final Activity a,
 			final int spinnerSelectedItemIndex) {
 
@@ -139,10 +146,35 @@ public class Premium {
 							public void onClick(DialogInterface dialog, int id) {
 								dialog.dismiss();
 								Intent intent = new Intent(Intent.ACTION_VIEW);
-								intent.setData(Uri.parse(a
-										.getString(R.string.market_details_id_com_inc_im_serptrackerpremium)));
-								a.startActivity(intent);
 
+								Boolean isAndroidMarketInstalled = isMarketInstalled();
+
+								if (isAndroidMarketInstalled) {
+									String marketlink = a
+											.getString(R.string.market_details_id_com_inc_im_serptrackerpremium);
+
+									intent.setData(Uri.parse(marketlink));
+
+									a.startActivity(intent);
+								} else {
+									Toast.makeText(
+											a,
+											"Android market is not found on your device. Aborting",
+											Toast.LENGTH_LONG).show();
+								}
+
+							}
+
+							private Boolean isMarketInstalled() {
+
+								try {
+									a.getPackageManager().getApplicationInfo(
+											"com.android.vending", 0);
+								} catch (NameNotFoundException e) {
+									return false;
+								}
+
+								return true;
 							}
 						})
 				.setNegativeButton(a.getString(R.string.cancel),
