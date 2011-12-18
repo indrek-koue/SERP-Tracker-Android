@@ -141,7 +141,7 @@ public class MainActivityListAdapter extends BaseAdapter {
 					tvRankOld.setVisibility(View.GONE);
 
 					// display error msg
-					tvRank.setText("error");
+					tvRank.setText(con.getString(R.string.error));
 					tvRank.setTextColor(con.getResources().getColor(
 							R.color.dred));
 				}

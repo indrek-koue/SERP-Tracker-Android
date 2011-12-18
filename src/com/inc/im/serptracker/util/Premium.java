@@ -64,7 +64,7 @@ public class Premium {
 
 				// display dialog - WITH SHOW LIVE RANKING/VERIFY BUTTON
 				// final CharSequence[] items = {
-				// a.getString(R.string.premium_view_live_ranking),
+				// a.getString("Debug verify ranking",
 				// "ANCHOR: " + k.anchorText, "URL: " + k.url };
 				//
 

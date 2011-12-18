@@ -27,14 +27,6 @@
         android:visibility="gone" >
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Featured message"
-            android:textColor="@color/white"
-            android:textSize="9dip" >
-        </TextView>
-
-        <TextView
             android:id="@+id/inhouseAdsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -65,7 +57,7 @@
     <ListView
         android:id="@+id/listview_result"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dip"
         android:layout_weight="1" >
     </ListView>
 
@@ -106,6 +98,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/black"
+                android:contentDescription="add profile button"
                 android:src="@android:drawable/ic_menu_add" >
             </ImageButton>
 
@@ -135,6 +128,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/black"
+                android:contentDescription="manage profiles button"
                 android:src="@android:drawable/ic_menu_edit" >
             </ImageButton>
 
@@ -164,6 +158,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/black"
+                android:contentDescription="settings button"
                 android:src="@android:drawable/ic_menu_manage" >
             </ImageButton>
 
@@ -193,6 +188,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/black"
+                android:contentDescription="about button"
                 android:src="@android:drawable/ic_menu_info_details" >
             </ImageButton>
 

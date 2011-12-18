@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.3"
         android:paddingRight="5dip"
-        android:text="TextView"
+        android:text="@string/error"
         android:textColor="@android:color/white"
         android:textSize="22dip" />
 
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingRight="5dip"
-            android:text="TextView"
+            android:text="@string/error"
             android:textColor="@android:color/white"
             android:textSize="22dip"
             android:textStyle="bold" />
@@ -36,13 +36,14 @@
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="22dip"
-            android:layout_height="22dip" />
+            android:layout_height="22dip"
+            android:contentDescription="ranking change icon" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="@string/error"
             android:textSize="22dip" />
     </LinearLayout>
 
