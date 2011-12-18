@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="app_name">SEO SERP Tracker</string>
     <string name="isPremium">true</string>
     <string name="keywordLimit">7</string>
     <string name="profileLimit">3</string>

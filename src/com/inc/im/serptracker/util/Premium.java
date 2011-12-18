@@ -62,10 +62,15 @@ public class Premium {
 				if (k.url.equals("error getExtraUrlById"))
 					return;
 
-				// display dialog
+				// display dialog - WITH SHOW LIVE RANKING/VERIFY BUTTON
+				// final CharSequence[] items = {
+				// a.getString(R.string.premium_view_live_ranking),
+				// "ANCHOR: " + k.anchorText, "URL: " + k.url };
+				//
+
 				final CharSequence[] items = {
-						a.getString(R.string.premium_view_live_ranking),
-						"ANCHOR: " + k.anchorText, "URL: " + k.url };
+						a.getString(R.string.anchor) + ": " + k.anchorText,
+						"URL: " + k.url };
 
 				AlertDialog.Builder builder = new AlertDialog.Builder(a);
 
@@ -73,6 +78,9 @@ public class Premium {
 				builder.setItems(items, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int item) {
 
+						//REMOVED VERIFY RANKING
+						item++;
+						
 						if (item == 0) {
 
 							// first reserved for verify ranking
