@@ -78,9 +78,9 @@ public class MainActivityListAdapter extends BaseAdapter {
 		// debugg
 		// k.newRank = new Random().nextInt(100);
 		// k.oldRank = new Random().nextInt(100);
+		// Log.i("MY", k.keyword + " newRank:" + k.newRank + " oldRank:"
+		// + k.oldRank);
 
-		Log.i("MY", k.keyword + " newRank:" + k.newRank + " oldRank:"
-				+ k.oldRank);
 		// k.oldRank != 0 is for when comes from edit page or just entered
 		// keyword first run
 		if (k.newRank > k.oldRank && k.oldRank != 0) {

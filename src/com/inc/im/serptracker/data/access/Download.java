@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
+import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.Keyword;
 
 /**
@@ -22,7 +23,7 @@ public class Download {
 	private final static int TIMEOUT = 10000;
 	private final static int PAUSE1 = 500;
 	private final static int PAUSE2 = 2000;
-	private final static String ua = "Apache-HttpClient/UNAVAILABLE (java 1.4)";
+	//private final static String ua = "Apache-HttpClient/UNAVAILABLE (java 1.4)";
 
 	/**
 	 * 
@@ -40,7 +41,7 @@ public class Download {
 		// try1
 		try {
 			Log.i("MY", "try1");
-			doc = download(a, keyword, ua);
+			doc = download(a, keyword, a.getString(R.string.userAgent));
 
 		} catch (Exception e1) {
 			Log.e("MY", e1.toString());
@@ -51,7 +52,7 @@ public class Download {
 			try {
 				Log.i("MY", "try2");
 				Thread.sleep(PAUSE1);
-				doc = download(a, keyword, ua);
+				doc = download(a, keyword, a.getString(R.string.userAgent));
 
 			} catch (Exception e1) {
 				Log.e("MY", e1.toString());
@@ -63,7 +64,7 @@ public class Download {
 			try {
 				Log.i("MY", "try3");
 				Thread.sleep(PAUSE2);
-				doc = download(a, keyword, ua);
+				doc = download(a, keyword, a.getString(R.string.userAgent));
 
 			} catch (Exception e1) {
 				Log.e("MY", e1.toString());

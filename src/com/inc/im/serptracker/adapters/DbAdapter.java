@@ -80,14 +80,15 @@ public class DbAdapter {
 
 	public void addExtraToKeyword(Keyword k) {
 
-		//dont add extras if keyword not ranked (extras == null)
-		if (k == null || k.newRank == -1 || k.newRank == -2)
+		// dont add extras if keyword extra doesent exist, -1 = not ranked, -2 =
+		// error, 0 = just added
+		if (k == null || k.newRank == -1 || k.newRank == -2 || k.newRank == 0)
 			return;
 
 		deleteFromExtrasTableById(k.id);
 
-		 Log.d("MY", "ADD extra:" + k.keyword + " anchor:" + k.anchorText
-		 + " url:" + k.url);
+		Log.d("MY", "ADD extra:" + k.keyword + " anchor:" + k.anchorText
+				+ " url:" + k.url);
 
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_EXTRA_PARENTID, k.id);

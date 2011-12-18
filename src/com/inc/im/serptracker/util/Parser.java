@@ -1,5 +1,8 @@
 package com.inc.im.serptracker.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -7,6 +10,8 @@ import org.jsoup.select.Elements;
 import android.app.Activity;
 import android.util.Log;
 
+import com.flurry.android.FlurryAgent;
+import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.access.Download;
 
@@ -38,7 +43,8 @@ public class Parser {
 		if (doc == null)
 			return null;
 
-		Elements allResults = doc.select("h3 > a");
+		Elements allResults = doc.select(a
+				.getString(R.string.googleResultParseRule));
 
 		if (allResults == null || allResults.size() == 0) {
 			Log.e("MY", "downloaded allResults h3 first a is null");
@@ -64,8 +70,10 @@ public class Parser {
 		if (keyword == null || allResults == null)
 			return null;
 
-		// logging
-		// for (int i = 0; i < allResults.size(); i++) {
+		int numOfResults = allResults.size();
+
+		// DEBUG
+		// for (int i = 0; i < numOfResults; i++) {
 		// Element singleResult = allResults.get(i);
 		// Log.d("MY", i + ". " + singleResult.attr("href"));
 		// }
@@ -74,7 +82,7 @@ public class Parser {
 		result.oldRank = keyword.oldRank;
 		result.id = keyword.id;
 
-		for (int i = 0; i < allResults.size(); i++) {
+		for (int i = 0; i < numOfResults; i++) {
 
 			Element singleResult = allResults.get(i);
 
@@ -88,32 +96,17 @@ public class Parser {
 				// if cointains url and is not set yet
 				if (singleResultUrl.contains(WEBSITE)) {
 
-					if (allResults.size() <= DCOUNT) {
+					if (numOfResults <= DCOUNT) {
 
 						result.newRank = i + 1;
 
-						
-						for (int j = 0; j < allResults.size(); j++) {
-							Element singleResult2 = allResults.get(j);
-							Log.d("MY", j + ". " + singleResult2.attr("href"));
-						}
-						
 					} else {
 
 						// WE HAVE TO JUSTIFY RANK
-						// there is a authority link with sub links somewhere
+						// there is a authority site with sub links somewhere
 						// probably
 
-						Log.w("MY",
-								"link parse + delete is: " + allResults.size()
-										+ " but should be: " + DCOUNT
-										+ " OUTPUTING LINKS FOR DEBUGING:");
-						for (int j = 0; j < allResults.size(); j++) {
-							Element singleResult2 = allResults.get(j);
-							Log.w("MY", j + ". " + singleResult2.attr("href"));
-						}
-
-						int overTheNormal = allResults.size() - DCOUNT;
+						int overTheNormal = numOfResults - DCOUNT;
 						int newRank = i + 1 - overTheNormal;
 
 						if (newRank <= 0)
@@ -121,12 +114,25 @@ public class Parser {
 
 						result.newRank = newRank;
 					}
+
 					result.anchorText = singleResult.text();
 					result.url = singleResult.attr("href");
 
 				}
 
 			}
+
+			// flurry loging
+			if (numOfResults <= 95 || numOfResults >= 105) {
+
+				Map<String, Integer> data = new HashMap<String, Integer>();
+
+				data.put("result count", numOfResults);
+
+				FlurryAgent.logEvent("DEBUG: parse count after invalid delete",
+						data);
+			}
+
 		} // for links in keyword
 
 		// not ranked
@@ -153,6 +159,10 @@ public class Parser {
 			Boolean isInvalid = link.startsWith("/");
 
 			if (isInvalid) {
+
+				//DEBUG
+				//Log.e("MY", "removed: " + allResults.get(i));
+
 				allResults.remove(i);
 				i--;
 
