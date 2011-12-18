@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- README::DO NOT TRANSLATE THIS -->
     <!-- Background story: SEO SERP Tracker is smarthphone application which allows you to check -->
     <!-- how your website ranks in Google for selected keyword. For example www.cnn.com is first for keyword "news" -->
+    
+    <!--
+    TUTORIAL FOR TRANSLATING: for example:  <string name="profile_edit_page_delete">Delete</string> you have to translate ONLY 
+    the part inside <string..></string> so for given example you have to translate the "delete" word only to given language. This 
+    applies to all translations below. Please use same letter case as provided below 
+    -->
+    <!-- README END: DO NOT TRANSLATE THIS -->
 
     <string name="profile_edit_page_delete">Delete</string>
     <string name="there_are_no_email_clients_installed_">There are no email clients installed.</string>
@@ -39,15 +47,14 @@
     <string name="about_title_news_and_updates">News and Updates</string>
     <string name="address">Address</string> <!-- address of website -->
     <string name="save">Save</string>
-    <string name="not_ranked">not ranked</string>
     <string name="keyword_">Keyword </string>
     <string name="free_version_limit_7_keywords_per_website">Free version is limited to 7 keywords per website. Would you like to buy the premium version to remove this limitation?</string>
-    <string name="google_is_trademark_of_google_inc_this_application_is_built_on_google_custom_search_api_and_does_not_infringe_google_search_terms_of_service_">Google is trademark of Google inc. This application is built on Google Custom Search API and does not infringe Google Search terms of service</string>
+    <string name="google_is_trademark_of_google_inc_this_application_is_built_on_google_custom_search_api_and_does_not_infringe_google_search_terms_of_service_">Google is trademark of Google inc. This application is built on Google Custom Search API and does not infringe Google Search terms of service.</string>
     <string name="search_engine">Search Engine</string>
     <string name="delete_all_data">Delete all data</string>
     <string name="resets_all_application_internal_data">Resets all application internal data</string>
     <string name="legal_information">Legal Information</string>
-    <string name="error_please_try_again">Error, please try again</string>
+    <string name="error">Error</string>
     <string name="region">Region</string>
     <string name="yes">Yes</string>
     <string name="premium_view_live_ranking">View Live Ranking</string>
