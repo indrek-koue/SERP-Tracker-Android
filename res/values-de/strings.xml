@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- README::DO NOT TRANSLATE THIS -->
+    <!-- Background story: SEO SERP Tracker is smarthphone application which allows you to check -->
+    <!-- how your website ranks in Google for selected keyword. For example www.cnn.com is first for keyword "news" -->
+    
+    <!--
+    TUTORIAL FOR TRANSLATING: for example:  <string name="profile_edit_page_delete">Delete</string> you have to translate ONLY 
+    the part inside <string..></string> so for given example you have to translate the "delete" word only to given language. This 
+    applies to all translations below. Please use same letter case as provided below 
+    -->
+    <!-- README END: DO NOT TRANSLATE THIS -->
+
+    <string name="profile_edit_page_delete">Löschen</string>
+    <string name="there_are_no_email_clients_installed_">Keine E-mail-Klienten installiert.</string>
+    <string name="spinner_default_selection">Webseite auswählen...</string>
+    <string name="no_websites_to_manage_please_add_a_website">Keine Webseiten angegeben. Bitte eine Webseite hinzufügen.</string>
+    <string name="no_active_internet_connection_please_check_your_settings">Keine aktive Netzwerkverbindung. Bitte prüfen Sie Ihre Netzwerkkonfiguration.</string>
+    <string name="like_this_app_rate_us_on_android_market_">Gefällt Ihnen diese App? Bewerten Sie uns auf dem Android-Markt!</string> <!-- app=application/software program -->
+    <string name="sure_">Klar!</string> <!-- postive response -->
+    <string name="cancel">Abbrechen</string> <!-- aborts action -->
+    <string name="inspect_dialog_title">Schlüsselwörter werden inspiziert</string>
+    <string name="inspect_dialog_fist_msg">Starte, bitte warten</string>
+    <string name="please_select_a_profile">Bitte ein Profil wählen</string>
+    <string name="please_enter_some_keywords">Bitte Schlüsselwörter eingeben</string>
+    <string name="website_address_is_too_short_or_invalid">Webseiten-Adresse ist zu kurz oder ungültig</string>
+    <string name="website_added_successfuly">Webseite erfolgreich hinzugefügt</string>
+    <string name="website_add_failure">Webseite konnte nicht hinzugefügt werden</string>
+    <string name="website_">Webseite</string> <!-- this message is combined with next one (_succesfully_deleted), EXAMPLE: website {userwebsite} succesfully deleted -->
+    <string name="_succesfully_deleted">erfolgreich gelöscht</string>
+    <string name="delete_failed">Löschen fehlgeschlagen</string>
+    <string name="website_edited_successfuly">Webseite erfolgreich bearbeitet</string>
+    <string name="website_edit_failure">Webseite konnte nicht bearbeitet werden</string>
+    <string name="all_user_data_deleted">Alle Benutzerdaten gelöscht</string>
+    <string name="run_btton">Platzierung ermitteln</string> <!-- main button which finds how selected website ranks in google for user inputed keywords -->
+    <string name="menubar_add">Hinzufügen</string>
+    <string name="menubar_manage">Verwalten</string>
+    <string name="menubar_settings">Einstellungen</string>
+    <string name="menubar_info">Info</string>
+    <string name="address_of_your_website">Adresse Ihrer Webseite</string>
+    <string name="www_example_com">www.example.com</string>
+    <string name="keywords_to_track">Zu verfolgende Schlüsselwörter</string>
+    <string name="example_keyword_1_nexample_keyword_2">beispiel schlüsselwort 1 \nbeispiel schlüsselwort 2 \nbeispiel schlüsselwort 3 \n... \nbeispiel schlüsselwort n</string> <!-- ATTENTION: \n represents page breaks -->
+    <string name="insert">Einfügen</string>
+    <string name="back">Zurück</string>
+    <string name="about_title_news_and_updates">Neuigkeiten und Aktualisierungen</string>
+    <string name="address">Adresse</string> <!-- address of website -->
+    <string name="save">Speichern</string>
+    <string name="keyword_">Schlüsselwort </string>
+    <string name="free_version_limit_7_keywords_per_website">Die Gratis-Version ist auf 7 Schlüsselwörter pro Webseite limitiert. Möchten Sie die Premium-Version kaufen, um diese Einschränkung aufzuheben?</string>
+    <string name="google_is_trademark_of_google_inc_this_application_is_built_on_google_custom_search_api_and_does_not_infringe_google_search_terms_of_service_">Google ist ein Warenzeichen von Google inc. Diese Anwendung benutzt die Google Custom Search API und verletzt nicht die Google Geschäftsbedingungen.</string>
+    <string name="search_engine">Suchmaschinen</string>
+    <string name="delete_all_data">Alle Daten löschen</string>
+    <string name="resets_all_application_internal_data">Setzt alle internen Anwendungsdaten zurück</string>
+    <string name="legal_information">Juristische Infos</string>
+    <string name="error">Fehler</string>
+    <string name="region">Region</string>
+    <string name="yes">Ja</string>
+    <string name="premium_view_live_ranking">Platzierung in Echtzeit ansehen</string>
+    <string name="premium_dialog_title">Extra-Informationen</string>
+    <string name="premium_show_anchor_dialog_title">Link-Text der Platzierung (Anker)</string>
+    <string name="selecting_locale_is_available_in_the_premium_version_would_you_like_to_buy_the_premium_version_">Lokale Einstellungen sind verfügbar in der Premium-Version. Möchten Sie die Premium-Version kaufen, um diese Einschränkung aufzuheben?</string>
+    <string name="free_version_supports_only_">Gratis-Version unterstützt nur </string> <!-- this message is combined with next one (_websites_would ...), EXAMPLE: Free version supports only {number} websites. Would you like to buy the premium version to remove this limitation? -->
+    <string name="_websites_would_you_like_to_buy_the_premium_version_to_remove_this_limitation_"> Webseiten. Möchten Sie die Premium-Version kaufen, um diese Einschränkung aufzuheben?</string>
+    <string name="anchor">ANKER</string>
+
+</resources>

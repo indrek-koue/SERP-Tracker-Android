@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- README::DO NOT TRANSLATE THIS -->
+    <!-- Background story: SEO SERP Tracker is smarthphone application which allows you to check -->
+    <!-- how your website ranks in Google for selected keyword. For example www.cnn.com is first for keyword "news" -->
+    
+    <!--
+    TUTORIAL FOR TRANSLATING: for example:  <string name="profile_edit_page_delete">Delete</string> you have to translate ONLY 
+    the part inside <string..></string> so for given example you have to translate the "delete" word only to given language. This 
+    applies to all translations below. Please use same letter case as provided below 
+    -->
+    <!-- README END: DO NOT TRANSLATE THIS -->
+
+    <string name="profile_edit_page_delete">Удалить</string>
+    <string name="there_are_no_email_clients_installed_">Нету установленных емайл клиентов</string>
+    <string name="spinner_default_selection">Выберите вэбсайт...</string>
+    <string name="no_websites_to_manage_please_add_a_website">Вебсайты для управления отсутствуют. Пожалуйста добавьте вебсайт.</string>
+    <string name="no_active_internet_connection_please_check_your_settings">Отсутсвует активное сетевое подключение. Проверьте настройки сети.</string>
+    <string name="like_this_app_rate_us_on_android_market_">Вам нравиться наше приложение? Оцените нас на Андройд™ маркете!</string> <!-- app=application/software program -->
+    <string name="sure_">Конечно!</string> <!-- postive response -->
+    <string name="cancel">Отмена</string> <!-- aborts action -->
+    <string name="inspect_dialog_title">Ожидаемые ключевые слова</string>
+    <string name="inspect_dialog_fist_msg">Запуск, пожалуйста подождите</string>
+    <string name="please_select_a_profile">Пожалуйста, выберите профайл</string>
+    <string name="please_enter_some_keywords">Пожалуйста добавьте ключевые слова</string>
+    <string name="website_address_is_too_short_or_invalid">Адрес вебсайта слишком короткий, либо не сушествует</string>
+    <string name="website_added_successfuly">Вебсайт добавлен</string>
+    <string name="website_add_failure">Вебсайт не был добавлен</string>
+    <string name="website_">Вебсайт</string> <!-- this message is combined with next one (_succesfully_deleted), EXAMPLE: website {userwebsite} succesfully deleted -->
+    <string name="_succesfully_deleted">успешно удален</string>
+    <string name="delete_failed">не был удален</string>
+    <string name="website_edited_successfuly">Вебсайт успешно изменен</string>
+    <string name="website_edit_failure">Вебсайт не был изменен</string>
+    <string name="all_user_data_deleted">Вся информация пользователей была удалена</string>
+    <string name="run_btton">Поиск Рейтинга</string> <!-- main button which finds how selected website ranks in google for user inputed keywords -->
+    <string name="menubar_add">Добавить</string>
+    <string name="menubar_manage">Управление</string>
+    <string name="menubar_settings">Настройки</string>
+    <string name="menubar_info">Информация</string>
+    <string name="address_of_your_website">Адрес вашего сайта</string>
+    <string name="www_example_com">www.example.com</string>
+    <string name="keywords_to_track">Ключевые слова для слежения</string>
+    <string name="example_keyword_1_nexample_keyword_2"> example keyword 1 \nexample keyword 2 \nexample keyword 3 \n... \nexample keyword n</string> <!-- ATTENTION: \n represents page breaks -->
+    <string name="insert">Вставить</string>
+    <string name="back">Назад</string>
+    <string name="about_title_news_and_updates">Новости и Обновления</string>
+    <string name="address">Адрес</string> <!-- address of website -->
+    <string name="save">Сохранить</string>
+    <string name="keyword_">Ключевое слово </string>
+    <string name="free_version_limit_7_keywords_per_website">Бесплатная версия ограничена 7 ключевыми словами для каждого вебсайта. Хоте ли бы вы приобрести премиум версию без ограничений?</string>
+    <string name="google_is_trademark_of_google_inc_this_application_is_built_on_google_custom_search_api_and_does_not_infringe_google_search_terms_of_service_">Google явояется товарным знаком Google Inc. Это приложение создано с помощью Google Custom Search API и не нарушает условий пользования Google Search.</string>
+    <string name="search_engine">Поиск</string>
+    <string name="delete_all_data">Удалить все данные</string>
+    <string name="resets_all_application_internal_data">Сброс внутренней информации приложения</string>
+    <string name="legal_information">Правовая информация</string>
+    <string name="error">Ошибка</string>
+    <string name="region">Регион</string>
+    <string name="yes">Да</string>
+    <string name="premium_view_live_ranking">Показать рейтинг в реальном времени</string>
+    <string name="premium_dialog_title">Дополнительная информация</string>
+    <string name="premium_show_anchor_dialog_title">Текст для рейтинга (якорь)</string>
+    <string name="selecting_locale_is_available_in_the_premium_version_would_you_like_to_buy_the_premium_version_">Локальный выбор доступен в премиум версии, хотите ли вы убрать это ограничение?.</string>
+    <string name="free_version_supports_only_">Бесплатная версия поддерживает только </string> <!-- this message is combined with next one (_websites_would ...), EXAMPLE: Free version supports only {number} websites. Would you like to buy the premium version to remove this limitation? -->
+    <string name="_websites_would_you_like_to_buy_the_premium_version_to_remove_this_limitation_"> вебсайтов. Хотели бы вы убрать это ограничение?</string>
+    <string name="anchor">ЯКОРЬ</string>
+
+</resources>
