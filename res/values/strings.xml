@@ -41,7 +41,7 @@
     <string name="address_of_your_website">Address of your website</string>
     <string name="www_example_com">www.example.com</string>
     <string name="keywords_to_track">Keywords to track</string>
-    <string name="example_keyword_1_nexample_keyword_2"> example keyword 1 \n example keyword 2 \n example keyword 3 \n ... \n example keyword n</string> <!-- ATTENTION: \n represents page breaks -->
+    <string name="example_keyword_1_nexample_keyword_2">example keyword 1 \nexample keyword 2 \nexample keyword 3 \n... \nexample keyword n</string> <!-- ATTENTION: \n represents page breaks -->
     <string name="insert">Insert</string>
     <string name="back">Back</string>
     <string name="about_title_news_and_updates">News and Updates</string>

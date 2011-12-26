@@ -1,5 +1,7 @@
 package com.inc.im.serptracker.util;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,8 +95,18 @@ public class Parser {
 
 				String singleResultUrl = singleResult.attr("href");
 
+				String singleResultUrlModified = singleResultUrl
+						.replace("https://", "").replace("http://", "")
+						.replace("www.", "");
+
 				// if cointains url and is not set yet
-				if (singleResultUrl.contains(WEBSITE)) {
+
+				if (singleResultUrlModified.startsWith(WEBSITE)
+						&& !singleResultUrlModified.startsWith(WEBSITE + ".")
+						|| singleResultUrlModified.contains("." + WEBSITE)) {
+
+					// singleResultUrlModified.contains("." + WEBSITE) -
+					// subdomain special case
 
 					if (numOfResults <= DCOUNT) {
 
@@ -112,9 +124,10 @@ public class Parser {
 						if (newRank <= 0)
 							newRank = 1;
 
+
 						result.newRank = newRank;
 					}
-
+					
 					result.anchorText = singleResult.text();
 					result.url = singleResult.attr("href");
 
@@ -160,8 +173,8 @@ public class Parser {
 
 			if (isInvalid) {
 
-				//DEBUG
-				//Log.e("MY", "removed: " + allResults.get(i));
+				// DEBUG
+				// Log.e("MY", "removed: " + allResults.get(i));
 
 				allResults.remove(i);
 				i--;

@@ -104,11 +104,11 @@ public class ManageWebsitesActivity extends Activity {
 											+ " "
 											+ getString(R.string._succesfully_deleted),
 									Toast.LENGTH_SHORT).show();
-
+							
 							// if there aren't any profiles to edit > direct to
 							// mainpage
 							if (new DbAdapter(getBaseContext())
-									.loadAllProfiles() == null) {
+									.loadAllProfiles().size() == 0) {
 								startActivity(new Intent(getBaseContext(),
 										MainActivity.class));
 							} else {
@@ -122,6 +122,9 @@ public class ManageWebsitesActivity extends Activity {
 									Toast.LENGTH_SHORT).show();
 						}
 
+						
+						
+						
 					}
 				});
 	}
@@ -214,6 +217,9 @@ public class ManageWebsitesActivity extends Activity {
 								.insertOrUpdate(inputSite, keyword,
 										selectedUserProfileId);
 
+						//delete extras
+						new DbAdapter(getBaseContext()).deleteAllFromExtrasTable(selectedUserProfileId);
+						
 						if (editSuccess) {
 							Toast.makeText(getBaseContext(),
 									R.string.website_edited_successfuly,

@@ -68,9 +68,12 @@ public class Premium {
 				// "ANCHOR: " + k.anchorText, "URL: " + k.url };
 				//
 
-				final CharSequence[] items = {
-						a.getString(R.string.anchor) + ": " + k.anchorText,
-						"URL: " + k.url };
+				// final CharSequence[] items = {
+				// a.getString(R.string.anchor) + ": " + k.anchorText,
+				// "URL: " + k.url };
+
+				// new minimalistic look
+				final CharSequence[] items = { k.anchorText, k.url };
 
 				AlertDialog.Builder builder = new AlertDialog.Builder(a);
 
@@ -78,9 +81,9 @@ public class Premium {
 				builder.setItems(items, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int item) {
 
-						//REMOVED VERIFY RANKING
+						// REMOVED VERIFY RANKING
 						item++;
-						
+
 						if (item == 0) {
 
 							// first reserved for verify ranking
