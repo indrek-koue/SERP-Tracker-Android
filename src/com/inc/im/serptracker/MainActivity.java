@@ -7,9 +7,11 @@ import com.inc.im.serptracker.util.MainActivityHelper;
 import com.inc.im.serptracker.util.Util;
 
 import android.app.Activity;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -18,6 +20,13 @@ public class MainActivity extends Activity {
 	private Boolean menuBarIsVisible = true;
 	private AdView adView;
 
+//	@Override
+//	public void onAttachedToWindow() {
+//		super.onAttachedToWindow();
+//		Window window = getWindow();
+//		window.setFormat(PixelFormat.RGB_888);
+//	}
+//	
 	@Override
 	public void onStart() {
 		super.onStart();

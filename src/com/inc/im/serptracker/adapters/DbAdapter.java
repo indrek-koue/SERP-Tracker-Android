@@ -100,6 +100,20 @@ public class DbAdapter {
 
 	}
 
+	public void deleteAllFromExtrasTable(int userprofileId) {
+
+		ArrayList<UserProfile> all = loadAllProfiles();
+
+		open();
+
+		for (UserProfile u : all)
+			if (u.id == userprofileId)
+				for (Keyword k : u.keywords)
+					deleteFromExtrasTableById(k.id);
+
+		close();
+	}
+
 	private Boolean deleteFromExtrasTableById(int keywordId) {
 
 		int rowsAff = mDb.delete(TABLE_EXTRA, KEY_EXTRA_PARENTID + "="
@@ -108,6 +122,15 @@ public class DbAdapter {
 		return rowsAff != 0 ? true : false;
 
 	}
+
+	// private Boolean deleteFromExtrasTableByParentParentId(int id) {
+	//
+	// int rowsAff = mDb.delete(TABLE_EXTRA, KEY_EXTRA_PARENTID + "="
+	// + keywordId, null);
+	//
+	// return rowsAff != 0 ? true : false;
+	//
+	// }
 
 	public Boolean updateProfile(UserProfile profile) {
 
