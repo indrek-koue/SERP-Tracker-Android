@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- README::DO NOT TRANSLATE THIS -->
+    <!-- Background story: SEO SERP Tracker is smarthphone application which allows you to check -->
+    <!-- how your website ranks in Google for selected keyword. For example www.cnn.com is first for keyword "news" -->
+    
+    <!--
+    TUTORIAL FOR TRANSLATING: for example:  <string name="profile_edit_page_delete">Delete</string> you have to translate ONLY 
+    the part inside <string..></string> so for given example you have to translate the "delete" word only to given language. This 
+    applies to all translations below. Please use same letter case as provided below 
+    -->
+    <!-- README END: DO NOT TRANSLATE THIS -->
+
+    <string name="profile_edit_page_delete">Verwijderen</string>
+    <string name="there_are_no_email_clients_installed_">Er zijn geen email clients geļnstalleerd.</string>
+    <string name="spinner_default_selection">Selecteer een website...</string>
+    <string name="no_websites_to_manage_please_add_a_website">Geen websites om te beheren. Voeg een website toe.</string>
+    <string name="no_active_internet_connection_please_check_your_settings">Geen actieve netwerk verbinding. Controleer uw netwerk instellingen.</string>
+    <string name="like_this_app_rate_us_on_android_market_">Vindt u deze app goed? Waardeer ons op de Android™ markt!</string> <!-- app=application/software program -->
+    <string name="sure_">Natuurlijk!</string> <!-- postive response -->
+    <string name="cancel">Annuleren</string> <!-- aborts action -->
+    <string name="inspect_dialog_title">Inspecteren van trefwoorden</string>
+    <string name="inspect_dialog_fist_msg">Begonnen, even geduld alstublieft</string>
+    <string name="please_select_a_profile">Selecteer een profiel</string>
+    <string name="please_enter_some_keywords">Voer de trefwoorden in</string>
+	<string name="website_address_is_too_short_or_invalid">Website adres is te kort of ongeldig</string>
+    <string name="website_added_successfuly">Website toevoeging gelukt </string>
+    <string name="website_add_failure">Website toevoeging mislukt</string>
+    <string name="website_">Website</string>
+    <string name="_succesfully_deleted">Succesvol verwijderd</string>
+    <string name="delete_failed">Verwijdering mislukt</string>
+    <string name="website_edited_successfuly">Website bijwerking gelukt</string>
+    <string name="website_edit_failure">Website bijwerking mislukt</string>
+    <string name="all_user_data_deleted">Alle gebruikerdata verwijderd</string>
+    <string name="run_btton">Vind Ranglijsten</string> <!-- main button which finds how selected website ranks in google for user inputed keywords -->
+    <string name="menubar_add">Voeg toe</string>
+    <string name="menubar_manage">Beheer</string>
+    <string name="menubar_settings">Instellingen</string>
+    <string name="menubar_info">Info</string>
+    <string name="address_of_your_website">Adres van uw website</string>
+    <string name="www_example_com">www.voorbeeld.com</string>
+    <string name="keywords_to_track">Te volgen trefwoorden</string>
+    <string name="example_keyword_1_nexample_keyword_2"> example keyword 1 \nexample keyword 2 \nexample keyword 3 \n... \nexample keyword n</string> <!-- ATTENTION: \n represents page breaks -->
+    <string name="insert">Invoegen</string>
+    <string name="back">Terug</string>
+    <string name="about_title_news_and_updates">Nieuws en Updates</string>
+    <string name="address">Adres</string> <!-- address of website -->
+    <string name="save">Bewaar</string>
+    <string name="keyword_">Trefwoord </string>
+    <string name="free_version_limit_7_keywords_per_website">De gratis versie is beperkt tot 7 trefwoorden per website. Wilt u de premium versie kopen om deze limitatie op te heffen?</string>
+    <string name="google_is_trademark_of_google_inc_this_application_is_built_on_google_custom_search_api_and_does_not_infringe_google_search_terms_of_service_">Google is trademark of Google inc. This application is built on Google Custom Search API and does not infringe Google Search terms of service.</string>
+    <string name="search_engine">Zoekmachine</string>
+    <string name="delete_all_data">Verwijder alle data</string>
+    <string name="resets_all_application_internal_data">Herstelt de interne data van alle applicaties</string>
+    <string name="legal_information">Juridische Informatie</string>
+    <string name="error">Fout</string>
+    <string name="region">Regio</string>
+    <string name="yes">Ja</string>
+    <string name="premium_view_live_ranking">Bekijk Live Ranking</string>
+    <string name="premium_dialog_title">Extra Informatie</string>
+    <string name="premium_show_anchor_dialog_title">Ranking Link Tekst (anker)</string>
+    <string name="selecting_locale_is_available_in_the_premium_version_would_you_like_to_buy_the_premium_version_">Het selecteren van localisatie is beschikbaar in de premium versie. Wilt u de premium versie kopen om deze limitatie op te heffen?</string>
+    <string name="free_version_supports_only_">De gratis versie ondersteunt alleen </string> <!-- this message is combined with next one (_websites_would ...), EXAMPLE: Free version supports only {number} websites. Would you like to buy the premium version to remove this limitation? -->
+    <string name="_websites_would_you_like_to_buy_the_premium_version_to_remove_this_limitation_"> websites. Wilt u de premium versie kopen om deze limitatie op te heffen?</string>
+    <string name="anchor">ANKER</string>
+    
+</resources>
