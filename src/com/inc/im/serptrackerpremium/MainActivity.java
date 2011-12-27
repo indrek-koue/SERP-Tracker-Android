@@ -1,10 +1,9 @@
-package com.inc.im.serptracker;
+package com.inc.im.serptrackerpremium;
 
 import com.flurry.android.FlurryAgent;
 import com.google.ads.AdView;
-import com.inc.im.serptracker.R;
-import com.inc.im.serptracker.util.MainActivityHelper;
-import com.inc.im.serptracker.util.Util;
+import com.inc.im.serptrackerpremium.util.MainActivityHelper;
+import com.inc.im.serptrackerpremium.util.Util;
 
 import android.app.Activity;
 import android.graphics.PixelFormat;
@@ -14,7 +13,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
-
+import com.inc.im.serptrackerpremium.R;
 public class MainActivity extends Activity {
 
 	private Boolean menuBarIsVisible = true;
