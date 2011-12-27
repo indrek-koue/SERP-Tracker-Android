@@ -1,4 +1,4 @@
-package com.inc.im.serptracker.data;
+package com.inc.im.serptrackerpremium.data;
 
 /**
  * Keyword holder object
