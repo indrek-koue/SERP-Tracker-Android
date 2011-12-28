@@ -23,7 +23,9 @@ public class Download {
 	private final static int TIMEOUT = 10000;
 	private final static int PAUSE1 = 500;
 	private final static int PAUSE2 = 2000;
-	//private final static String ua = "Apache-HttpClient/UNAVAILABLE (java 1.4)";
+
+	// private final static String ua =
+	// "Apache-HttpClient/UNAVAILABLE (java 1.4)";
 
 	/**
 	 * 
@@ -93,10 +95,15 @@ public class Download {
 
 	public static String generateEscapedQueryString(Activity a, Keyword k) {
 
-		// get value from preference
-		String userSearchEngine = PreferenceManager
-				.getDefaultSharedPreferences(a).getString("prefLocalize",
-						"Google.com");
+		String userSearchEngine;
+
+		if (new Boolean(a.getString(R.string.isPremium))) {
+			// get value from preference
+			userSearchEngine = PreferenceManager.getDefaultSharedPreferences(a)
+					.getString("prefLocalize", "Google.com");
+		} else {
+			userSearchEngine = "google.com";
+		}
 
 		return "http://www." + userSearchEngine + "/search?num=100&q="
 				+ URLEncoder.encode(k.keyword);
