@@ -352,6 +352,10 @@ public class DbAdapter {
 
 					} while (keywordsCur.moveToNext());
 
+					// v 2.02 fix
+					if (keywordsCur != null || !keywordsCur.isClosed())
+						keywordsCur.close();
+
 					// one profile done, not let's get next one
 					profiles.add(new UserProfile(profileId, profileUrl,
 							keywords));
@@ -359,6 +363,11 @@ public class DbAdapter {
 				}
 
 			} while (profileHeaderCur.moveToNext());
+
+			// v 2.02 fix
+			if (profileHeaderCur != null || !profileHeaderCur.isClosed())
+				profileHeaderCur.close();
+
 		}
 
 		close();
@@ -369,30 +378,43 @@ public class DbAdapter {
 
 	private String getExtraUrlById(int id) {
 
+		String result = "error getExtraUrlById";
+
 		Cursor cur = mDb.query(TABLE_EXTRA, null,
 				KEY_EXTRA_PARENTID + "=" + id, null, null, null, null);
 
 		if (cur != null && cur.getCount() > 0 && cur.getColumnCount() > 0) {
 			cur.moveToFirst();
-			return cur.getString(cur.getColumnIndex(KEY_EXTRA_URL));
+			result = cur.getString(cur.getColumnIndex(KEY_EXTRA_URL));
+
+			// v 2.02 fix
+			if (!cur.isClosed())
+				cur.close();
+
 		}
 
-		return "error getExtraUrlById";
+		return result;
+
 	}
 
 	private String getExtraAnchorById(int id) {
 
+		String result = "error getExtraAnchorById";
+
 		Cursor cur = mDb.query(TABLE_EXTRA, null,
 				KEY_EXTRA_PARENTID + "=" + id, null, null, null, null);
 
 		if (cur != null && cur.getCount() > 0 && cur.getColumnCount() > 0) {
 			cur.moveToFirst();
 
-			return cur.getString(cur.getColumnIndex(KEY_EXTRA_ANCHOR));
+			result = cur.getString(cur.getColumnIndex(KEY_EXTRA_ANCHOR));
 
+			// v 2.02 fix
+			if (!cur.isClosed())
+				cur.close();
 		}
 
-		return "error getExtraAnchorById";
+		return result;
 	}
 
 	public void trunkTables() {
