@@ -40,7 +40,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 		addPreferencesFromResource(R.xml.app_preferences_layout);
 
 		bindDeleteAllDataButton();
-		bindSelectSearchEngine();
+		//bindSelectSearchEngine();
 		bindSelectRegion();
 
 	}
@@ -82,23 +82,23 @@ public class PreferencesActivity extends PreferenceActivity implements
 
 	}
 
-	public void bindSelectSearchEngine() {
-		getPreferenceManager().findPreference("prefSearchEngine")
-				.setOnPreferenceClickListener(
-						new Preference.OnPreferenceClickListener() {
-
-							@Override
-							public boolean onPreferenceClick(
-									Preference preference) {
-								Toast.makeText(
-										getBaseContext(),
-										getString(R.string.google_is_trademark_of_google_inc_this_application_is_built_on_google_custom_search_api_and_does_not_infringe_google_search_terms_of_service_),
-										Toast.LENGTH_LONG).show();
-
-								return false;
-							}
-						});
-	}
+//	public void bindSelectSearchEngine() {
+//		getPreferenceManager().findPreference("prefSearchEngine")
+//				.setOnPreferenceClickListener(
+//						new Preference.OnPreferenceClickListener() {
+//
+//							@Override
+//							public boolean onPreferenceClick(
+//									Preference preference) {
+//								Toast.makeText(
+//										getBaseContext(),
+//										getString(R.string.google_is_trademark_of_google_inc_this_application_is_built_on_google_custom_search_api_and_does_not_infringe_google_search_terms_of_service_),
+//										Toast.LENGTH_LONG).show();
+//
+//								return false;
+//							}
+//						});
+//	}
 
 	public void bindSelectRegion() {
 
