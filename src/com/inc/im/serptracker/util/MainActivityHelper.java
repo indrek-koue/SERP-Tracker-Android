@@ -1,4 +1,4 @@
-package com.inc.im.serptrackerpremium.util;
+package com.inc.im.serptracker.util;
 
 import java.util.ArrayList;
 
@@ -22,16 +22,16 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.flurry.android.FlurryAgent;
-import com.inc.im.serptrackerpremium.R;
-import com.inc.im.serptrackerpremium.AboutActivity;
-import com.inc.im.serptrackerpremium.InsertWebsiteActivity;
-import com.inc.im.serptrackerpremium.ManageWebsitesActivity;
-import com.inc.im.serptrackerpremium.PreferencesActivity;
-import com.inc.im.serptrackerpremium.adapters.DbAdapter;
-import com.inc.im.serptrackerpremium.adapters.MainActivityListAdapter;
-import com.inc.im.serptrackerpremium.data.Keyword;
-import com.inc.im.serptrackerpremium.data.UserProfile;
-import com.inc.im.serptrackerpremium.data.access.AsyncDownloader;
+import com.inc.im.serptracker.AboutActivity;
+import com.inc.im.serptracker.InsertWebsiteActivity;
+import com.inc.im.serptracker.ManageWebsitesActivity;
+import com.inc.im.serptracker.PreferencesActivity;
+import com.inc.im.serptracker.R;
+import com.inc.im.serptracker.adapters.DbAdapter;
+import com.inc.im.serptracker.adapters.MainActivityListAdapter;
+import com.inc.im.serptracker.data.Keyword;
+import com.inc.im.serptracker.data.UserProfile;
+import com.inc.im.serptracker.data.access.AsyncDownloader;
 
 /**
  * Hold methods for helping out main activity.

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">SEO SERP Tracker Premium</string>
-    <string name="isPremium">true</string>
+    <string name="app_name">SEO SERP Tracker FREE</string>
+    <string name="isPremium">false</string>
     <string name="keywordLimit">7</string>
     <string name="profileLimit">3</string>
     <string name="userAgent">Apache-HttpClient/UNAVAILABLE (java 1.4)</string>

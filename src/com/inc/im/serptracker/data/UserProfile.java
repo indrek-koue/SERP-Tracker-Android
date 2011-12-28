@@ -1,4 +1,4 @@
-package com.inc.im.serptrackerpremium.data;
+package com.inc.im.serptracker.data;
 
 import java.util.ArrayList;
 
