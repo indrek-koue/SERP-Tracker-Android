@@ -83,7 +83,7 @@ public class AboutActivity extends Activity {
 
 						builder.setTitle(getString(R.string.legal_information));
 
-						builder.setMessage(msg + "\n\n" + msg2);
+						builder.setMessage(msg2 + "\n\n" + msg);
 
 						builder.setCancelable(true);
 						builder.create().show();
