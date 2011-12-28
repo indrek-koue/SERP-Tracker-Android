@@ -1,10 +1,10 @@
-package com.inc.im.serptrackerpremium;
+package com.inc.im.serptracker;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URLEncoder;
 
-import com.inc.im.serptrackerpremium.util.Parser;
+import com.inc.im.serptracker.util.Parser;
 
 import android.app.Activity;
 import android.os.Bundle;

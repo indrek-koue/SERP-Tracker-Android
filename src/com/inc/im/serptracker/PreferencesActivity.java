@@ -1,8 +1,9 @@
-package com.inc.im.serptrackerpremium;
+package com.inc.im.serptracker;
 
 import com.flurry.android.FlurryAgent;
-import com.inc.im.serptrackerpremium.adapters.DbAdapter;
-import com.inc.im.serptrackerpremium.util.Premium;
+import com.inc.im.serptracker.R;
+import com.inc.im.serptracker.adapters.DbAdapter;
+import com.inc.im.serptracker.util.Premium;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,7 +14,6 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
-import com.inc.im.serptrackerpremium.R;
 public class PreferencesActivity extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener {
 

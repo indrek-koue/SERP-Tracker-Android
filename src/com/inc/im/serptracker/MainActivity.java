@@ -1,4 +1,14 @@
-package com.inc.im.serptrackerpremium;
+package com.inc.im.serptracker;
+
+/* Switching between premium - free
+ * 
+ * Rename package
+ * Rename gen package
+ * change manigest package
+ * change manifest webview activity name right
+ * change config: name and isPremium
+ * 
+ */
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,8 +20,9 @@ import android.widget.LinearLayout;
 import com.bugsense.trace.BugSenseHandler;
 import com.flurry.android.FlurryAgent;
 import com.google.ads.AdView;
-import com.inc.im.serptrackerpremium.util.MainActivityHelper;
-import com.inc.im.serptrackerpremium.util.Util;
+import com.inc.im.serptracker.R;
+import com.inc.im.serptracker.util.MainActivityHelper;
+import com.inc.im.serptracker.util.Util;
 
 
 public class MainActivity extends Activity {
