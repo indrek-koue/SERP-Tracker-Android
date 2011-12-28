@@ -20,7 +20,12 @@ public class PreferencesActivity extends PreferenceActivity implements
 	@Override
 	public void onStart() {
 		super.onStart();
-		FlurryAgent.onStartSession(this, getString(R.string.flurry_api_key));
+		if (new Boolean(getString(R.string.isPremium)))
+			FlurryAgent.onStartSession(this,
+					getString(R.string.flurry_api_key_premium));
+		else
+			FlurryAgent
+					.onStartSession(this, getString(R.string.flurry_api_key));
 	}
 
 	@Override
