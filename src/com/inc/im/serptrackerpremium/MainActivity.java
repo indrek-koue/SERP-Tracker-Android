@@ -1,35 +1,34 @@
 package com.inc.im.serptrackerpremium;
 
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+
+import com.bugsense.trace.BugSenseHandler;
 import com.flurry.android.FlurryAgent;
 import com.google.ads.AdView;
 import com.inc.im.serptrackerpremium.util.MainActivityHelper;
 import com.inc.im.serptrackerpremium.util.Util;
 
-import android.app.Activity;
-import android.graphics.PixelFormat;
-import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import com.inc.im.serptrackerpremium.R;
+
 public class MainActivity extends Activity {
 
 	private Boolean menuBarIsVisible = true;
 	private AdView adView;
 
-//	@Override
-//	public void onAttachedToWindow() {
-//		super.onAttachedToWindow();
-//		Window window = getWindow();
-//		window.setFormat(PixelFormat.RGB_888);
-//	}
-//	
 	@Override
 	public void onStart() {
 		super.onStart();
-		FlurryAgent.onStartSession(this, getString(R.string.flurry_api_key));
+
+		if (new Boolean(getString(R.string.isPremium)))
+			FlurryAgent.onStartSession(this,
+					getString(R.string.flurry_api_key_premium));
+		else
+			FlurryAgent
+					.onStartSession(this, getString(R.string.flurry_api_key));
 	}
 
 	@Override
@@ -43,7 +42,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity_layout);
 
-		// BugSenseHandler.setup(this, "dd278c2d");
+		BugSenseHandler.setup(this, "dd278c2d");
 
 		adView = Util.loadAdmob(this);
 
@@ -63,25 +62,25 @@ public class MainActivity extends Activity {
 		super.onDestroy();
 	}
 
-//	@Override
-//	protected void onResume() {
-//		super.onResume();
-//
-//		// load default value on spinner
-//		MainActivityHelper.initSpinner(this);
-//
-//		// clear listview
-//		((ListView) findViewById(R.id.listview_result))
-//				.setAdapter(new ArrayAdapter<String>(getBaseContext(),
-//						R.layout.main_activity_listview_item));
-//
-//	}
+	// @Override
+	// protected void onResume() {
+	// super.onResume();
+	//
+	// // load default value on spinner
+	// MainActivityHelper.initSpinner(this);
+	//
+	// // clear listview
+	// ((ListView) findViewById(R.id.listview_result))
+	// .setAdapter(new ArrayAdapter<String>(getBaseContext(),
+	// R.layout.main_activity_listview_item));
+	//
+	// }
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-		//menu key hide/show menubar
-		
+		// menu key hide/show menubar
+
 		LinearLayout lv = (LinearLayout) findViewById(R.id.menuBar);
 
 		if (keyCode == KeyEvent.KEYCODE_MENU)
@@ -95,7 +94,6 @@ public class MainActivity extends Activity {
 
 		return super.onKeyDown(keyCode, event);
 	}
-
 
 	private void bindRunButton() {
 
