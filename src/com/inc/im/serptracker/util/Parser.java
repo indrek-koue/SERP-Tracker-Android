@@ -95,15 +95,11 @@ public class Parser {
 
 				String singleResultUrl = singleResult.attr("href");
 
-				String singleResultUrlModified = singleResultUrl
-						.replace("https://", "").replace("http://", "")
-						.replace("www.", "");
-
+				String singleResultUrlModified = removePrefix(singleResultUrl);
 				// if cointains url and is not set yet
 
-				if (singleResultUrlModified.startsWith(WEBSITE)
-						&& !singleResultUrlModified.startsWith(WEBSITE + ".")
-						|| singleResultUrlModified.contains("." + WEBSITE)) {
+				if (singleResultUrlModified.startsWith(WEBSITE+"/")){
+						//&& !singleResultUrlModified.startsWith(WEBSITE + ".")) {
 
 					// singleResultUrlModified.contains("." + WEBSITE) -
 					// subdomain special case
@@ -124,10 +120,9 @@ public class Parser {
 						if (newRank <= 0)
 							newRank = 1;
 
-
 						result.newRank = newRank;
 					}
-					
+
 					result.anchorText = singleResult.text();
 					result.url = singleResult.attr("href");
 
@@ -189,9 +184,23 @@ public class Parser {
 							+ allResults.size());
 	}
 
+	/**
+	 * Removes http, https and www. from the beginning
+	 * 
+	 * @param searchable
+	 * @return
+	 */
 	public static String removePrefix(String searchable) {
 
-		String result = searchable.replace("http://", "").replace("www.", "");
+		// String result = searchable.replace("http://", "").replace("www.",
+		// "");
+
+		String result = searchable.replace("https://", "").replace("http://",
+				"");
+
+		if (result.startsWith("www."))
+			result = result.replace("www.", "");
+		// result = singleResultUrlModified;
 
 		return result;
 	}
