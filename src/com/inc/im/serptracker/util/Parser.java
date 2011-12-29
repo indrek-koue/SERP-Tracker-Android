@@ -98,8 +98,13 @@ public class Parser {
 				String singleResultUrlModified = removePrefix(singleResultUrl);
 				// if cointains url and is not set yet
 
-				if (singleResultUrlModified.startsWith(WEBSITE+"/")){
-						//&& !singleResultUrlModified.startsWith(WEBSITE + ".")) {
+				// second boolean is for subdomains. For example when person
+				// searches for wikipedia he probably wants to get the
+				// en.wikipedia.org etc
+				if (singleResultUrlModified.startsWith(WEBSITE + "/")
+						|| singleResultUrlModified
+								.contains("." + WEBSITE + "/")) {
+					// && !singleResultUrlModified.startsWith(WEBSITE + ".")) {
 
 					// singleResultUrlModified.contains("." + WEBSITE) -
 					// subdomain special case
