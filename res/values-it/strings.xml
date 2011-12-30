@@ -35,28 +35,24 @@ succesfully deleted -->
     <string name="website_edited_successfuly">Edizione Sito Web OK</string>
     <string name="website_edit_failure">Edizione Sito Web non riuscita</string>
     <string name="all_user_data_deleted">Cancellati tutti i dati utente</string>
-    <string name="run_btton">Trova Ranghi</string> <!-- main button
+    <string name="run_btton">Trova ottieni risultati</string> <!-- main button
 which finds how selected website ranks in google for user inputed keywords -->
     <string name="menubar_add">Aggiunta</string>
     <string name="menubar_manage">Gestione</string>
     <string name="menubar_settings">Impostazioni</string>
-    <string name="menubar_info">Informazione</string>
+    <string name="menubar_info">Info</string>
     <string name="address_of_your_website">Indirizzo del tuo sito web</string>
     <string name="www_example_com">www.esempio.com</string>
     <string name="keywords_to_track">Keyword da to tracciare</string>
     <string name="example_keyword_1_nexample_keyword_2">esempio keyword 1\nesempio keyword 2 \nesempio keyword 3 \n... \nesempio keyword n</string> <!-- ATTENTION: \n represents page breaks -->
     <string name="insert">Inserimento</string>
-    <string name="back">Dietro</string>
+    <string name="back">Indietro</string>
     <string name="about_title_news_and_updates">Notizie ed Aggiornamenti</string>
     <string name="address">Indirizzo</string> <!-- address of website -->
     <string name="save">Salva</string>
     <string name="keyword_">Keyword </string>
-    <string name="free_version_limit_7_keywords_per_website">La verione
-gratuita ha un limite di 7 keywords per sito web. Worreste comprare la
-versione premium per rimuovere questo limite?</string>
-    <string name="google_is_trademark_of_google_inc_this_application_is_built_on_google_custom_search_api_and_does_not_infringe_google_search_terms_of_service_">Google e\' un trademark di Google inc. Questa applicazione utilizza le API Google per ricerca 
-customizzata e non infrange le regole di servizio delle ricerche
-Google.</string>
+    <string name="free_version_limit_7_keywords_per_website">La verione gratuita ha un limite di 7 keywords per sito web. Worreste comprare la versione premium per rimuovere questo limite?</string>
+    <string name="google_is_trademark_of_google_inc_this_application_is_built_on_google_custom_search_api_and_does_not_infringe_google_search_terms_of_service_">Google e\' un trademark di Google inc. Questa applicazione utilizza le API Google per ricerca  customizzata e non infrange le regole di servizio delle ricerche Google.</string>
     <string name="search_engine">Motore Ricerca</string>
     <string name="delete_all_data">Cancella tutti i dati</string>
     <string name="resets_all_application_internal_data">Resetta tutti i dati originali dell\'applicazione</string>

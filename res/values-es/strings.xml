@@ -41,7 +41,7 @@
     <string name="address_of_your_website">Dirección de tu sitio web</string>
     <string name="www_example_com">www.ejemplo.com</string>
     <string name="keywords_to_track">trazar palabras clave</string>
-    <string name="example_keyword_1_nexample_keyword_2">ejemplo palabra clave 1 \n ejemplo palabra clave 2 \n ejemplo palabra clave 3 \n... \n ejemplo palabra clave n</string> <!-- ATENCIÓN: \n representa los saltos de pįgina -->
+    <string name="example_keyword_1_nexample_keyword_2">ejemplo palabra clave 1 \nejemplo palabra clave 2 \nejemplo palabra clave 3 \n... \nejemplo palabra clave n</string> <!-- ATENCIÓN: \n representa los saltos de pįgina -->
     <string name="insert">Insertar</string>
     <string name="back">Volver</string>
     <string name="about_title_news_and_updates">Noticias y actualizaciones</string>
