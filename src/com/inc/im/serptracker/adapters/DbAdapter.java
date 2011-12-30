@@ -387,11 +387,11 @@ public class DbAdapter {
 			cur.moveToFirst();
 			result = cur.getString(cur.getColumnIndex(KEY_EXTRA_URL));
 
-			// v 2.02 fix
-			if (!cur.isClosed())
-				cur.close();
-
 		}
+
+		// v 2.05 fix
+		if (cur != null && !cur.isClosed())
+			cur.close();
 
 		return result;
 
@@ -409,10 +409,11 @@ public class DbAdapter {
 
 			result = cur.getString(cur.getColumnIndex(KEY_EXTRA_ANCHOR));
 
-			// v 2.02 fix
-			if (!cur.isClosed())
-				cur.close();
 		}
+
+		// v 2.05 fix
+		if (cur != null && !cur.isClosed())
+			cur.close();
 
 		return result;
 	}
