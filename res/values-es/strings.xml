@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- README::DO NOT TRANSLATE THIS -->
+    <!-- Background story: SEO SERP Tracker is smarthphone application which allows you to check -->
+    <!-- how your website ranks in Google for selected keyword. For example www.cnn.com is first for keyword "news" -->
+    
+    <!--
+    TUTORIAL FOR TRANSLATING: for example:  <string name="profile_edit_page_delete">Delete</string> you have to translate ONLY 
+    the part inside <string..></string> so for given example you have to translate the "delete" word only to given language. This 
+    applies to all translations below. Please use same letter case as provided below 
+    -->
+    <!-- README END: DO NOT TRANSLATE THIS -->
+
+    <string name="profile_edit_page_delete">Borrar</string>
+    <string name="there_are_no_email_clients_installed_">No hay clientes de correo electrónico instalados.</string>
+    <string name="spinner_default_selection">Seleccionar una pįgna web</string>
+    <string name="no_websites_to_manage_please_add_a_website">Ningśn sitio internet para gestionar.Por favor, ańada un sito internet.</string>
+    <string name="no_active_internet_connection_please_check_your_settings">Ningśna red internet disponible. Por favor, compruebe el estado de su coneccion</string>
+    <string name="like_this_app_rate_us_on_android_market_">Te gusta esta aplicación? Votanos en Android™ market!</string> <!-- app=application/software program -->
+    <string name="sure_">Claro!</string> <!-- postive response -->
+    <string name="cancel">Borrar</string> <!-- aborts action -->
+    <string name="inspect_dialog_title">Inspección de palabras clave</string>
+    <string name="inspect_dialog_fist_msg">Iniciando, espere por favor</string>
+    <string name="please_select_a_profile">Por favor, seleccionar un perfil</string>
+    <string name="please_enter_some_keywords">Por favor, escriba una palabra clave</string>
+    <string name="website_address_is_too_short_or_invalid">La dirección de la pįgina web es demasiado corta o no es correcta</string>
+    <string name="website_added_successfuly">Sitio web ańadido correctamente</string>
+    <string name="website_add_failure">No se ha podido ańadir el sitio web</string>
+    <string name="website_">Sitio web</string> <!-- this message is combined with next one (_succesfully_deleted), EXAMPLE: website {userwebsite} succesfully deleted -->
+    <string name="_succesfully_deleted">borrado satisfactoriamente</string>
+    <string name="delete_failed">No se ha podido borrar</string>
+    <string name="website_edited_successfuly">Modificación pįgina web aceptada</string>
+    <string name="website_edit_failure">No se ha podido modificar la pagina web</string>
+    <string name="all_user_data_deleted">Todos los datos del usuario han sido borrados</string>
+    <string name="run_btton">Busca graduatoria</string> <!-- main button which finds how selected website ranks in google for user inputed keywords -->
+    <string name="menubar_add">Ańadir</string>
+    <string name="menubar_manage">Gestionar</string>
+    <string name="menubar_settings">Ajustes</string>
+    <string name="menubar_info">Información</string>
+    <string name="address_of_your_website">Dirección de tu sitio web</string>
+    <string name="www_example_com">www.ejemplo.com</string>
+    <string name="keywords_to_track">trazar palabras clave</string>
+    <string name="example_keyword_1_nexample_keyword_2">ejemplo palabra clave 1 \n ejemplo palabra clave 2 \n ejemplo palabra clave 3 \n... \n ejemplo palabra clave n</string> <!-- ATENCIÓN: \n representa los saltos de pįgina -->
+    <string name="insert">Insertar</string>
+    <string name="back">Volver</string>
+    <string name="about_title_news_and_updates">Noticias y actualizaciones</string>
+    <string name="address">Dirección</string> <!-- Dirección del sitio web -->
+    <string name="save">Guardar</string>
+    <string name="keyword_">Palabra Clave </string>
+    <string name="free_version_limit_7_keywords_per_website">La versión gratuita es limitada a 7 palabras clave por sitio web. æQuieres comprar la versión Premium y quitar esta limitación?</string>
+    <string name="google_is_trademark_of_google_inc_this_application_is_built_on_google_custom_search_api_and_does_not_infringe_google_search_terms_of_service_">Google es una marca comercial de Google inc. Esta aplicación se basa en la API de bśsqueda personalizada de Google y no infringe los términos de bśsqueda del servicio de Google.</string>
+    <string name="search_engine">Buscador</string>
+    <string name="delete_all_data">Borrar todos los datos</string>
+    <string name="resets_all_application_internal_data">Restablece todos los datos de las aplicaciones internas</string>
+    <string name="legal_information">Avķso legal</string>
+    <string name="error">Error</string>
+    <string name="region">Región</string>
+    <string name="yes">Si</string>
+    <string name="premium_view_live_ranking">Ver Live Ranking</string>
+    <string name="premium_dialog_title">Información extra</string>
+    <string name="premium_show_anchor_dialog_title">Graduatoria enlaces de texto</string>
+    <string name="selecting_locale_is_available_in_the_premium_version_would_you_like_to_buy_the_premium_version_">La selección de localidad se encuentra disponible en la versión de pago. æQuieres comprar la versión premium para eliminar esta limitación?</string>
+    <string name="free_version_supports_only_">Compatible sólo con versión gratuita </string> <!-- this message is combined with next one (_websites_would ...), EXAMPLE: Free version supports only {number} websites. Would you like to buy the premium version to remove this limitation? -->
+    <string name="_websites_would_you_like_to_buy_the_premium_version_to_remove_this_limitation_"> sitios web. æTe gustarķa comprar la versión premium para eliminar esta limitación?</string>
+    <string name="anchor">ANCLA</string>
+
+</resources>
