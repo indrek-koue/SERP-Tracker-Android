@@ -75,10 +75,10 @@ public class Parser {
 		int numOfResults = allResults.size();
 
 		// DEBUG
-		// for (int i = 0; i < numOfResults; i++) {
-		// Element singleResult = allResults.get(i);
-		// Log.d("MY", i + ". " + singleResult.attr("href"));
-		// }
+//		for (int i = 0; i < numOfResults; i++) {
+//			Element singleResult = allResults.get(i);
+//			Log.d("MY", i + ". " + singleResult.attr("href"));
+//		}
 
 		Keyword result = new Keyword(keyword.keyword);
 		result.oldRank = keyword.oldRank;
