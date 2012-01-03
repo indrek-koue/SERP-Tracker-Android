@@ -1,14 +1,14 @@
-package com.inc.im.serptracker;
+package com.inc.im.serptrackerpremium;
 
 import java.util.ArrayList;
 
 import com.flurry.android.FlurryAgent;
 import com.google.ads.AdView;
-import com.inc.im.serptracker.R;
-import com.inc.im.serptracker.adapters.DbAdapter;
-import com.inc.im.serptracker.data.Keyword;
-import com.inc.im.serptracker.data.UserProfile;
-import com.inc.im.serptracker.util.Util;
+import com.inc.im.serptrackerpremium.R;
+import com.inc.im.serptrackerpremium.adapters.DbAdapter;
+import com.inc.im.serptrackerpremium.data.Keyword;
+import com.inc.im.serptrackerpremium.data.UserProfile;
+import com.inc.im.serptrackerpremium.util.Util;
 
 import android.app.Activity;
 import android.content.Intent;
