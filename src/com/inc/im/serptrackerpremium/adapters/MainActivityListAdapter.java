@@ -1,9 +1,9 @@
-package com.inc.im.serptracker.adapters;
+package com.inc.im.serptrackerpremium.adapters;
 
 import java.util.ArrayList;
 
-import com.inc.im.serptracker.R;
-import com.inc.im.serptracker.data.Keyword;
+import com.inc.im.serptrackerpremium.R;
+import com.inc.im.serptrackerpremium.data.Keyword;
 
 import android.content.Context;
 import android.util.Log;

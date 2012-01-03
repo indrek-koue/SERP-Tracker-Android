@@ -1,10 +1,10 @@
-package com.inc.im.serptracker;
+package com.inc.im.serptrackerpremium;
 
 import com.flurry.android.FlurryAgent;
 import com.google.ads.AdView;
-import com.inc.im.serptracker.R;
-import com.inc.im.serptracker.data.access.AsyncDownloaderNews;
-import com.inc.im.serptracker.util.Util;
+import com.inc.im.serptrackerpremium.R;
+import com.inc.im.serptrackerpremium.data.access.AsyncDownloaderNews;
+import com.inc.im.serptrackerpremium.util.Util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
