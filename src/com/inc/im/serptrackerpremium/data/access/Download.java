@@ -3,6 +3,7 @@ package com.inc.im.serptrackerpremium.data.access;
 import java.io.IOException;
 import java.net.URLEncoder;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import android.app.Activity;
@@ -23,9 +24,6 @@ public class Download {
 	private final static int TIMEOUT = 10000;
 	private final static int PAUSE1 = 500;
 	private final static int PAUSE2 = 2000;
-
-	// private final static String ua =
-	// "Apache-HttpClient/UNAVAILABLE (java 1.4)";
 
 	/**
 	 * 
@@ -87,10 +85,24 @@ public class Download {
 	private static Document download(Activity a, Keyword keyword, String ua)
 			throws IOException {
 
-		return Jsoup.connect(generateEscapedQueryString(a, keyword))
-				.userAgent(ua).header("Accept", "text/plain").timeout(TIMEOUT)
-				.get();
+		// v. 2.11 fix
+		Connection con = Jsoup.connect(generateEscapedQueryString(a, keyword))
+				.userAgent(ua).header("Accept", "text/plain").timeout(TIMEOUT);
 
+		if (con != null) {
+
+			Document doc = null;
+			try {
+				doc = con.get();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			return doc;
+
+		} else {
+			return null;
+		}
 	}
 
 	public static String generateEscapedQueryString(Activity a, Keyword k) {
