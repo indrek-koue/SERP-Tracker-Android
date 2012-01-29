@@ -83,7 +83,7 @@ public class Download {
 	}
 
 	private static Document download(Activity a, Keyword keyword, String ua)
-			throws IOException {
+			throws Exception {
 
 		// v. 2.11 fix
 		Connection con = Jsoup.connect(generateEscapedQueryString(a, keyword))
