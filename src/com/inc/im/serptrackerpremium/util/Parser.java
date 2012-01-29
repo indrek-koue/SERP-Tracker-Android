@@ -190,7 +190,7 @@ public class Parser {
 	}
 
 	/**
-	 * Removes http, https and www. from the beginning
+	 * Removes http, https and www. from the beginning and converts to lowercase
 	 * 
 	 * @param searchable
 	 * @return
@@ -207,7 +207,7 @@ public class Parser {
 			result = result.replace("www.", "");
 		// result = singleResultUrlModified;
 
-		return result;
+		return result.toLowerCase();
 	}
 
 }
