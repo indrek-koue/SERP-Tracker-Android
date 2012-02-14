@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
-    package="com.inc.im.serptrackerpremium"
-    android:versionCode="24"
-    android:versionName="2.12" >
+    package="com.inc.im.serptracker"
+    android:versionCode="26"
+    android:versionName="2.20" >
 
     <uses-sdk android:minSdkVersion="7" />
 
@@ -35,7 +35,6 @@
         <activity
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:name="com.google.ads.AdActivity" />
-        <activity android:name=".VerifyWebView"></activity>
     </application>
 
 </manifest>

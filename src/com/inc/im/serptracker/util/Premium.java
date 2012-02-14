@@ -1,4 +1,4 @@
-package com.inc.im.serptrackerpremium.util;
+package com.inc.im.serptracker.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -23,11 +23,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
-import com.inc.im.serptrackerpremium.R;
-import com.inc.im.serptrackerpremium.VerifyWebView;
-import com.inc.im.serptrackerpremium.adapters.DbAdapter;
-import com.inc.im.serptrackerpremium.data.Keyword;
-import com.inc.im.serptrackerpremium.data.UserProfile;
+import com.inc.im.serptracker.R;
+import com.inc.im.serptracker.adapters.DbAdapter;
+import com.inc.im.serptracker.data.Keyword;
+import com.inc.im.serptracker.data.UserProfile;
 
 /**
  * Holds functions for premium version.
@@ -62,16 +61,6 @@ public class Premium {
 				if (k.url.equals("error getExtraUrlById"))
 					return;
 
-				// display dialog - WITH SHOW LIVE RANKING/VERIFY BUTTON
-				// final CharSequence[] items = {
-				// a.getString("Debug verify ranking",
-				// "ANCHOR: " + k.anchorText, "URL: " + k.url };
-				//
-
-				// final CharSequence[] items = {
-				// a.getString(R.string.anchor) + ": " + k.anchorText,
-				// "URL: " + k.url };
-
 				// new minimalistic look
 				final CharSequence[] items = { k.anchorText, k.url };
 
@@ -86,31 +75,31 @@ public class Premium {
 
 						if (item == 0) {
 
-							// first reserved for verify ranking
-							try {
-
-								String userSearchEngine = PreferenceManager
-										.getDefaultSharedPreferences(a)
-										.getString("prefLocalize", "Google.com");
-
-								Toast.makeText(
-										a,
-										"www."
-												+ userSearchEngine
-												+ "/seach?q="
-												+ URLEncoder.encode(k.keyword,
-														"UTF-8"),
-										Toast.LENGTH_LONG).show();
-							} catch (UnsupportedEncodingException e) {
-								Log.e("MY", e.toString());
-								e.printStackTrace();
-							}
-
-							Intent i = new Intent(a, VerifyWebView.class);
-							i.putExtra("keyword", k.keyword);
-							i.putExtra("url", selectedUser.url);
-
-							a.startActivity(i);
+//							// first reserved for verify ranking
+//							try {
+//
+//								String userSearchEngine = PreferenceManager
+//										.getDefaultSharedPreferences(a)
+//										.getString("prefLocalize", "Google.com");
+//
+//								Toast.makeText(
+//										a,
+//										"www."
+//												+ userSearchEngine
+//												+ "/seach?q="
+//												+ URLEncoder.encode(k.keyword,
+//														"UTF-8"),
+//										Toast.LENGTH_LONG).show();
+//							} catch (UnsupportedEncodingException e) {
+//								Log.e("MY", e.toString());
+//								e.printStackTrace();
+//							}
+//
+//							Intent i = new Intent(a, VerifyWebView.class);
+//							i.putExtra("keyword", k.keyword);
+//							i.putExtra("url", selectedUser.url);
+//
+//							a.startActivity(i);
 						} else if (item == 1) {
 
 							// start custom dialog with textbox with url inside
@@ -118,8 +107,10 @@ public class Premium {
 
 						} else if (item == 2) {
 							// third reserved for visit url
-							a.startActivity(new Intent(Intent.ACTION_VIEW, Uri
-									.parse(selectedUser.keywords.get(arg2).url)));
+							a.startActivity(new Intent(
+									Intent.ACTION_VIEW,
+									Uri.parse("http://www.google.com/url?q="
+											+ selectedUser.keywords.get(arg2).url)));
 						}
 
 					}
