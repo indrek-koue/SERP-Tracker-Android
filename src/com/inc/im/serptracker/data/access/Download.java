@@ -1,4 +1,4 @@
-package com.inc.im.serptrackerpremium.data.access;
+package com.inc.im.serptracker.data.access;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -11,8 +11,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
-import com.inc.im.serptrackerpremium.R;
-import com.inc.im.serptrackerpremium.data.Keyword;
+import com.inc.im.serptracker.R;
+import com.inc.im.serptracker.data.Keyword;
 
 /**
  * All data is download through this class. Uses JSoup based on java networking

@@ -1,9 +1,9 @@
-package com.inc.im.serptrackerpremium;
+package com.inc.im.serptracker;
 
 import com.flurry.android.FlurryAgent;
-import com.inc.im.serptrackerpremium.R;
-import com.inc.im.serptrackerpremium.adapters.DbAdapter;
-import com.inc.im.serptrackerpremium.util.Premium;
+import com.inc.im.serptracker.R;
+import com.inc.im.serptracker.adapters.DbAdapter;
+import com.inc.im.serptracker.util.Premium;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

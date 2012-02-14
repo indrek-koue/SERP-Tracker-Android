@@ -1,4 +1,4 @@
-package com.inc.im.serptrackerpremium;
+package com.inc.im.serptracker;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,10 +11,10 @@ import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.google.ads.AdView;
-import com.inc.im.serptrackerpremium.R;
-import com.inc.im.serptrackerpremium.adapters.DbAdapter;
-import com.inc.im.serptrackerpremium.util.Premium;
-import com.inc.im.serptrackerpremium.util.Util;
+import com.inc.im.serptracker.R;
+import com.inc.im.serptracker.adapters.DbAdapter;
+import com.inc.im.serptracker.util.Premium;
+import com.inc.im.serptracker.util.Util;
 
 public class InsertWebsiteActivity extends Activity {
 

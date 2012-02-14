@@ -1,4 +1,4 @@
-package com.inc.im.serptrackerpremium.data.access;
+package com.inc.im.serptracker.data.access;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,11 +6,11 @@ import java.util.HashMap;
 import org.jsoup.select.Elements;
 
 import com.flurry.android.FlurryAgent;
-import com.inc.im.serptrackerpremium.R;
-import com.inc.im.serptrackerpremium.adapters.DbAdapter;
-import com.inc.im.serptrackerpremium.adapters.MainActivityListAdapter;
-import com.inc.im.serptrackerpremium.data.Keyword;
-import com.inc.im.serptrackerpremium.util.Parser;
+import com.inc.im.serptracker.R;
+import com.inc.im.serptracker.adapters.DbAdapter;
+import com.inc.im.serptracker.adapters.MainActivityListAdapter;
+import com.inc.im.serptracker.data.Keyword;
+import com.inc.im.serptracker.util.Parser;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -74,27 +74,14 @@ public class AsyncDownloader extends
 				return null;
 
 			// download and parse h3first
-			Elements raw = Parser.parse(a, keyword);
+			Parser.parse(a, keyword);
 
-			// find WEBSITE ranking in raw
-			if (raw != null) {
+			Keyword updatedKeyword = Parser.getRanking(keyword, WEBSITE);
 
-				// NB! has to return keyword because i need the anchor/link also
-				// for premium
-
-				Keyword updatedKeyword = Parser.getRanking(keyword, raw,
-						WEBSITE);
-
-				// keyword.newRank = newRank;
-				if (updatedKeyword != null) {
-					result.add(updatedKeyword);
-				} else {
-					// nothing found = add old back
-					result.add(keyword);
-				}
-
+			if (updatedKeyword != null) {
+				result.add(updatedKeyword);
 			} else {
-				// nothing downloaded = add old back
+				// nothing found = add old back
 				result.add(keyword);
 			}
 

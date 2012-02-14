@@ -1,7 +1,8 @@
-package com.inc.im.serptrackerpremium.util;
+package com.inc.im.serptracker.util;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,9 +14,9 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
-import com.inc.im.serptrackerpremium.R;
-import com.inc.im.serptrackerpremium.data.Keyword;
-import com.inc.im.serptrackerpremium.data.access.Download;
+import com.inc.im.serptracker.R;
+import com.inc.im.serptracker.data.Keyword;
+import com.inc.im.serptracker.data.access.Download;
 
 /**
  * Parses raw document into objects using Jsoup parsing engine.
@@ -25,6 +26,9 @@ import com.inc.im.serptrackerpremium.data.access.Download;
  */
 
 public class Parser {
+
+	private static ArrayList<String> allAnchors;
+	private static ArrayList<String> allResults;
 
 	private final static int DCOUNT = 100;
 
@@ -37,27 +41,36 @@ public class Parser {
 	 *            - find h3 > a in here
 	 * @return Elements of results
 	 */
-	public static Elements parse(Activity a, Keyword keyword) {
+	public static void parse(Activity a, Keyword keyword) {
 
 		Document doc = Download.H3FirstA(a, keyword);
 
+		allAnchors = new ArrayList<String>();
+		allResults = new ArrayList<String>();
+
 		// @added ver 1.3 - exception fix
 		if (doc == null)
-			return null;
+			return;
 
-		Elements allResults = doc.select(a
+		Elements allResultsE = doc.select(a
 				.getString(R.string.googleResultParseRule));
 
-		if (allResults == null || allResults.size() == 0) {
-			Log.e("MY", "downloaded allResults h3 first a is null");
-			keyword.newRank = -2;
+		// 14.02.2012 - ver 2.15 - google muutis oma urle
+		for (Element e : allResultsE) {
+			Log.d("MY", e.attr("href").replace("/url?q=", ""));
+			allResults.add(e.attr("href").replace("/url?q=", ""));
+			allAnchors.add(e.text());
 
-			return null;
 		}
 
-		removeNotValidUrls(allResults);
+		if (allResults.size() == 0) {
+			Log.e("MY", "downloaded allResults h3 first a is null");
+			keyword.newRank = -2;
+			return;
+		}
 
-		return allResults;
+		removeNotValidUrls();
+
 	}
 
 	/**
@@ -66,19 +79,12 @@ public class Parser {
 	 * @param WEBSITE
 	 *            what to find
 	 */
-	public static Keyword getRanking(Keyword keyword, Elements allResults,
-			String WEBSITE) {
+	public static Keyword getRanking(Keyword keyword, String WEBSITE) {
 
 		if (keyword == null || allResults == null)
 			return null;
 
 		int numOfResults = allResults.size();
-
-		// DEBUG
-		// for (int i = 0; i < numOfResults; i++) {
-		// Element singleResult = allResults.get(i);
-		// Log.i("MY", i + ". " + singleResult.attr("href"));
-		// }
 
 		Keyword result = new Keyword(keyword.keyword);
 		result.oldRank = keyword.oldRank;
@@ -86,52 +92,36 @@ public class Parser {
 
 		for (int i = 0; i < numOfResults; i++) {
 
-			Element singleResult = allResults.get(i);
-
 			if (result.newRank != 0)
 				return result;
 
-			if (singleResult != null) {
+			String singleResultUrlModified = removePrefix(allResults.get(i));
 
-				String singleResultUrl = singleResult.attr("href");
+			// second boolean is for subdomains. For example when person
+			// searches for wikipedia he probably wants to get the
+			// en.wikipedia.org etc
+			if (singleResultUrlModified.startsWith(WEBSITE + "/")
+					|| singleResultUrlModified.contains("." + WEBSITE + "/")) {
 
-				String singleResultUrlModified = removePrefix(singleResultUrl);
-				// if cointains url and is not set yet
+				if (numOfResults <= DCOUNT) {
+					result.newRank = i + 1;
+				} else {
 
-				// second boolean is for subdomains. For example when person
-				// searches for wikipedia he probably wants to get the
-				// en.wikipedia.org etc
-				if (singleResultUrlModified.startsWith(WEBSITE + "/")
-						|| singleResultUrlModified
-								.contains("." + WEBSITE + "/")) {
-					// && !singleResultUrlModified.startsWith(WEBSITE + ".")) {
+					// WE HAVE TO JUSTIFY RANK
+					// there is a authority site with sub links somewhere
+					// probably
 
-					// singleResultUrlModified.contains("." + WEBSITE) -
-					// subdomain special case
+					int overTheNormal = numOfResults - DCOUNT;
+					int newRank = i + 1 - overTheNormal;
 
-					if (numOfResults <= DCOUNT) {
+					if (newRank <= 0)
+						newRank = 1;
 
-						result.newRank = i + 1;
-
-					} else {
-
-						// WE HAVE TO JUSTIFY RANK
-						// there is a authority site with sub links somewhere
-						// probably
-
-						int overTheNormal = numOfResults - DCOUNT;
-						int newRank = i + 1 - overTheNormal;
-
-						if (newRank <= 0)
-							newRank = 1;
-
-						result.newRank = newRank;
-					}
-
-					result.anchorText = singleResult.text();
-					result.url = singleResult.attr("href");
-
+					result.newRank = newRank;
 				}
+
+				result.anchorText = allAnchors.get(i);
+				result.url = allResults.get(i);
 
 			}
 
@@ -162,31 +152,24 @@ public class Parser {
 	 * 
 	 * @param allResults
 	 */
-	public static void removeNotValidUrls(Elements allResults) {
+	public static void removeNotValidUrls() {
 
-		// remove ad urls
 		for (int i = 0; i < allResults.size(); i++) {
 
-			String link = allResults.get(i).attr("href").trim();
-
-			Boolean isInvalid = link.startsWith("/");
-
-			if (isInvalid) {
-
-				// DEBUG
-				// Log.e("MY", "removed: " + allResults.get(i));
+			if (allResults.get(i).startsWith("/")) {
+				Log.i("MY", "removed: " + allResults.get(i));
 
 				allResults.remove(i);
 				i--;
-
 			}
 
 		}
-		// loging - remove
+
 		if (allResults.size() != 100)
 			Log.w("MY",
 					"WARNING: results after internal link delete != 100, instead:"
 							+ allResults.size());
+
 	}
 
 	/**
@@ -197,15 +180,14 @@ public class Parser {
 	 */
 	public static String removePrefix(String searchable) {
 
-		// String result = searchable.replace("http://", "").replace("www.",
-		// "");
+		if (searchable == null)
+			return "";
 
 		String result = searchable.replace("https://", "").replace("http://",
 				"");
 
 		if (result.startsWith("www."))
 			result = result.replace("www.", "");
-		// result = singleResultUrlModified;
 
 		return result.toLowerCase();
 	}
