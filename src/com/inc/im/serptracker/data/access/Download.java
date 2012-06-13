@@ -43,7 +43,7 @@ public class Download {
         if (keyword == null)
             return null;
 
-        Document doc = null;
+        String result = "";
 
         String uaSelector = PreferenceManager.getDefaultSharedPreferences(a)
                 .getString("prefUa", "Google Chrome");
@@ -62,41 +62,52 @@ public class Download {
         else if (uaSelector.equals("Empty"))
             ua = EMPTY;
 
-        
-        // try1
-        try {
-            Log.i("MY", "try1");
-            doc = download(a, keyword, ua);
+        Log.i("MY", "UA: " + ua);
 
-        } catch (Exception e1) {
-            Log.e("MY", e1.toString());
+        for (int i = 1; i < 11; i++) {
+
+            Log.i("MY", "LOOP NR: " + i);
+
+            Document doc = null;
+
+            // try1
+            try {
+                // Thread.sleep(PAUSE1);
+                Log.i("MY", "try1");
+                doc = download(a, keyword, ua, i);
+
+            } catch (Exception e1) {
+                Log.e("MY", e1.toString());
+            }
+
+            // try 2
+            if (doc == null)
+                try {
+                    Log.i("MY", "try2");
+                    Thread.sleep(PAUSE1);
+                    doc = download(a, keyword, ua, i);
+
+                } catch (Exception e1) {
+                    Log.e("MY", e1.toString());
+
+                }
+
+            // try 3
+            if (doc == null)
+                try {
+                    Log.i("MY", "try3");
+                    Thread.sleep(PAUSE2);
+                    doc = download(a, keyword, ua, i);
+
+                } catch (Exception e1) {
+                    Log.e("MY", e1.toString());
+
+                }
+
+            result += doc.toString();
         }
 
-        // try 2
-        if (doc == null)
-            try {
-                Log.i("MY", "try2");
-                Thread.sleep(PAUSE1);
-                doc = download(a, keyword, ua);
-
-            } catch (Exception e1) {
-                Log.e("MY", e1.toString());
-
-            }
-
-        // try 3
-        if (doc == null)
-            try {
-                Log.i("MY", "try3");
-                Thread.sleep(PAUSE2);
-                doc = download(a, keyword, ua);
-
-            } catch (Exception e1) {
-                Log.e("MY", e1.toString());
-
-            }
-
-        if (doc == null) {
+        if (result.equals("")) {
             Log.e("MY", "download is null FAILED DOWNLOAD (after 3 tries)");
             FlurryAgent.onEvent("FAILED DOWNLOAD (after 3 tries)");
 
@@ -104,17 +115,16 @@ public class Download {
 
             return null;
         }
-        
-        return doc;
+
+        return Jsoup.parse(result);
     }
 
-    private static Document download(Activity a, Keyword keyword, String ua)
+    private static Document download(Activity a, Keyword keyword, String ua, int pageNum)
             throws Exception {
 
-        String httpQuery = generateEscapedQueryString(a, keyword);
+        String httpQuery = generateEscapedQueryString(a, keyword) + "&start=" + pageNum;
 
         Log.i("MY", "QUERY: " + httpQuery);
-        Log.i("MY", "UA: " + ua);
 
         // v. 2.11 fix
         Connection con = Jsoup.connect(httpQuery)
@@ -148,7 +158,7 @@ public class Download {
             userSearchEngine = "google.com";
         }
 
-        return "http://www." + userSearchEngine + "/search?num=100&q="
+        return "http://www." + userSearchEngine + "/search?q="
                 + URLEncoder.encode(k.keyword);
     }
 

@@ -55,6 +55,8 @@ public class Parser {
 
         // 14.02.2012 - ver 2.15 - google muutis oma urle
 
+        Log.i("MY", "ALL RESULT SIZE: " + allResultsE.size());
+
         for (int i = 0; i < allResultsE.size(); i++) {
             // for (Element e : allResultsE) {
             Element e = allResultsE.get(i);
