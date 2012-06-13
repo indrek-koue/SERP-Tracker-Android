@@ -1,3 +1,4 @@
+
 package com.inc.im.serptracker.data.access;
 
 import java.io.IOException;
@@ -21,104 +22,107 @@ import com.inc.im.serptracker.data.Keyword;
 
 public class Download {
 
-	private final static int TIMEOUT = 10000;
-	private final static int PAUSE1 = 500;
-	private final static int PAUSE2 = 2000;
+    private final static int TIMEOUT = 10000;
+    private final static int PAUSE1 = 500;
+    private final static int PAUSE2 = 2000;
 
-	/**
-	 * 
-	 * @param keyword
-	 *            used to generate URL for download
-	 * @return downloaded document from Google
-	 */
-	public static Document H3FirstA(Activity a, Keyword keyword) {
+    /**
+     * @param keyword used to generate URL for download
+     * @return downloaded document from Google
+     */
+    public static Document H3FirstA(Activity a, Keyword keyword) {
 
-		if (keyword == null)
-			return null;
+        if (keyword == null)
+            return null;
 
-		Document doc = null;
+        Document doc = null;
 
-		// try1
-		try {
-			Log.i("MY", "try1");
-			doc = download(a, keyword, a.getString(R.string.userAgent));
+        // try1
+        try {
+            Log.i("MY", "try1");
+            doc = download(a, keyword, a.getString(R.string.userAgent));
 
-		} catch (Exception e1) {
-			Log.e("MY", e1.toString());
-		}
+        } catch (Exception e1) {
+            Log.e("MY", e1.toString());
+        }
 
-		// try 2
-		if (doc == null)
-			try {
-				Log.i("MY", "try2");
-				Thread.sleep(PAUSE1);
-				doc = download(a, keyword, a.getString(R.string.userAgent));
+        // try 2
+        if (doc == null)
+            try {
+                Log.i("MY", "try2");
+                Thread.sleep(PAUSE1);
+                doc = download(a, keyword, a.getString(R.string.userAgent));
 
-			} catch (Exception e1) {
-				Log.e("MY", e1.toString());
+            } catch (Exception e1) {
+                Log.e("MY", e1.toString());
 
-			}
+            }
 
-		// try 3
-		if (doc == null)
-			try {
-				Log.i("MY", "try3");
-				Thread.sleep(PAUSE2);
-				doc = download(a, keyword, a.getString(R.string.userAgent));
+        // try 3
+        if (doc == null)
+            try {
+                Log.i("MY", "try3");
+                Thread.sleep(PAUSE2);
+                doc = download(a, keyword, a.getString(R.string.userAgent));
 
-			} catch (Exception e1) {
-				Log.e("MY", e1.toString());
+            } catch (Exception e1) {
+                Log.e("MY", e1.toString());
 
-			}
+            }
 
-		if (doc == null) {
-			Log.e("MY", "download is null FAILED DOWNLOAD (after 3 tries)");
-			FlurryAgent.onEvent("FAILED DOWNLOAD (after 3 tries)");
+        if (doc == null) {
+            Log.e("MY", "download is null FAILED DOWNLOAD (after 3 tries)");
+            FlurryAgent.onEvent("FAILED DOWNLOAD (after 3 tries)");
 
-			keyword.newRank = -2;
+            keyword.newRank = -2;
 
-			return null;
-		}
-		return doc;
-	}
+            return null;
+        }
+        return doc;
+    }
 
-	private static Document download(Activity a, Keyword keyword, String ua)
-			throws Exception {
+    private static Document download(Activity a, Keyword keyword, String ua)
+            throws Exception {
 
-		// v. 2.11 fix
-		Connection con = Jsoup.connect(generateEscapedQueryString(a, keyword))
-				.userAgent(ua).header("Accept", "text/plain").timeout(TIMEOUT);
+        String httpQuery = generateEscapedQueryString(a, keyword);
 
-		if (con != null) {
+        Log.i("MY", "QUERY: " + httpQuery);
+        Log.i("MY", "UA: " + ua);
 
-			Document doc = null;
-			try {
-				doc = con.get();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+        // v. 2.11 fix
+        Connection con = Jsoup.connect(httpQuery)
+                .userAgent(ua).header("Accept", "text/plain").timeout(TIMEOUT);
 
-			return doc;
+        if (con != null) {
 
-		} else {
-			return null;
-		}
-	}
+            Document doc = null;
+            try {
+                doc = con.get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-	public static String generateEscapedQueryString(Activity a, Keyword k) {
+            return doc;
 
-		String userSearchEngine;
+        } else {
+            return null;
+        }
+    }
 
-		if (new Boolean(a.getString(R.string.isPremium))) {
-			// get value from preference
-			userSearchEngine = PreferenceManager.getDefaultSharedPreferences(a)
-					.getString("prefLocalize", "Google.com");
-		} else {
-			userSearchEngine = "google.com";
-		}
+    public static String generateEscapedQueryString(Activity a, Keyword k) {
 
-		return "http://www." + userSearchEngine + "/search?num=100&q="
-				+ URLEncoder.encode(k.keyword);
-	}
+        String userSearchEngine;
+
+        if (new Boolean(a.getString(R.string.isPremium))) {
+            // get value from preference
+            userSearchEngine = PreferenceManager.getDefaultSharedPreferences(a)
+                    .getString("prefLocalize", "Google.com");
+        } else {
+            userSearchEngine = "google.com";
+        }
+
+        return "http://www." + userSearchEngine + "/search?num=100&q="
+                + URLEncoder.encode(k.keyword);
+    }
 
 }

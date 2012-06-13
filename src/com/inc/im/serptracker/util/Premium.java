@@ -1,3 +1,4 @@
+
 package com.inc.im.serptracker.util;
 
 import java.io.UnsupportedEncodingException;
@@ -30,168 +31,142 @@ import com.inc.im.serptracker.data.UserProfile;
 
 /**
  * Holds functions for premium version.
- * 
  */
 
 public class Premium {
 
-	/**
-	 * Adds ranking result keyword on click premium features
-	 */
-	public static void addPremiumOnClick(final Activity a,
-			final int spinnerSelectedItemIndex) {
+    /**
+     * Adds ranking result keyword on click premium features
+     */
+    public static void addPremiumOnClick(final Activity a,
+            final int spinnerSelectedItemIndex) {
 
-		ListView lv = (ListView) a.findViewById(R.id.listview_result);
+        ListView lv = (ListView) a.findViewById(R.id.listview_result);
 
-		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1,
-					final int arg2, long arg3) {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1,
+                    final int arg2, long arg3) {
 
-				Context con = a.getBaseContext();
+                Context con = a.getBaseContext();
 
-				// -1 because first is default text
-				final UserProfile selectedUser = new DbAdapter(con)
-						.loadAllProfiles().get(spinnerSelectedItemIndex - 1);
+                // -1 because first is default text
+                final UserProfile selectedUser = new DbAdapter(con)
+                        .loadAllProfiles().get(spinnerSelectedItemIndex - 1);
 
-				final Keyword k = selectedUser.keywords.get(arg2);
+                final Keyword k = selectedUser.keywords.get(arg2);
 
-				// if there isn't anchor/url to show, don't open dialog
-				if (k.url.equals("error getExtraUrlById"))
-					return;
+                // if there isn't anchor/url to show, don't open dialog
+                if (k.url.equals("error getExtraUrlById"))
+                    return;
 
-				// new minimalistic look
-				final CharSequence[] items = { k.anchorText, k.url };
+                // new minimalistic look
+                final CharSequence[] items = {
+                        "Title: " + k.anchorText, "Link"
+                };
 
-				AlertDialog.Builder builder = new AlertDialog.Builder(a);
+                AlertDialog.Builder builder = new AlertDialog.Builder(a);
 
-				builder.setTitle(a.getString(R.string.premium_dialog_title));
-				builder.setItems(items, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int item) {
+                builder.setTitle(a.getString(R.string.premium_dialog_title));
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
 
-						// REMOVED VERIFY RANKING
-						item++;
+                        // REMOVED VERIFY RANKING
+                        item++;
+                        if (item == 1) {
 
-						if (item == 0) {
+                            // start custom dialog with textbox with anchor
+                            // inside
+                            customDialogWithTextboxToShowAnchor(k.anchorText);
 
-//							// first reserved for verify ranking
-//							try {
-//
-//								String userSearchEngine = PreferenceManager
-//										.getDefaultSharedPreferences(a)
-//										.getString("prefLocalize", "Google.com");
-//
-//								Toast.makeText(
-//										a,
-//										"www."
-//												+ userSearchEngine
-//												+ "/seach?q="
-//												+ URLEncoder.encode(k.keyword,
-//														"UTF-8"),
-//										Toast.LENGTH_LONG).show();
-//							} catch (UnsupportedEncodingException e) {
-//								Log.e("MY", e.toString());
-//								e.printStackTrace();
-//							}
-//
-//							Intent i = new Intent(a, VerifyWebView.class);
-//							i.putExtra("keyword", k.keyword);
-//							i.putExtra("url", selectedUser.url);
-//
-//							a.startActivity(i);
-						} else if (item == 1) {
+                        } else if (item == 2) {
+                            // third reserved for visit url
+                            a.startActivity(new Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("http://www.google.com/url?q="
+                                            + selectedUser.keywords.get(arg2).url)));
+                        }
 
-							// start custom dialog with textbox with url inside
-							customDialogWithTextboxToShowAnchor(k.anchorText);
+                    }
 
-						} else if (item == 2) {
-							// third reserved for visit url
-							a.startActivity(new Intent(
-									Intent.ACTION_VIEW,
-									Uri.parse("http://www.google.com/url?q="
-											+ selectedUser.keywords.get(arg2).url)));
-						}
+                    private void customDialogWithTextboxToShowAnchor(
+                            String anchorText) {
 
-					}
+                        Dialog dialog = new Dialog(a);
 
-					private void customDialogWithTextboxToShowAnchor(
-							String anchorText) {
+                        dialog.setContentView(R.layout.premium_dialog_textbox);
+                        dialog.setTitle(a
+                                .getString(R.string.premium_show_anchor_dialog_title));
 
-						Dialog dialog = new Dialog(a);
+                        EditText et = (EditText) dialog
+                                .findViewById(R.id.editText1);
 
-						dialog.setContentView(R.layout.premium_dialog_textbox);
-						dialog.setTitle(a
-								.getString(R.string.premium_show_anchor_dialog_title));
+                        et.setText(anchorText);
 
-						EditText et = (EditText) dialog
-								.findViewById(R.id.editText1);
+                        dialog.show();
 
-						et.setText(anchorText);
+                    }
+                });
+                AlertDialog alert = builder.create();
 
-						dialog.show();
+                alert.show();
 
-					}
-				});
-				AlertDialog alert = builder.create();
+            }
+        });
+    }
 
-				alert.show();
+    public static void showBuyPremiumDialog(String msg, final Activity a) {
 
-			}
-		});
-	}
+        AlertDialog.Builder builder = new AlertDialog.Builder(a);
+        builder.setMessage(msg)
+                .setCancelable(true)
+                .setPositiveButton(a.getString(R.string.yes),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
 
-	public static void showBuyPremiumDialog(String msg, final Activity a) {
+                                Boolean isAndroidMarketInstalled = isMarketInstalled();
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(a);
-		builder.setMessage(msg)
-				.setCancelable(true)
-				.setPositiveButton(a.getString(R.string.yes),
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								dialog.dismiss();
-								Intent intent = new Intent(Intent.ACTION_VIEW);
+                                if (isAndroidMarketInstalled) {
+                                    String marketlink = a
+                                            .getString(R.string.market_details_id_com_inc_im_serptrackerpremium);
 
-								Boolean isAndroidMarketInstalled = isMarketInstalled();
+                                    intent.setData(Uri.parse(marketlink));
 
-								if (isAndroidMarketInstalled) {
-									String marketlink = a
-											.getString(R.string.market_details_id_com_inc_im_serptrackerpremium);
+                                    a.startActivity(intent);
+                                } else {
+                                    Toast.makeText(
+                                            a,
+                                            "Android market is not found on your device. Aborting",
+                                            Toast.LENGTH_LONG).show();
+                                }
 
-									intent.setData(Uri.parse(marketlink));
+                            }
 
-									a.startActivity(intent);
-								} else {
-									Toast.makeText(
-											a,
-											"Android market is not found on your device. Aborting",
-											Toast.LENGTH_LONG).show();
-								}
+                            private Boolean isMarketInstalled() {
 
-							}
+                                try {
+                                    a.getPackageManager().getApplicationInfo(
+                                            "com.android.vending", 0);
+                                } catch (NameNotFoundException e) {
+                                    return false;
+                                }
 
-							private Boolean isMarketInstalled() {
+                                return true;
+                            }
+                        })
+                .setNegativeButton(a.getString(R.string.cancel),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
 
-								try {
-									a.getPackageManager().getApplicationInfo(
-											"com.android.vending", 0);
-								} catch (NameNotFoundException e) {
-									return false;
-								}
+                                dialog.dismiss();
 
-								return true;
-							}
-						})
-				.setNegativeButton(a.getString(R.string.cancel),
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
+                            }
+                        });
+        AlertDialog alert = builder.create();
+        alert.show();
 
-								dialog.dismiss();
-
-							}
-						});
-		AlertDialog alert = builder.create();
-		alert.show();
-
-	}
+    }
 }

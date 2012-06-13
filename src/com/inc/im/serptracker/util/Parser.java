@@ -1,3 +1,4 @@
+
 package com.inc.im.serptracker.util;
 
 import java.net.MalformedURLException;
@@ -22,174 +23,173 @@ import com.inc.im.serptracker.data.access.Download;
  * Parses raw document into objects using Jsoup parsing engine.
  * 
  * @author indrek
- * 
  */
 
 public class Parser {
 
-	private static ArrayList<String> allAnchors;
-	private static ArrayList<String> allResults;
+    private static ArrayList<String> allAnchors;
+    private static ArrayList<String> allResults;
 
-	private final static int DCOUNT = 100;
+    private final static int DCOUNT = 100;
 
-	/**
-	 * Gets h3 > a from Document and removes not valid urls
-	 * 
-	 * @param keyword
-	 *            - if parse fails save newrank -2
-	 * @param doc
-	 *            - find h3 > a in here
-	 * @return Elements of results
-	 */
-	public static void parse(Activity a, Keyword keyword) {
+    /**
+     * Gets h3 > a from Document and removes not valid urls
+     * 
+     * @param keyword - if parse fails save newrank -2
+     * @param doc - find h3 > a in here
+     * @return Elements of results
+     */
+    public static void parse(Activity a, Keyword keyword) {
 
-		Document doc = Download.H3FirstA(a, keyword);
+        Document doc = Download.H3FirstA(a, keyword);
 
-		allAnchors = new ArrayList<String>();
-		allResults = new ArrayList<String>();
+        allAnchors = new ArrayList<String>();
+        allResults = new ArrayList<String>();
 
-		// @added ver 1.3 - exception fix
-		if (doc == null)
-			return;
+        // @added ver 1.3 - exception fix
+        if (doc == null)
+            return;
 
-		Elements allResultsE = doc.select(a
-				.getString(R.string.googleResultParseRule));
+        Elements allResultsE = doc.select(a
+                .getString(R.string.googleResultParseRule));
 
-		// 14.02.2012 - ver 2.15 - google muutis oma urle
-		for (Element e : allResultsE) {
-			Log.d("MY", e.attr("href").replace("/url?q=", ""));
-			allResults.add(e.attr("href").replace("/url?q=", ""));
-			allAnchors.add(e.text());
+        // 14.02.2012 - ver 2.15 - google muutis oma urle
 
-		}
+        for (int i = 0; i < allResultsE.size(); i++) {
+            // for (Element e : allResultsE) {
+            Element e = allResultsE.get(i);
 
-		if (allResults.size() == 0) {
-			Log.e("MY", "downloaded allResults h3 first a is null");
-			keyword.newRank = -2;
-			return;
-		}
+            Log.i("MY", e.attr("href").replace("/url?q=", ""));
+            allResults.add(e.attr("href").replace("/url?q=", ""));
+            allAnchors.add(e.text());
 
-		removeNotValidUrls();
+        }
 
-	}
+        if (allResults.size() == 0) {
+            Log.e("MY", "downloaded allResults h3 first a is null");
+            keyword.newRank = -2;
+            return;
+        }
 
-	/**
-	 * @param allResults
-	 *            where to find
-	 * @param WEBSITE
-	 *            what to find
-	 */
-	public static Keyword getRanking(Keyword keyword, String WEBSITE) {
+        removeNotValidUrls();
 
-		if (keyword == null || allResults == null)
-			return null;
+    }
 
-		int numOfResults = allResults.size();
+    /**
+     * @param allResults where to find
+     * @param WEBSITE what to find
+     */
+    public static Keyword getRanking(Keyword keyword, String WEBSITE) {
 
-		Keyword result = new Keyword(keyword.keyword);
-		result.oldRank = keyword.oldRank;
-		result.id = keyword.id;
+        if (keyword == null || allResults == null)
+            return null;
 
-		for (int i = 0; i < numOfResults; i++) {
+        int numOfResults = allResults.size();
 
-			if (result.newRank != 0)
-				return result;
+        Keyword result = new Keyword(keyword.keyword);
+        result.oldRank = keyword.oldRank;
+        result.id = keyword.id;
 
-			String singleResultUrlModified = removePrefix(allResults.get(i));
+        for (int i = 0; i < numOfResults; i++) {
 
-			// second boolean is for subdomains. For example when person
-			// searches for wikipedia he probably wants to get the
-			// en.wikipedia.org etc
-			if (singleResultUrlModified.startsWith(WEBSITE + "/")
-					|| singleResultUrlModified.contains("." + WEBSITE + "/")) {
+            if (result.newRank != 0)
+                return result;
 
-				if (numOfResults <= DCOUNT) {
-					result.newRank = i + 1;
-				} else {
+            String singleResultUrlModified = removePrefix(allResults.get(i));
 
-					// WE HAVE TO JUSTIFY RANK
-					// there is a authority site with sub links somewhere
-					// probably
+            // second boolean is for subdomains. For example when person
+            // searches for wikipedia he probably wants to get the
+            // en.wikipedia.org etc
+            if (singleResultUrlModified.startsWith(WEBSITE + "/")
+                    || singleResultUrlModified.contains("." + WEBSITE + "/")) {
 
-					int overTheNormal = numOfResults - DCOUNT;
-					int newRank = i + 1 - overTheNormal;
+                if (numOfResults <= DCOUNT) {
+                    result.newRank = i + 1;
+                } else {
 
-					if (newRank <= 0)
-						newRank = 1;
+                    // WE HAVE TO JUSTIFY RANK
+                    // there is a authority site with sub links somewhere
+                    // probably
 
-					result.newRank = newRank;
-				}
+                    int overTheNormal = numOfResults - DCOUNT;
+                    int newRank = i + 1 - overTheNormal;
 
-				result.anchorText = allAnchors.get(i);
-				result.url = allResults.get(i);
+                    if (newRank <= 0)
+                        newRank = 1;
 
-			}
+                    result.newRank = newRank;
+                }
 
-			// flurry loging
-			if (numOfResults <= 95 || numOfResults >= 105) {
+                result.anchorText = allAnchors.get(i);
+                result.url = allResults.get(i);
 
-				Map<String, Integer> data = new HashMap<String, Integer>();
+            }
 
-				data.put("result count", numOfResults);
+            // flurry loging
+            if (numOfResults <= 95 || numOfResults >= 105) {
 
-				FlurryAgent.logEvent("DEBUG: parse count after invalid delete",
-						data);
-			}
+                Map<String, Integer> data = new HashMap<String, Integer>();
 
-		} // for links in keyword
+                data.put("result count", numOfResults);
 
-		// not ranked
-		if (result.newRank == 0)
-			result.newRank = -1;
+                FlurryAgent.logEvent("DEBUG: parse count after invalid delete",
+                        data);
+            }
 
-		return result;
+        } // for links in keyword
 
-	}
+        // not ranked
+        if (result.newRank == 0)
+            result.newRank = -1;
 
-	/**
-	 * Removes advertisements links, meaning all local links meaning all links
-	 * starting with /
-	 * 
-	 * @param allResults
-	 */
-	public static void removeNotValidUrls() {
+        return result;
 
-		for (int i = 0; i < allResults.size(); i++) {
+    }
 
-			if (allResults.get(i).startsWith("/")) {
-				Log.i("MY", "removed: " + allResults.get(i));
+    /**
+     * Removes advertisements links, meaning all local links meaning all links
+     * starting with /
+     * 
+     * @param allResults
+     */
+    public static void removeNotValidUrls() {
 
-				allResults.remove(i);
-				i--;
-			}
+        for (int i = 0; i < allResults.size(); i++) {
 
-		}
+            if (allResults.get(i).startsWith("/")) {
+                Log.i("MY", "removed: " + allResults.get(i));
 
-		if (allResults.size() != 100)
-			Log.w("MY",
-					"WARNING: results after internal link delete != 100, instead:"
-							+ allResults.size());
+                allResults.remove(i);
+                i--;
+            }
 
-	}
+        }
 
-	/**
-	 * Removes http, https and www. from the beginning and converts to lowercase
-	 * 
-	 * @param searchable
-	 * @return
-	 */
-	public static String removePrefix(String searchable) {
+        if (allResults.size() != 100)
+            Log.w("MY",
+                    "WARNING: results after internal link delete != 100, instead:"
+                            + allResults.size());
 
-		if (searchable == null)
-			return "";
+    }
 
-		String result = searchable.replace("https://", "").replace("http://",
-				"");
+    /**
+     * Removes http, https and www. from the beginning and converts to lowercase
+     * 
+     * @param searchable
+     * @return
+     */
+    public static String removePrefix(String searchable) {
 
-		if (result.startsWith("www."))
-			result = result.replace("www.", "");
+        if (searchable == null)
+            return "";
 
-		return result.toLowerCase();
-	}
+        String result = searchable.replace("https://", "").replace("http://",
+                "");
+
+        if (result.startsWith("www."))
+            result = result.replace("www.", "");
+
+        return result.toLowerCase();
+    }
 
 }
