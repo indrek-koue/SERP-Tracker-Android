@@ -75,6 +75,16 @@ public class AsyncDownloader extends
 
         for (int counter = 0; counter < keywords[0].size(); counter++) {
 
+            publishProgress(counter + 1);
+            
+            if (counter != 0)
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
             Keyword keyword = keywords[0].get(counter);
 
             if (!progressDialog.isShowing())
@@ -93,7 +103,7 @@ public class AsyncDownloader extends
             }
 
             // int progress = counter;
-            publishProgress(counter + 1);
+            //publishProgress(counter + 1);
 
         }
 
