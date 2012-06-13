@@ -6,13 +6,14 @@ import java.net.URLEncoder;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.HttpConnection.Response;
 import org.jsoup.nodes.Document;
 import android.app.Activity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
-import com.inc.im.serptrackerpremium.R;
+import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.Keyword;
 
 /**
@@ -33,6 +34,9 @@ public class Download {
     public static Document downloadAndGetH3FirstA(Activity a, Keyword keyword, int i, String ua) {
 
         if (keyword == null)
+            return null;
+
+        if (AsyncDownloader.banned)
             return null;
 
         Document doc = null;
@@ -97,7 +101,25 @@ public class Download {
             Document doc = null;
             try {
                 doc = con.get();
+
+                // Connection.Response r = con.execute();
+                //
+                // Log.d("MY", r.statusMessage() + " " + r.statusCode());
+                //
+                // if (r.statusCode() == 503) {
+                // // ypu have been banned, try agian later
+                //
+                // AsyncDownloader.banned = true;
+                //
+                // }
+
+                // doc = r.parse();
+
             } catch (Exception e) {
+
+                if (e.getMessage().startsWith("503"))
+                    AsyncDownloader.banned = true;
+
                 e.printStackTrace();
             }
 
