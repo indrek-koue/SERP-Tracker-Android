@@ -76,12 +76,11 @@ public class AsyncDownloader extends
         for (int counter = 0; counter < keywords[0].size(); counter++) {
 
             publishProgress(counter + 1);
-            
+
             if (counter != 0)
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
 
@@ -92,18 +91,6 @@ public class AsyncDownloader extends
 
             // download and parse h3first
             result.add(Parser.downloadAndParse(a, keyword, WEBSITE));
-
-//            Keyword updatedKeyword = Parser.getRanking(keyword, WEBSITE);
-
-//            if (updatedKeyword != null) {
-//                result.add(updatedKeyword);
-//            } else {
-//                // nothing found = add old back
-//                result.add(keyword);
-//            }
-
-            // int progress = counter;
-            //publishProgress(counter + 1);
 
         }
 
