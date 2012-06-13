@@ -12,7 +12,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
-import com.inc.im.serptracker.R;
+import com.inc.im.serptrackerpremium.R;
 import com.inc.im.serptracker.data.Keyword;
 
 /**
@@ -38,12 +38,12 @@ public class Download {
      * @param keyword used to generate URL for download
      * @return downloaded document from Google
      */
-    public static Document H3FirstA(Activity a, Keyword keyword) {
+    public static Document H3FirstA(Activity a, Keyword keyword, int i) {
 
         if (keyword == null)
             return null;
 
-        String result = "";
+        // String result = "";
 
         String uaSelector = PreferenceManager.getDefaultSharedPreferences(a)
                 .getString("prefUa", "Google Chrome");
@@ -64,50 +64,50 @@ public class Download {
 
         Log.i("MY", "UA: " + ua);
 
-        for (int i = 1; i < 11; i++) {
+        // for (int i = 1; i < 11; i++) {
 
-            Log.i("MY", "LOOP NR: " + i);
+        // Log.i("MY", "LOOP NR: " + i);
 
-            Document doc = null;
+        Document doc = null;
 
-            // try1
+        // try1
+        try {
+            // Thread.sleep(PAUSE1);
+            Log.i("MY", "try1");
+            doc = download(a, keyword, ua, i);
+
+        } catch (Exception e1) {
+            Log.e("MY", e1.toString());
+        }
+
+        // try 2
+        if (doc == null)
             try {
-                // Thread.sleep(PAUSE1);
-                Log.i("MY", "try1");
+                Log.i("MY", "try2");
+                Thread.sleep(PAUSE1);
                 doc = download(a, keyword, ua, i);
 
             } catch (Exception e1) {
                 Log.e("MY", e1.toString());
+
             }
 
-            // try 2
-            if (doc == null)
-                try {
-                    Log.i("MY", "try2");
-                    Thread.sleep(PAUSE1);
-                    doc = download(a, keyword, ua, i);
+        // try 3
+        if (doc == null)
+            try {
+                Log.i("MY", "try3");
+                Thread.sleep(PAUSE2);
+                doc = download(a, keyword, ua, i);
 
-                } catch (Exception e1) {
-                    Log.e("MY", e1.toString());
+            } catch (Exception e1) {
+                Log.e("MY", e1.toString());
 
-                }
+            }
 
-            // try 3
-            if (doc == null)
-                try {
-                    Log.i("MY", "try3");
-                    Thread.sleep(PAUSE2);
-                    doc = download(a, keyword, ua, i);
+        // result += doc.toString();
+        // }
 
-                } catch (Exception e1) {
-                    Log.e("MY", e1.toString());
-
-                }
-
-            result += doc.toString();
-        }
-
-        if (result.equals("")) {
+        if (doc == null) {
             Log.e("MY", "download is null FAILED DOWNLOAD (after 3 tries)");
             FlurryAgent.onEvent("FAILED DOWNLOAD (after 3 tries)");
 
@@ -116,7 +116,7 @@ public class Download {
             return null;
         }
 
-        return Jsoup.parse(result);
+        return doc;
     }
 
     private static Document download(Activity a, Keyword keyword, String ua, int pageNum)
