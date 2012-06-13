@@ -1,3 +1,4 @@
+
 package com.inc.im.serptracker;
 
 /* Switching between premium - free
@@ -28,96 +29,97 @@ import com.inc.im.serptracker.util.Util;
 
 public class MainActivity extends Activity {
 
-	private Boolean menuBarIsVisible = true;
-	private AdView adView;
+    private Boolean menuBarIsVisible = true;
+    private AdView adView;
 
-	@Override
-	public void onStart() {
-		super.onStart();
+    @Override
+    public void onStart() {
+        super.onStart();
 
-		if (new Boolean(getString(R.string.isPremium)))
-			FlurryAgent.onStartSession(this,
-					getString(R.string.flurry_api_key_premium));
-		else
-			FlurryAgent
-					.onStartSession(this, getString(R.string.flurry_api_key));
-	}
+        if (new Boolean(getString(R.string.isPremium)))
+            FlurryAgent.onStartSession(this,
+                    getString(R.string.flurry_api_key_premium));
+        else
+            FlurryAgent
+                    .onStartSession(this, getString(R.string.flurry_api_key));
+    }
 
-	@Override
-	public void onStop() {
-		super.onStop();
-		FlurryAgent.onEndSession(this);
-	}
+    @Override
+    public void onStop() {
+        super.onStop();
+        FlurryAgent.onEndSession(this);
+    }
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main_activity_layout);
+    
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main_activity_layout);
 
-		BugSenseHandler.setup(this, "dd278c2d");
+        BugSenseHandler.setup(this, "dd278c2d");
 
-		adView = Util.loadAdmob(this);
+        adView = Util.loadAdmob(this);
 
-		// init spinner + loads data form db
-		MainActivityHelper.initSpinner(this);
+        // init spinner + loads data form db
+        MainActivityHelper.initSpinner(this);
 
-		// bind buttons
-		bindRunButton();
-		MainActivityHelper.bindMenuBarButtons(this);
+        // bind buttons
+        bindRunButton();
+        MainActivityHelper.bindMenuBarButtons(this);
 
-	}
+    }
 
-	@Override
-	protected void onDestroy() {
-		if (adView != null)
-			adView.destroy();
-		super.onDestroy();
-	}
+    @Override
+    protected void onDestroy() {
+        if (adView != null)
+            adView.destroy();
+        super.onDestroy();
+    }
 
-	// @Override
-	// protected void onResume() {
-	// super.onResume();
-	//
-	// // load default value on spinner
-	// MainActivityHelper.initSpinner(this);
-	//
-	// // clear listview
-	// ((ListView) findViewById(R.id.listview_result))
-	// .setAdapter(new ArrayAdapter<String>(getBaseContext(),
-	// R.layout.main_activity_listview_item));
-	//
-	// }
+    // @Override
+    // protected void onResume() {
+    // super.onResume();
+    //
+    // // load default value on spinner
+    // MainActivityHelper.initSpinner(this);
+    //
+    // // clear listview
+    // ((ListView) findViewById(R.id.listview_result))
+    // .setAdapter(new ArrayAdapter<String>(getBaseContext(),
+    // R.layout.main_activity_listview_item));
+    //
+    // }
 
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-		// menu key hide/show menubar
+        // menu key hide/show menubar
 
-		LinearLayout lv = (LinearLayout) findViewById(R.id.menuBar);
+        LinearLayout lv = (LinearLayout) findViewById(R.id.menuBar);
 
-		if (keyCode == KeyEvent.KEYCODE_MENU)
-			if (menuBarIsVisible) {
-				lv.setVisibility(View.GONE);
-				menuBarIsVisible = false;
-			} else {
-				lv.setVisibility(View.VISIBLE);
-				menuBarIsVisible = true;
-			}
+        if (keyCode == KeyEvent.KEYCODE_MENU)
+            if (menuBarIsVisible) {
+                lv.setVisibility(View.GONE);
+                menuBarIsVisible = false;
+            } else {
+                lv.setVisibility(View.VISIBLE);
+                menuBarIsVisible = true;
+            }
 
-		return super.onKeyDown(keyCode, event);
-	}
+        return super.onKeyDown(keyCode, event);
+    }
 
-	private void bindRunButton() {
+    private void bindRunButton() {
 
-		((Button) findViewById(R.id.button_run))
-				.setOnClickListener(new View.OnClickListener() {
+        ((Button) findViewById(R.id.button_run))
+                .setOnClickListener(new View.OnClickListener() {
 
-					@Override
-					public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
 
-						MainActivityHelper.runButtonLogic(MainActivity.this);
-					}
-				});
-	}
+                        MainActivityHelper.runButtonLogic(MainActivity.this);
+                    }
+                });
+    }
 
 }
