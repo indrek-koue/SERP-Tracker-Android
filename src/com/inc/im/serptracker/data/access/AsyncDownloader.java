@@ -1,9 +1,13 @@
+
 package com.inc.im.serptracker.data.access;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import org.jsoup.select.Elements;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.inc.im.serptracker.R;
@@ -12,14 +16,10 @@ import com.inc.im.serptracker.adapters.MainActivityListAdapter;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.util.Parser;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.ListView;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
- * 
  * Downloads results from search engine asyncronosly and bind to elements. Uses
  * Download.java and Jsoup parsing engine.
  */
@@ -29,136 +29,143 @@ import android.widget.ListView;
 // -2 - error getting data
 
 public class AsyncDownloader extends
-		AsyncTask<ArrayList<Keyword>, Integer, ArrayList<Keyword>> {
+        AsyncTask<ArrayList<Keyword>, Integer, ArrayList<Keyword>> {
 
-	private Activity a;
-	public ListView lv;
-	private final String WEBSITE;
-	private ProgressDialog progressDialog;
+    private Activity a;
+    public ListView lv;
+    private final String WEBSITE;
+    private ProgressDialog progressDialog;
 
-	private int itemCount;
-	private long start;
+    private int itemCount;
+    private long start;
 
-	public AsyncDownloader(Activity a, ListView lv, String searchable) {
-		this.a = a;
-		this.lv = lv;
-		this.WEBSITE = Parser.removePrefix(searchable);
-	}
+    public AsyncDownloader(Activity a, ListView lv, String searchable) {
+        this.a = a;
+        this.lv = lv;
+        this.WEBSITE = Parser.removePrefix(searchable);
+    }
 
-	@Override
-	protected void onPreExecute() {
+    @Override
+    protected void onPreExecute() {
 
-		progressDialog = ProgressDialog.show(a,
-				a.getString(R.string.inspect_dialog_title),
-				a.getString(R.string.inspect_dialog_fist_msg), true, true);
+        Toast.makeText(
+                a,
+                PreferenceManager.getDefaultSharedPreferences(a)
+                        .getString("prefLocalize", "Google.com") + " - "
+                        + PreferenceManager.getDefaultSharedPreferences(a)
+                                .getString("prefUa", "Google Chrome"), Toast.LENGTH_LONG).show();
 
-		start = System.currentTimeMillis();
+        progressDialog = ProgressDialog.show(a,
+                a.getString(R.string.inspect_dialog_title),
+                a.getString(R.string.inspect_dialog_fist_msg), true, true);
 
-	}
+        start = System.currentTimeMillis();
 
-	@Override
-	protected ArrayList<Keyword> doInBackground(ArrayList<Keyword>... keywords) {
+    }
 
-		if (keywords == null || keywords.length == 0)
-			return null;
+    @Override
+    protected ArrayList<Keyword> doInBackground(ArrayList<Keyword>... keywords) {
 
-		// count items for the load screen
-		itemCount = keywords[0].size();
-		ArrayList<Keyword> result = new ArrayList<Keyword>();
+        if (keywords == null || keywords.length == 0)
+            return null;
 
-		for (int counter = 0; counter < keywords[0].size(); counter++) {
+        // count items for the load screen
+        itemCount = keywords[0].size();
+        ArrayList<Keyword> result = new ArrayList<Keyword>();
 
-			Keyword keyword = keywords[0].get(counter);
+        for (int counter = 0; counter < keywords[0].size(); counter++) {
 
-			if (!progressDialog.isShowing())
-				return null;
+            Keyword keyword = keywords[0].get(counter);
 
-			// download and parse h3first
-			Parser.parse(a, keyword);
+            if (!progressDialog.isShowing())
+                return null;
 
-			Keyword updatedKeyword = Parser.getRanking(keyword, WEBSITE);
+            // download and parse h3first
+            Parser.parse(a, keyword);
 
-			if (updatedKeyword != null) {
-				result.add(updatedKeyword);
-			} else {
-				// nothing found = add old back
-				result.add(keyword);
-			}
+            Keyword updatedKeyword = Parser.getRanking(keyword, WEBSITE);
 
-			// int progress = counter;
-			publishProgress(counter + 1);
+            if (updatedKeyword != null) {
+                result.add(updatedKeyword);
+            } else {
+                // nothing found = add old back
+                result.add(keyword);
+            }
 
-		}
+            // int progress = counter;
+            publishProgress(counter + 1);
 
-		flurryLogging(result);
+        }
 
-		return result;
+        flurryLogging(result);
 
-	}
+        return result;
 
-	@Override
-	protected void onPostExecute(ArrayList<Keyword> input) {
+    }
 
-		if (input == null)
-			return;
+    @Override
+    protected void onPostExecute(ArrayList<Keyword> input) {
 
-		// if progressdialog is canceled, dont show results
-		if (!progressDialog.isShowing())
-			return;
+        if (input == null)
+            return;
 
-		lv.setAdapter(new MainActivityListAdapter(a, input));
+        // if progressdialog is canceled, dont show results
+        if (!progressDialog.isShowing())
+            return;
 
-		// save new ranks
-		for (Keyword k : input)
-			if (!new DbAdapter(a).updateKeywordRank(k, k.newRank))
-				Log.e("MY", k.keyword + " save to db update failed");
+        lv.setAdapter(new MainActivityListAdapter(a, input));
 
-		progressDialog.dismiss();
+        // save new ranks
+        for (Keyword k : input)
+            if (!new DbAdapter(a).updateKeywordRank(k, k.newRank))
+                Log.e("MY", k.keyword + " save to db update failed");
 
-	}
+        progressDialog.dismiss();
 
-	@Override
-	protected void onProgressUpdate(Integer... values) {
+    }
 
-		String loaderValue = a.getString(R.string.keyword_) + " " + values[0]
-				+ "/" + itemCount;
+    @Override
+    protected void onProgressUpdate(Integer... values) {
 
-		progressDialog.setMessage(loaderValue);
+        String loaderValue = a.getString(R.string.keyword_) + " " + values[0]
+                + "/" + itemCount;
 
-	}
+        progressDialog.setMessage(loaderValue);
 
-	public void flurryLogging(ArrayList<Keyword> result) {
+    }
 
-		// ver 1.31 fix
-		if (result == null)
-			return;
+    public void flurryLogging(ArrayList<Keyword> result) {
 
-		String values = "";
-		for (Keyword k : result)
-			values += k.newRank + ":";
+        // ver 1.31 fix
+        if (result == null)
+            return;
 
-		HashMap<String, String> parameters = new HashMap<String, String>();
-		parameters.put("num of keywords", String.valueOf(itemCount));
-		parameters.put("total time",
-				String.valueOf(System.currentTimeMillis() - start));
+        String values = "";
+        for (Keyword k : result)
+            values += k.newRank + ":";
 
-		// ver 1.31 fix
-		if ((System.currentTimeMillis() - start) != 0 && itemCount != 0)
-			parameters.put(
-					"avg time per keyword",
-					String.valueOf((System.currentTimeMillis() - start)
-							/ itemCount));
+        HashMap<String, String> parameters = new HashMap<String, String>();
+        parameters.put("num of keywords", String.valueOf(itemCount));
+        parameters.put("total time",
+                String.valueOf(System.currentTimeMillis() - start));
 
-		parameters.put("results", values);
+        // ver 1.31 fix
+        if ((System.currentTimeMillis() - start) != 0 && itemCount != 0)
+            parameters.put(
+                    "avg time per keyword",
+                    String.valueOf((System.currentTimeMillis() - start)
+                            / itemCount));
 
-		FlurryAgent.onEvent("download", parameters);
-	}
+        parameters.put("results", values);
 
-	// public String removePrefix(String searchable) {
-	//
-	// String result = searchable.replace("http://", "").replace("www.", "");
-	//
-	// return result;
-	// }
+        FlurryAgent.onEvent("download", parameters);
+    }
+
+    // public String removePrefix(String searchable) {
+    //
+    // String result = searchable.replace("http://", "").replace("www.", "");
+    //
+    // return result;
+    // }
 
 }

@@ -2,11 +2,10 @@
 <resources>
 
     <string name="app_name">SEO SERP Tracker Premium</string>
- <!-- SEO SERP Tracker FREE | SEO SERP Tracker Premium -->
+   <!-- SEO SERP Tracker FREE | SEO SERP Tracker Premium -->
     <string name="isPremium">true</string>
     <string name="keywordLimit">7</string>
     <string name="profileLimit">3</string>
-    <string name="userAgent">Apache-HttpClient/UNAVAILABLE (java 1.4)</string>
     <string name="googleResultParseRule">h3 > a</string>
 
 </resources>
