@@ -15,7 +15,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
-import com.inc.im.serptracker.R;
+import com.inc.im.serptrackerpremium.R;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.access.Download;
 
@@ -37,43 +37,63 @@ public class Parser {
      * 
      * @param keyword - if parse fails save newrank -2
      * @param doc - find h3 > a in here
+     * @return
      * @return Elements of results
      */
-    public static void parse(Activity a, Keyword keyword) {
+    public static Keyword downloadAndParse(Activity a, Keyword keyword, String WEBSITE) {
 
-        Document doc = Download.H3FirstA(a, keyword);
+        // Document doc = Download.H3FirstA(a, keyword);
 
         allAnchors = new ArrayList<String>();
         allResults = new ArrayList<String>();
 
-        // @added ver 1.3 - exception fix
-        if (doc == null)
-            return;
+        for (int j = 1; j < 11; j++) {
+            Log.i("MY", "LOOP NR: " + j);
 
-        Elements allResultsE = doc.select(a
-                .getString(R.string.googleResultParseRule));
+            Document doc = Download.H3FirstA(a, keyword, j);
 
-        // 14.02.2012 - ver 2.15 - google muutis oma urle
+            // @added ver 1.3 - exception fix
+            // if (doc == null)
+            // return;
 
-        Log.i("MY", "ALL RESULT SIZE: " + allResultsE.size());
+            if (doc != null) {
+                Elements allResultsE = doc.select(a
+                        .getString(R.string.googleResultParseRule));
 
-        for (int i = 0; i < allResultsE.size(); i++) {
-            // for (Element e : allResultsE) {
-            Element e = allResultsE.get(i);
+                // Log.d("MY", "results parsed: " + allResultsE.size());
 
-            Log.i("MY", e.attr("href").replace("/url?q=", ""));
-            allResults.add(e.attr("href").replace("/url?q=", ""));
-            allAnchors.add(e.text());
+                // 14.02.2012 - ver 2.15 - google muutis oma urle
 
+                for (int i = 0; i < allResultsE.size(); i++) {
+                    // for (Element e : allResultsE) {
+                    Element e = allResultsE.get(i);
+
+                    Log.i("MY", e.attr("href").replace("/url?q=", ""));
+                    allResults.add(e.attr("href").replace("/url?q=", ""));
+                    allAnchors.add(e.text());
+
+                }
+            }
         }
+
+        Log.i("MY", "ALL RESULT SIZE: " + allResults.size());
 
         if (allResults.size() == 0) {
             Log.e("MY", "downloaded allResults h3 first a is null");
             keyword.newRank = -2;
-            return;
+            return keyword;
         }
 
         removeNotValidUrls();
+
+        Keyword updatedKeyword = Parser.getRanking(keyword, WEBSITE);
+
+        if (updatedKeyword != null) {
+            return updatedKeyword;
+        } else {
+            // nothing found = add old back
+            return keyword;
+        }
 
     }
 

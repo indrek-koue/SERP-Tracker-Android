@@ -10,7 +10,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
-import com.inc.im.serptracker.R;
+import com.inc.im.serptrackerpremium.R;
 import com.inc.im.serptracker.adapters.DbAdapter;
 import com.inc.im.serptracker.adapters.MainActivityListAdapter;
 import com.inc.im.serptracker.data.Keyword;
@@ -91,16 +91,16 @@ public class AsyncDownloader extends
                 return null;
 
             // download and parse h3first
-            Parser.parse(a, keyword);
+            result.add(Parser.downloadAndParse(a, keyword, WEBSITE));
 
-            Keyword updatedKeyword = Parser.getRanking(keyword, WEBSITE);
+//            Keyword updatedKeyword = Parser.getRanking(keyword, WEBSITE);
 
-            if (updatedKeyword != null) {
-                result.add(updatedKeyword);
-            } else {
-                // nothing found = add old back
-                result.add(keyword);
-            }
+//            if (updatedKeyword != null) {
+//                result.add(updatedKeyword);
+//            } else {
+//                // nothing found = add old back
+//                result.add(keyword);
+//            }
 
             // int progress = counter;
             //publishProgress(counter + 1);

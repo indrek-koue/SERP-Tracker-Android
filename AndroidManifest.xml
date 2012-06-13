@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.inc.im.serptracker"
+    package="com.inc.im.serptrackerpremium"
     android:installLocation="auto"
     android:versionCode="27"
     android:versionName="2.40" >
@@ -15,7 +15,7 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Holo" >
         <activity
-            android:name=".MainActivity"
+            android:name="com.inc.im.serptracker.MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name" >
             <intent-filter>
@@ -24,13 +24,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="InsertWebsiteActivity" >
+        <activity android:name="com.inc.im.serptracker.InsertWebsiteActivity" >
         </activity>
-        <activity android:name="PreferencesActivity" >
+        <activity android:name="com.inc.im.serptracker.PreferencesActivity" >
         </activity>
-        <activity android:name="ManageWebsitesActivity" >
+        <activity android:name="com.inc.im.serptracker.ManageWebsitesActivity" >
         </activity>
-        <activity android:name="AboutActivity" >
+        <activity android:name="com.inc.im.serptracker.AboutActivity" >
         </activity>
         <activity
             android:name="com.google.ads.AdActivity"
