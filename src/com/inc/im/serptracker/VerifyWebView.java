@@ -1,6 +1,6 @@
 package com.inc.im.serptracker;
 
-import com.inc.im.serptracker.R;
+import com.inc.im.serptrackerpremium.R;
 //package com.inc.im.serptrackerpremium;
 //
 //import java.io.UnsupportedEncodingException;
