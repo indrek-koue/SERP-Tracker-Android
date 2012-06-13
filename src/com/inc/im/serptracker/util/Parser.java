@@ -12,6 +12,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import android.app.Activity;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
@@ -27,8 +28,16 @@ import com.inc.im.serptracker.data.access.Download;
 
 public class Parser {
 
-    private static ArrayList<String> allAnchors;
-    private static ArrayList<String> allResults;
+    // private static ArrayList<String> allAnchors;
+    // private static ArrayList<String> allResults;
+
+    private final static String CHROME = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6";
+    private final static String FIREFOX = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20120427 Firefox/15.0a1";
+    private final static String EXPLORER = "Mozilla/5.0 (compatible; MSIE 10.6; Windows NT 6.1; Trident/5.0; InfoPath.2; SLCC1; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET CLR 2.0.50727) 3gpp-gba UNTRUSTED/1.0";
+    private final static String OPERA = "Opera/9.80 (Windows NT 6.1; U; es-ES) Presto/2.9.181 Version/12.00";
+    private final static String SAFARI = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/534.55.3 (KHTML, like Gecko) Version/5.1.3 Safari/534.53.10";
+    private final static String UNAVAILABLE = "Apache-HttpClient/UNAVAILABLE (java 1.4)";
+    private final static String EMPTY = "";
 
     private final static int DCOUNT = 100;
 
@@ -42,33 +51,24 @@ public class Parser {
      */
     public static Keyword downloadAndParse(Activity a, Keyword keyword, String WEBSITE) {
 
-        // Document doc = Download.H3FirstA(a, keyword);
+        String ua = getUserAgentStringFromPref(a);
 
-        allAnchors = new ArrayList<String>();
-        allResults = new ArrayList<String>();
+        ArrayList<String> allAnchors = new ArrayList<String>();
+        ArrayList<String> allResults = new ArrayList<String>();
 
         for (int j = 1; j < 11; j++) {
             Log.i("MY", "LOOP NR: " + j);
 
-            Document doc = Download.H3FirstA(a, keyword, j);
-
-            // @added ver 1.3 - exception fix
-            // if (doc == null)
-            // return;
+            Document doc = Download.downloadAndGetH3FirstA(a, keyword, j, ua);
 
             if (doc != null) {
                 Elements allResultsE = doc.select(a
                         .getString(R.string.googleResultParseRule));
 
-                // Log.d("MY", "results parsed: " + allResultsE.size());
-
-                // 14.02.2012 - ver 2.15 - google muutis oma urle
-
                 for (int i = 0; i < allResultsE.size(); i++) {
-                    // for (Element e : allResultsE) {
                     Element e = allResultsE.get(i);
 
-                    Log.i("MY", e.attr("href").replace("/url?q=", ""));
+                    // Log.i("MY", e.attr("href").replace("/url?q=", ""));
                     allResults.add(e.attr("href").replace("/url?q=", ""));
                     allAnchors.add(e.text());
 
@@ -76,7 +76,13 @@ public class Parser {
             }
         }
 
-        Log.i("MY", "ALL RESULT SIZE: " + allResults.size());
+        allResults = removeNotValidUrls(allResults);
+
+        // print out for logging
+        int i = 0;
+        for (String s : allResults)
+            Log.i("MY", i++ + ". " + s);
+        Log.i("MY", keyword.keyword + " RESULTS: " + allResults.size());
 
         if (allResults.size() == 0) {
             Log.e("MY", "downloaded allResults h3 first a is null");
@@ -84,9 +90,10 @@ public class Parser {
             return keyword;
         }
 
-        removeNotValidUrls();
+        // removeNotValidUrls();
 
-        Keyword updatedKeyword = Parser.getRanking(keyword, WEBSITE);
+        Keyword updatedKeyword = Parser.getRanking(keyword, WEBSITE,
+                allResults, allAnchors);
 
         if (updatedKeyword != null) {
             return updatedKeyword;
@@ -97,11 +104,37 @@ public class Parser {
 
     }
 
+    private static String getUserAgentStringFromPref(Activity a) {
+
+        String uaSelector = PreferenceManager.getDefaultSharedPreferences(a)
+                .getString("prefUa", "Google Chrome");
+
+        String ua = CHROME;
+        if (uaSelector.equals("Firefox"))
+            ua = FIREFOX;
+        else if (uaSelector.equals("Internet Explorer"))
+            ua = EXPLORER;
+        else if (uaSelector.equals("Opera"))
+            ua = OPERA;
+        else if (uaSelector.equals("Safari"))
+            ua = SAFARI;
+        else if (uaSelector.equals("Unavailable"))
+            ua = UNAVAILABLE;
+        else if (uaSelector.equals("Empty"))
+            ua = EMPTY;
+
+        Log.i("MY", "UA: " + ua);
+
+        return ua;
+
+    }
+
     /**
      * @param allResults where to find
      * @param WEBSITE what to find
      */
-    public static Keyword getRanking(Keyword keyword, String WEBSITE) {
+    public static Keyword getRanking(Keyword keyword, String WEBSITE, ArrayList<String> allResults,
+            ArrayList<String> allAnchors) {
 
         if (keyword == null || allResults == null)
             return null;
@@ -148,15 +181,15 @@ public class Parser {
             }
 
             // flurry loging
-            if (numOfResults <= 95 || numOfResults >= 105) {
-
-                Map<String, Integer> data = new HashMap<String, Integer>();
-
-                data.put("result count", numOfResults);
-
-                FlurryAgent.logEvent("DEBUG: parse count after invalid delete",
-                        data);
-            }
+            // if (numOfResults <= 95 || numOfResults >= 105) {
+            //
+            // Map<String, Integer> data = new HashMap<String, Integer>();
+            //
+            // data.put("result count", numOfResults);
+            //
+            // FlurryAgent.logEvent("DEBUG: parse count after invalid delete",
+            // data);
+            // }
 
         } // for links in keyword
 
@@ -174,7 +207,7 @@ public class Parser {
      * 
      * @param allResults
      */
-    public static void removeNotValidUrls() {
+    public static ArrayList<String> removeNotValidUrls(ArrayList<String> allResults) {
 
         for (int i = 0; i < allResults.size(); i++) {
 
@@ -191,6 +224,8 @@ public class Parser {
             Log.w("MY",
                     "WARNING: results after internal link delete != 100, instead:"
                             + allResults.size());
+
+        return allResults;
 
     }
 
