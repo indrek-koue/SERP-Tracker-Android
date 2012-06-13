@@ -11,19 +11,16 @@ package com.inc.im.serptracker;
  */
 
 import android.app.Activity;
-import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.bugsense.trace.BugSenseHandler;
 import com.flurry.android.FlurryAgent;
 import com.google.ads.AdView;
-import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.util.MainActivityHelper;
 import com.inc.im.serptracker.util.Util;
 
@@ -50,7 +47,6 @@ public class MainActivity extends Activity {
         FlurryAgent.onEndSession(this);
     }
 
-    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

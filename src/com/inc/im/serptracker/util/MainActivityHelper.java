@@ -153,8 +153,8 @@ public class MainActivityHelper {
                                     dialog.dismiss();
                                     Intent intent = new Intent(
                                             Intent.ACTION_VIEW);
-                                    intent.setData(Uri.parse(a
-                                            .getString(R.string.market_details_id_com_inc_im_serptracker)));
+                                    intent.setData(Uri.parse("market://details?id="
+                                            + a.getPackageName()));
                                     a.startActivity(intent);
 
                                     FlurryAgent.onEvent("rate us dialog: YES");
