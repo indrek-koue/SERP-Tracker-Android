@@ -10,7 +10,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
-import com.inc.im.serptrackerpremium.R;
+import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.adapters.DbAdapter;
 import com.inc.im.serptracker.adapters.MainActivityListAdapter;
 import com.inc.im.serptracker.data.Keyword;
@@ -35,6 +35,7 @@ public class AsyncDownloader extends
     public ListView lv;
     private final String WEBSITE;
     private ProgressDialog progressDialog;
+    public static boolean banned = false;
 
     private int itemCount;
     private long start;
@@ -66,6 +67,8 @@ public class AsyncDownloader extends
     @Override
     protected ArrayList<Keyword> doInBackground(ArrayList<Keyword>... keywords) {
 
+        banned = false;
+
         if (keywords == null || keywords.length == 0)
             return null;
 
@@ -74,6 +77,9 @@ public class AsyncDownloader extends
         ArrayList<Keyword> result = new ArrayList<Keyword>();
 
         for (int counter = 0; counter < keywords[0].size(); counter++) {
+
+            if (banned == true)
+                return null;
 
             publishProgress(counter + 1);
 
@@ -102,6 +108,10 @@ public class AsyncDownloader extends
 
     @Override
     protected void onPostExecute(ArrayList<Keyword> input) {
+
+        if (banned == true)
+            Toast.makeText(a, "You have been banned from google. Please try again later.",
+                    Toast.LENGTH_LONG).show();
 
         if (input == null)
             return;
