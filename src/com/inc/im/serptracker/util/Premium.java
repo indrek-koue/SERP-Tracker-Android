@@ -52,6 +52,10 @@ public class Premium {
                 Context con = a.getBaseContext();
 
                 // -1 because first is default text
+                if (new DbAdapter(con)
+                        .loadAllProfiles().size() <= spinnerSelectedItemIndex - 1)
+                    return;
+
                 final UserProfile selectedUser = new DbAdapter(con)
                         .loadAllProfiles().get(spinnerSelectedItemIndex - 1);
 
