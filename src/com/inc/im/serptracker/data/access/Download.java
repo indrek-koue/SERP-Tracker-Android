@@ -13,7 +13,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
-import com.inc.im.serptrackerpremium.R;
+import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.Keyword;
 
 /**
@@ -88,8 +88,13 @@ public class Download {
     private static Document download(Activity a, Keyword keyword, String ua, int pageNum)
             throws Exception {
 
-        String httpQuery = generateEscapedQueryString(a, keyword) + "&start=" + pageNum;
+        String httpQuery = "";
 
+        if (pageNum == 0) {
+            httpQuery = generateEscapedQueryString(a, keyword);
+        } else {
+            httpQuery = generateEscapedQueryString(a, keyword) + "&start=" + pageNum * 10;
+        }
         Log.i("MY", "QUERY: " + httpQuery);
 
         // v. 2.11 fix
@@ -101,19 +106,6 @@ public class Download {
             Document doc = null;
             try {
                 doc = con.get();
-
-                // Connection.Response r = con.execute();
-                //
-                // Log.d("MY", r.statusMessage() + " " + r.statusCode());
-                //
-                // if (r.statusCode() == 503) {
-                // // ypu have been banned, try agian later
-                //
-                // AsyncDownloader.banned = true;
-                //
-                // }
-
-                // doc = r.parse();
 
             } catch (Exception e) {
 
