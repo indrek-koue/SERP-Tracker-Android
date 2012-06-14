@@ -17,6 +17,7 @@ import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
 import com.inc.im.serptrackerpremium.R;
+import com.inc.im.serptracker.adapters.DbAdapter;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.access.Download;
 
@@ -83,6 +84,11 @@ public class Parser {
         for (String s : allResults)
             Log.i("MY", i++ + ". " + s);
         Log.i("MY", keyword.keyword + " RESULTS: " + allResults.size());
+
+        long numOfRowsInserted = new DbAdapter(a).insertRawData(keyword.id, allResults);
+
+        Log.i("MY", "number of extra raw rows inserted (note: 100urls per 1 row): "
+                + numOfRowsInserted);
 
         if (allResults.size() == 0) {
             Log.e("MY", "downloaded allResults h3 first a is null");

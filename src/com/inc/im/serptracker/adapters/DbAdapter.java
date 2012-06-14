@@ -1,3 +1,4 @@
+
 package com.inc.im.serptracker.adapters;
 
 import java.util.ArrayList;
@@ -19,501 +20,566 @@ import android.util.Log;
  * class
  * 
  * @see documentation file for database schema
- * 
  */
 
 public class DbAdapter {
 
-	private SQLiteDatabase mDb;
-	private static Context mCtx;
-	private DatabaseHelper mDbHelper;
+    private SQLiteDatabase mDb;
+    private static Context mCtx;
+    private DatabaseHelper mDbHelper;
+
+    private static final String DATABASE_NAME = "appdata";
+    private static final int DATABASE_VERSION = 2;
+
+    // user url
+    private static final String TABLE_PROFILE = "profile";
+    private static final String KEY_PROFILE_TABLE_ID = "_id";
+    private static final String KEY_PROFILE_TABLE_URL = "url";
 
-	private static final String DATABASE_NAME = "appdata";
-	private static final int DATABASE_VERSION = 2;
-	private static final String TABLE_PROFILE = "profile";
-	private static final String KEY_PROFILE_TABLE_ID = "_id";
-	private static final String KEY_PROFILE_TABLE_URL = "url";
+    // user keywords
+    private static final String TABLE_KEYWORDS = "profile_keywords";
+    private static final String KEY_KEYWORDS_TABLE_ID = "_id";
+    private static final String KEY_KEYWORDS_TABLE_KEYWORD = "keyword";
+    private static final String KEY_KEYWORDS_TABLE_POSTION = "position";
+    private static final String KEY_KEYWORDS_TABLE_PARENTID = "parentid";
 
-	private static final String TABLE_KEYWORDS = "profile_keywords";
-	private static final String KEY_KEYWORDS_TABLE_ID = "_id";
-	private static final String KEY_KEYWORDS_TABLE_KEYWORD = "keyword";
-	private static final String KEY_KEYWORDS_TABLE_POSTION = "position";
-	private static final String KEY_KEYWORDS_TABLE_PARENTID = "parentid";
+    // keywords extra premium: anchor/url
+    private static final String TABLE_EXTRA = "profile_keywords_extra";
+    private static final String TABLE_ID = "_id";
+    private static final String KEY_EXTRA_PARENTID = "parentid";
+    private static final String KEY_EXTRA_ANCHOR = "anchor";
+    private static final String KEY_EXTRA_URL = "url";
 
-	private static final String TABLE_EXTRA = "profile_keywords_extra";
-	private static final String TABLE_ID = "_id";
-	private static final String KEY_EXTRA_PARENTID = "parentid";
-	private static final String KEY_EXTRA_ANCHOR = "anchor";
-	private static final String KEY_EXTRA_URL = "url";
+    // keywords extra premium: raw data
+    private static final String TABLE_EXTRA_RAW = "profile_keywords_extra_raw";
+    private static final String TABLE_EXTRA_RAW_ID = "_id";
+    private static final String TABLE_EXTRA_RAW_PARENTID = "parentid";
+    private static final String TABLE_EXTRA_RAW_ENTRY = "entry";
 
-	private static final String PROFILE_TABLE_CREATE = "CREATE TABLE "
-			+ TABLE_PROFILE + " (" + KEY_PROFILE_TABLE_ID
-			+ " INTEGER PRIMARY KEY, " + KEY_PROFILE_TABLE_URL
-			+ " TEXT NOT NULL);";
+    private static final String PROFILE_TABLE_CREATE = "CREATE TABLE "
+            + TABLE_PROFILE + " (" + KEY_PROFILE_TABLE_ID
+            + " INTEGER PRIMARY KEY, " + KEY_PROFILE_TABLE_URL
+            + " TEXT NOT NULL);";
 
-	private static final String KEYWORDS_TABLE_CREATE = "CREATE TABLE "
-			+ TABLE_KEYWORDS + " (" + KEY_KEYWORDS_TABLE_ID
-			+ " INTEGER PRIMARY KEY, " + KEY_KEYWORDS_TABLE_KEYWORD
-			+ " TEXT NOT NULL, " + KEY_KEYWORDS_TABLE_POSTION + " INTEGER, "
-			+ KEY_KEYWORDS_TABLE_PARENTID + " INTEGER NOT NULL);";
+    private static final String KEYWORDS_TABLE_CREATE = "CREATE TABLE "
+            + TABLE_KEYWORDS + " (" + KEY_KEYWORDS_TABLE_ID
+            + " INTEGER PRIMARY KEY, " + KEY_KEYWORDS_TABLE_KEYWORD
+            + " TEXT NOT NULL, " + KEY_KEYWORDS_TABLE_POSTION + " INTEGER, "
+            + KEY_KEYWORDS_TABLE_PARENTID + " INTEGER NOT NULL);";
 
-	private static final String EXTRA_TABLE_CREATE = String
-			.format("CREATE TABLE %s ( %s INTEGER PRIMARY KEY, %s INTEGER NOT NULL,  %s TEXT NOT NULL, %s TEXT NOT NULL);",
-					TABLE_EXTRA, TABLE_ID, KEY_EXTRA_PARENTID,
-					KEY_EXTRA_ANCHOR, KEY_EXTRA_URL);
+    private static final String EXTRA_TABLE_CREATE = String
+            .format("CREATE TABLE %s ( %s INTEGER PRIMARY KEY, %s INTEGER NOT NULL,  %s TEXT NOT NULL, %s TEXT NOT NULL);",
+                    TABLE_EXTRA, TABLE_ID, KEY_EXTRA_PARENTID,
+                    KEY_EXTRA_ANCHOR, KEY_EXTRA_URL);
 
-	public DbAdapter(Context ctx) {
-		DbAdapter.mCtx = ctx;
-	}
+    private static final String TABLE_EXTRA_RAW_CREATE = String
+            .format("CREATE TABLE %s ( %s INTEGER PRIMARY KEY, %s INTEGER NOT NULL,  %s TEXT NOT NULL);",
+                    TABLE_EXTRA_RAW, TABLE_EXTRA_RAW_ID, TABLE_EXTRA_RAW_PARENTID,
+                    TABLE_EXTRA_RAW_ENTRY);
 
-	public DbAdapter open() throws SQLException {
-		mDbHelper = new DatabaseHelper(mCtx);
-		mDb = mDbHelper.getWritableDatabase();
-		return this;
-	}
+    public DbAdapter(Context ctx) {
+        DbAdapter.mCtx = ctx;
+    }
 
-	public void close() {
+    public DbAdapter open() throws SQLException {
+        mDbHelper = new DatabaseHelper(mCtx);
+        mDb = mDbHelper.getWritableDatabase();
+        return this;
+    }
 
-		if (mDbHelper != null)
-			mDbHelper.close();
-	}
+    public void close() {
 
-	public void addExtraToKeyword(Keyword k) {
+        if (mDbHelper != null)
+            mDbHelper.close();
+    }
 
-		// dont add extras if keyword extra doesent exist, -1 = not ranked, -2 =
-		// error, 0 = just added
-		if (k == null || k.newRank == -1 || k.newRank == -2 || k.newRank == 0)
-			return;
+    public void addExtraToKeyword(Keyword k) {
 
-		deleteFromExtrasTableById(k.id);
+        // dont add extras if keyword extra doesent exist, -1 = not ranked, -2 =
+        // error, 0 = just added
+        if (k == null || k.newRank == -1 || k.newRank == -2 || k.newRank == 0)
+            return;
 
-		Log.d("MY", "ADD extra:" + k.keyword + " anchor:" + k.anchorText
-				+ " url:" + k.url);
+        deleteFromExtrasTableById(k.id);
 
-		ContentValues initialValues = new ContentValues();
-		initialValues.put(KEY_EXTRA_PARENTID, k.id);
-		initialValues.put(KEY_EXTRA_ANCHOR, k.anchorText);
-		initialValues.put(KEY_EXTRA_URL, k.url);
+        Log.d("MY", "ADD extra:" + k.keyword + " anchor:" + k.anchorText
+                + " url:" + k.url);
 
-		if (mDb.insert(TABLE_EXTRA, null, initialValues) == -1)
-			Log.e("MY", "extra insert failed: " + k.keyword);
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(KEY_EXTRA_PARENTID, k.id);
+        initialValues.put(KEY_EXTRA_ANCHOR, k.anchorText);
+        initialValues.put(KEY_EXTRA_URL, k.url);
 
-	}
+        if (mDb.insert(TABLE_EXTRA, null, initialValues) == -1)
+            Log.e("MY", "extra insert failed: " + k.keyword);
 
-	public void deleteAllFromExtrasTable(int userprofileId) {
+    }
 
-		ArrayList<UserProfile> all = loadAllProfiles();
+    public void deleteAllFromExtrasTable(int userprofileId) {
 
-		open();
+        ArrayList<UserProfile> all = loadAllProfiles();
 
-		for (UserProfile u : all)
-			if (u.id == userprofileId)
-				for (Keyword k : u.keywords)
-					deleteFromExtrasTableById(k.id);
+        open();
 
-		close();
-	}
+        for (UserProfile u : all)
+            if (u.id == userprofileId)
+                for (Keyword k : u.keywords)
+                    deleteFromExtrasTableById(k.id);
 
-	private Boolean deleteFromExtrasTableById(int keywordId) {
+        close();
+    }
 
-		int rowsAff = mDb.delete(TABLE_EXTRA, KEY_EXTRA_PARENTID + "="
-				+ keywordId, null);
+    private Boolean deleteFromExtrasTableById(int keywordId) {
 
-		return rowsAff != 0 ? true : false;
+        int rowsAff = mDb.delete(TABLE_EXTRA, KEY_EXTRA_PARENTID + "="
+                + keywordId, null);
 
-	}
+        return rowsAff != 0 ? true : false;
 
-	// private Boolean deleteFromExtrasTableByParentParentId(int id) {
-	//
-	// int rowsAff = mDb.delete(TABLE_EXTRA, KEY_EXTRA_PARENTID + "="
-	// + keywordId, null);
-	//
-	// return rowsAff != 0 ? true : false;
-	//
-	// }
+    }
 
-	public Boolean updateProfile(UserProfile profile) {
+    public Boolean updateProfile(UserProfile profile) {
 
-		if (profile == null || profile.url == null || profile.id == 0
-				|| profile.keywords.size() <= 0)
-			return false;
+        if (profile == null || profile.url == null || profile.id == 0
+                || profile.keywords.size() <= 0)
+            return false;
 
-		Log.i("MY", "UPDATE PROFILE " + profile.url);
+        Log.i("MY", "UPDATE PROFILE " + profile.url);
 
-		Boolean headerUpdateIsSuccess = false;
-		Boolean keywordUpdateIsSuccess = false;
-		Boolean keywordRankResetIsSuccess = false;
+        Boolean headerUpdateIsSuccess = false;
+        Boolean keywordUpdateIsSuccess = false;
+        Boolean keywordRankResetIsSuccess = false;
 
-		int idToUpdate = profile.id;
+        int idToUpdate = profile.id;
 
-		open();
+        open();
 
-		// insert header
-		ContentValues initialValues = new ContentValues();
-		initialValues.put(KEY_PROFILE_TABLE_URL, profile.url);
-		int numOfRowsAf = mDb.update(TABLE_PROFILE, initialValues,
-				KEY_PROFILE_TABLE_ID + " = " + idToUpdate, null);
+        // insert header
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(KEY_PROFILE_TABLE_URL, profile.url);
+        int numOfRowsAf = mDb.update(TABLE_PROFILE, initialValues,
+                KEY_PROFILE_TABLE_ID + " = " + idToUpdate, null);
 
-		headerUpdateIsSuccess = numOfRowsAf != 1 ? false : true;
+        headerUpdateIsSuccess = numOfRowsAf != 1 ? false : true;
 
-		// delete old keywords
-		numOfRowsAf = mDb.delete(TABLE_KEYWORDS, KEY_KEYWORDS_TABLE_PARENTID
-				+ " = " + idToUpdate, null);
+        // delete old keywords
+        numOfRowsAf = mDb.delete(TABLE_KEYWORDS, KEY_KEYWORDS_TABLE_PARENTID
+                + " = " + idToUpdate, null);
 
-		for (Keyword keyword : profile.keywords) {
+        for (Keyword keyword : profile.keywords) {
 
-			// insert keywords
-			ContentValues initialValuesKeywords = new ContentValues();
-			initialValuesKeywords.put(KEY_KEYWORDS_TABLE_KEYWORD,
-					keyword.keyword);
-			initialValuesKeywords.put(KEY_KEYWORDS_TABLE_PARENTID, idToUpdate);
+            // insert keywords
+            ContentValues initialValuesKeywords = new ContentValues();
+            initialValuesKeywords.put(KEY_KEYWORDS_TABLE_KEYWORD,
+                    keyword.keyword);
+            initialValuesKeywords.put(KEY_KEYWORDS_TABLE_PARENTID, idToUpdate);
 
-			Long l = mDb.insert(TABLE_KEYWORDS, null, initialValuesKeywords);
-			keywordUpdateIsSuccess = l == -1 ? false : true;
+            Long l = mDb.insert(TABLE_KEYWORDS, null, initialValuesKeywords);
+            keywordUpdateIsSuccess = l == -1 ? false : true;
 
-			// reset keyword ranking values
-			ContentValues val = new ContentValues();
-			val.put(KEY_KEYWORDS_TABLE_POSTION, 0);
-			int rowsAff = mDb.update(TABLE_KEYWORDS, val,
-					KEY_KEYWORDS_TABLE_PARENTID + " = " + profile.id, null);
-			keywordRankResetIsSuccess = rowsAff != 0 ? true : false;
+            // reset keyword ranking values
+            ContentValues val = new ContentValues();
+            val.put(KEY_KEYWORDS_TABLE_POSTION, 0);
+            int rowsAff = mDb.update(TABLE_KEYWORDS, val,
+                    KEY_KEYWORDS_TABLE_PARENTID + " = " + profile.id, null);
+            keywordRankResetIsSuccess = rowsAff != 0 ? true : false;
 
-			addExtraToKeyword(keyword);
+            addExtraToKeyword(keyword);
 
-		}
+        }
 
-		close();
+        close();
 
-		return (headerUpdateIsSuccess && keywordUpdateIsSuccess && keywordRankResetIsSuccess);
+        return (headerUpdateIsSuccess && keywordUpdateIsSuccess && keywordRankResetIsSuccess);
 
-	}
+    }
 
-	public Boolean insertProfile(UserProfile profile) {
+    public Boolean insertProfile(UserProfile profile) {
 
-		if (profile == null)
-			return false;
+        if (profile == null)
+            return false;
 
-		Log.i("MY", "INSERT PROFILE " + profile.url);
+        Log.i("MY", "INSERT PROFILE " + profile.url);
 
-		Boolean headerInsertIsSuccess = false;
-		Boolean keywordInsertIsSuccess = false;
+        Boolean headerInsertIsSuccess = false;
+        Boolean keywordInsertIsSuccess = false;
 
-		Long parentId = 0l;
+        Long parentId = 0l;
 
-		open();
+        open();
 
-		if (profile != null && profile.url != null) {
+        if (profile != null && profile.url != null) {
 
-			// insert header
-			ContentValues initialValues = new ContentValues();
-			initialValues.put(KEY_PROFILE_TABLE_URL, profile.url);
-			parentId = mDb.insert(TABLE_PROFILE, null, initialValues);
+            // insert header
+            ContentValues initialValues = new ContentValues();
+            initialValues.put(KEY_PROFILE_TABLE_URL, profile.url);
+            parentId = mDb.insert(TABLE_PROFILE, null, initialValues);
 
-			headerInsertIsSuccess = parentId == -1 ? false : true;
+            headerInsertIsSuccess = parentId == -1 ? false : true;
 
-			// insert keywords
-			for (Keyword keyword : profile.keywords) {
+            // insert keywords
+            for (Keyword keyword : profile.keywords) {
 
-				ContentValues initialValuesKeywords = new ContentValues();
-				initialValuesKeywords.put(KEY_KEYWORDS_TABLE_KEYWORD,
-						keyword.keyword);
-				initialValuesKeywords
-						.put(KEY_KEYWORDS_TABLE_PARENTID, parentId);
+                ContentValues initialValuesKeywords = new ContentValues();
+                initialValuesKeywords.put(KEY_KEYWORDS_TABLE_KEYWORD,
+                        keyword.keyword);
+                initialValuesKeywords
+                        .put(KEY_KEYWORDS_TABLE_PARENTID, parentId);
 
-				Long l = mDb
-						.insert(TABLE_KEYWORDS, null, initialValuesKeywords);
+                Long l = mDb
+                        .insert(TABLE_KEYWORDS, null, initialValuesKeywords);
 
-				keywordInsertIsSuccess = l == -1 ? false : true;
+                keywordInsertIsSuccess = l == -1 ? false : true;
 
-			}
-		}
+            }
+        }
 
-		close();
+        close();
 
-		return (headerInsertIsSuccess && keywordInsertIsSuccess);
-	}
+        return (headerInsertIsSuccess && keywordInsertIsSuccess);
+    }
 
-	public Boolean deleteProfile(UserProfile profile) {
+    public Boolean deleteProfile(UserProfile profile) {
 
-		if (profile == null)
-			return false;
+        if (profile == null)
+            return false;
 
-		Log.i("MY", "DELETE PROFILE " + profile.url);
+        Log.i("MY", "DELETE PROFILE " + profile.url);
 
-		open();
+        open();
 
-		// delete profile
-		int numOfRowsAfProfile = mDb.delete(TABLE_PROFILE, KEY_PROFILE_TABLE_ID
-				+ " = " + profile.id, null);
+        // delete profile
+        int numOfRowsAfProfile = mDb.delete(TABLE_PROFILE, KEY_PROFILE_TABLE_ID
+                + " = " + profile.id, null);
 
-		// delete all keywords
-		int numOfRowsAfKeywords = mDb.delete(TABLE_KEYWORDS,
-				KEY_KEYWORDS_TABLE_PARENTID + " = " + profile.id, null);
+        // delete all keywords
+        int numOfRowsAfKeywords = mDb.delete(TABLE_KEYWORDS,
+                KEY_KEYWORDS_TABLE_PARENTID + " = " + profile.id, null);
 
-		for (Keyword k : profile.keywords)
-			deleteFromExtrasTableById(k.id);
+        for (Keyword k : profile.keywords)
+            deleteFromExtrasTableById(k.id);
 
-		close();
+        close();
 
-		Boolean profileDeleteSuccess = numOfRowsAfProfile != 0 ? true : false;
-		Boolean keywordDeleteSuccess = numOfRowsAfKeywords != 0 ? true : false;
+        Boolean profileDeleteSuccess = numOfRowsAfProfile != 0 ? true : false;
+        Boolean keywordDeleteSuccess = numOfRowsAfKeywords != 0 ? true : false;
 
-		return (profileDeleteSuccess && keywordDeleteSuccess);
-	}
+        return (profileDeleteSuccess && keywordDeleteSuccess);
+    }
 
-	public Boolean updateKeywordRank(Keyword k, int newRank) {
+    public Boolean updateKeywordRank(Keyword k, int newRank) {
 
-		if (k == null || newRank == 0)
-			return false;
+        if (k == null || newRank == 0)
+            return false;
 
-		open();
+        open();
 
-		ContentValues val = new ContentValues();
-		val.put(KEY_KEYWORDS_TABLE_POSTION, newRank);
+        ContentValues val = new ContentValues();
+        val.put(KEY_KEYWORDS_TABLE_POSTION, newRank);
 
-		// save new rank
-		int numOfRowsAf = mDb.update(TABLE_KEYWORDS, val, KEY_KEYWORDS_TABLE_ID
-				+ " = " + k.id, null);
+        // save new rank
+        int numOfRowsAf = mDb.update(TABLE_KEYWORDS, val, KEY_KEYWORDS_TABLE_ID
+                + " = " + k.id, null);
 
-		// save url/anchor
-		addExtraToKeyword(k);
+        // save url/anchor
+        addExtraToKeyword(k);
 
-		close();
+        close();
 
-		return numOfRowsAf != 0 ? true : false;
+        return numOfRowsAf != 0 ? true : false;
 
-	}
+    }
 
-	public ArrayList<UserProfile> loadAllProfiles() {
+    public ArrayList<UserProfile> loadAllProfiles() {
 
-		ArrayList<UserProfile> profiles = new ArrayList<UserProfile>();
+        ArrayList<UserProfile> profiles = new ArrayList<UserProfile>();
 
-		open();
+        open();
 
-		// creating extra table if not exists because had that
-		// implemented/canceled in previous version
-		mDb.execSQL("CREATE TABLE IF NOT EXISTS "
-				+ String.format(
-						"%s ( %s INTEGER PRIMARY KEY, %s INTEGER NOT NULL,  %s TEXT NOT NULL, %s TEXT NOT NULL);",
-						TABLE_EXTRA, TABLE_ID, KEY_EXTRA_PARENTID,
-						KEY_EXTRA_ANCHOR, KEY_EXTRA_URL));
+        // creating extra table if not exists because had that
+        // implemented/canceled in previous version
+        mDb.execSQL("CREATE TABLE IF NOT EXISTS "
+                + String.format(
+                        "%s ( %s INTEGER PRIMARY KEY, %s INTEGER NOT NULL,  %s TEXT NOT NULL, %s TEXT NOT NULL);",
+                        TABLE_EXTRA, TABLE_ID, KEY_EXTRA_PARENTID,
+                        KEY_EXTRA_ANCHOR, KEY_EXTRA_URL));
 
-		Cursor profileHeaderCur = mDb.query(TABLE_PROFILE, null, null, null,
-				null, null, null);
+        Cursor profileHeaderCur = mDb.query(TABLE_PROFILE, null, null, null,
+                null, null, null);
 
-		if (profileHeaderCur != null && profileHeaderCur.getCount() != 0) {
+        if (profileHeaderCur != null && profileHeaderCur.getCount() != 0) {
 
-			profileHeaderCur.moveToFirst();
+            profileHeaderCur.moveToFirst();
 
-			do {
+            do {
 
-				int profileId = profileHeaderCur.getInt(profileHeaderCur
-						.getColumnIndex(KEY_PROFILE_TABLE_ID));
-				String profileUrl = profileHeaderCur.getString(profileHeaderCur
-						.getColumnIndex(KEY_PROFILE_TABLE_URL));
+                int profileId = profileHeaderCur.getInt(profileHeaderCur
+                        .getColumnIndex(KEY_PROFILE_TABLE_ID));
+                String profileUrl = profileHeaderCur.getString(profileHeaderCur
+                        .getColumnIndex(KEY_PROFILE_TABLE_URL));
 
-				// we have name and ID now lets get the keywords
-				ArrayList<Keyword> keywords = new ArrayList<Keyword>();
+                // we have name and ID now lets get the keywords
+                ArrayList<Keyword> keywords = new ArrayList<Keyword>();
 
-				Cursor keywordsCur = mDb.query(TABLE_KEYWORDS, null,
-						KEY_KEYWORDS_TABLE_PARENTID + " = " + profileId, null,
-						null, null, null);
+                Cursor keywordsCur = mDb.query(TABLE_KEYWORDS, null,
+                        KEY_KEYWORDS_TABLE_PARENTID + " = " + profileId, null,
+                        null, null, null);
 
-				if (keywordsCur != null && keywordsCur.getColumnCount() > 0
-						&& keywordsCur.getCount() > 0) {
-					// profile has keywords
+                if (keywordsCur != null && keywordsCur.getColumnCount() > 0
+                        && keywordsCur.getCount() > 0) {
+                    // profile has keywords
 
-					keywordsCur.moveToFirst();
+                    keywordsCur.moveToFirst();
 
-					do {
+                    do {
 
-						try {
-							int id = keywordsCur.getInt(keywordsCur
-									.getColumnIndex(KEY_KEYWORDS_TABLE_ID));
+                        try {
+                            int id = keywordsCur.getInt(keywordsCur
+                                    .getColumnIndex(KEY_KEYWORDS_TABLE_ID));
 
-							String keyword = keywordsCur
-									.getString(keywordsCur
-											.getColumnIndex(KEY_KEYWORDS_TABLE_KEYWORD));
+                            String keyword = keywordsCur
+                                    .getString(keywordsCur
+                                            .getColumnIndex(KEY_KEYWORDS_TABLE_KEYWORD));
 
-							int rank = keywordsCur
-									.getInt(keywordsCur
-											.getColumnIndex(KEY_KEYWORDS_TABLE_POSTION));
+                            int rank = keywordsCur
+                                    .getInt(keywordsCur
+                                            .getColumnIndex(KEY_KEYWORDS_TABLE_POSTION));
 
-							String anchor = getExtraAnchorById(id);
-							String url = getExtraUrlById(id);
+                            String anchor = getExtraAnchorById(id);
+                            String url = getExtraUrlById(id);
 
-							keywords.add(new Keyword(id, keyword, rank, anchor,
-									url));
+                            keywords.add(new Keyword(id, keyword, rank, anchor,
+                                    url));
 
-						} catch (Exception e) {
-							Log.e("MY", "dbatapter parsing from cursor error: "
-									+ e.toString());
-						}
+                        } catch (Exception e) {
+                            Log.e("MY", "dbatapter parsing from cursor error: "
+                                    + e.toString());
+                        }
 
-					} while (keywordsCur.moveToNext());
+                    } while (keywordsCur.moveToNext());
 
-					// v 2.02 fix
-					if (keywordsCur != null || !keywordsCur.isClosed())
-						keywordsCur.close();
+                    // v 2.02 fix
+                    if (keywordsCur != null || !keywordsCur.isClosed())
+                        keywordsCur.close();
 
-					// one profile done, not let's get next one
-					profiles.add(new UserProfile(profileId, profileUrl,
-							keywords));
+                    // one profile done, not let's get next one
+                    profiles.add(new UserProfile(profileId, profileUrl,
+                            keywords));
 
-				}
+                }
 
-			} while (profileHeaderCur.moveToNext());
+            } while (profileHeaderCur.moveToNext());
 
-			// v 2.02 fix
-			if (profileHeaderCur != null || !profileHeaderCur.isClosed())
-				profileHeaderCur.close();
+            // v 2.02 fix
+            if (profileHeaderCur != null || !profileHeaderCur.isClosed())
+                profileHeaderCur.close();
 
-		}
+        }
 
-		close();
+        close();
 
-		return profiles;
+        return profiles;
 
-	}
+    }
 
-	private String getExtraUrlById(int id) {
+    private String getExtraUrlById(int id) {
 
-		String result = "error getExtraUrlById";
+        String result = "error getExtraUrlById";
 
-		Cursor cur = mDb.query(TABLE_EXTRA, null,
-				KEY_EXTRA_PARENTID + "=" + id, null, null, null, null);
+        Cursor cur = mDb.query(TABLE_EXTRA, null,
+                KEY_EXTRA_PARENTID + "=" + id, null, null, null, null);
 
-		if (cur != null && cur.getCount() > 0 && cur.getColumnCount() > 0) {
-			cur.moveToFirst();
-			result = cur.getString(cur.getColumnIndex(KEY_EXTRA_URL));
+        if (cur != null && cur.getCount() > 0 && cur.getColumnCount() > 0) {
+            cur.moveToFirst();
+            result = cur.getString(cur.getColumnIndex(KEY_EXTRA_URL));
 
-		}
+        }
 
-		// v 2.05 fix
-		if (cur != null && !cur.isClosed())
-			cur.close();
+        // v 2.05 fix
+        if (cur != null && !cur.isClosed())
+            cur.close();
 
-		return result;
+        return result;
 
-	}
+    }
 
-	private String getExtraAnchorById(int id) {
+    private String getExtraAnchorById(int id) {
 
-		String result = "error getExtraAnchorById";
+        String result = "error getExtraAnchorById";
 
-		Cursor cur = mDb.query(TABLE_EXTRA, null,
-				KEY_EXTRA_PARENTID + "=" + id, null, null, null, null);
+        Cursor cur = mDb.query(TABLE_EXTRA, null,
+                KEY_EXTRA_PARENTID + "=" + id, null, null, null, null);
 
-		if (cur != null && cur.getCount() > 0 && cur.getColumnCount() > 0) {
-			cur.moveToFirst();
+        if (cur != null && cur.getCount() > 0 && cur.getColumnCount() > 0) {
+            cur.moveToFirst();
 
-			result = cur.getString(cur.getColumnIndex(KEY_EXTRA_ANCHOR));
+            result = cur.getString(cur.getColumnIndex(KEY_EXTRA_ANCHOR));
 
-		}
+        }
 
-		// v 2.05 fix
-		if (cur != null && !cur.isClosed())
-			cur.close();
+        // v 2.05 fix
+        if (cur != null && !cur.isClosed())
+            cur.close();
 
-		return result;
-	}
+        return result;
+    }
 
-	public void trunkTables() {
+    public void trunkTables() {
 
-		open();
+        open();
 
-		mDb.execSQL("drop table if exists " + TABLE_PROFILE);
-		mDb.execSQL("drop table if exists " + TABLE_KEYWORDS);
-		mDb.execSQL("drop table if exists " + TABLE_EXTRA);
+        mDb.execSQL("drop table if exists " + TABLE_PROFILE);
+        mDb.execSQL("drop table if exists " + TABLE_KEYWORDS);
+        mDb.execSQL("drop table if exists " + TABLE_EXTRA);
+        mDb.execSQL("drop table if exists " + TABLE_EXTRA_RAW);
 
-		mDb.execSQL(PROFILE_TABLE_CREATE);
-		mDb.execSQL(KEYWORDS_TABLE_CREATE);
-		mDb.execSQL(EXTRA_TABLE_CREATE);
+        mDb.execSQL(PROFILE_TABLE_CREATE);
+        mDb.execSQL(KEYWORDS_TABLE_CREATE);
+        mDb.execSQL(EXTRA_TABLE_CREATE);
+        mDb.execSQL(TABLE_EXTRA_RAW_CREATE);
 
-		close();
+        close();
 
-	}
+    }
 
-	/**
-	 * @param inputSite
-	 *            - inserted or edited page url
-	 * @param keyword
-	 *            - all keywords on seperate rows
-	 * @param id
-	 *            - if is update then id != 0
-	 * @return - if was success
-	 */
-	public Boolean insertOrUpdate(String inputSite, String keyword, int id) {
+    /**
+     * @param inputSite - inserted or edited page url
+     * @param keyword - all keywords on seperate rows
+     * @param id - if is update then id != 0
+     * @return - if was success
+     */
+    public Boolean insertOrUpdate(String inputSite, String keyword, int id) {
 
-		String[] keywords = null;
+        String[] keywords = null;
 
-		if (keyword.contains("\n"))
-			keywords = keyword.split("\\n");
-		else if (keyword.contains(","))
-			keywords = keyword.split(",");
-		else if (keyword.contains(";"))
-			keywords = keyword.split(";");
-		else
-			keywords = new String[] { keyword };
+        if (keyword.contains("\n"))
+            keywords = keyword.split("\\n");
+        else if (keyword.contains(","))
+            keywords = keyword.split(",");
+        else if (keyword.contains(";"))
+            keywords = keyword.split(";");
+        else
+            keywords = new String[] {
+                    keyword
+            };
 
-		// generate array list
-		ArrayList<Keyword> keywordsArrayList = new ArrayList<Keyword>();
-		for (String s : keywords)
-			keywordsArrayList.add(new Keyword(s));
+        // generate array list
+        ArrayList<Keyword> keywordsArrayList = new ArrayList<Keyword>();
+        for (String s : keywords)
+            keywordsArrayList.add(new Keyword(s));
 
-		Boolean result = false;
+        Boolean result = false;
 
-		if (id == 0)
-			result = insertProfile(new UserProfile(inputSite, keywordsArrayList));
-		else
-			result = updateProfile(new UserProfile(id, inputSite,
-					keywordsArrayList));
+        if (id == 0)
+            result = insertProfile(new UserProfile(inputSite, keywordsArrayList));
+        else
+            result = updateProfile(new UserProfile(id, inputSite,
+                    keywordsArrayList));
 
-		return result;
+        return result;
 
-	}
+    }
 
-	private static class DatabaseHelper extends SQLiteOpenHelper {
+    public long insertRawData(int parentId, ArrayList<String> rawData) {
 
-		DatabaseHelper(Context context) {
-			super(context, DATABASE_NAME, null, 2);
-		}
+        String allRaw = "";
 
-		public DatabaseHelper(Context context, String name,
-				CursorFactory factory, int version) {
-			super(context, name, factory, version);
-		}
+        long numberOfRowsInserted = 0;
 
-		@Override
-		public void onCreate(SQLiteDatabase db) {
-			// Called when the database is created for the first time. This is
-			// where the creation of tables and the initial population of the
-			// tables should happen.
+        for (int i = 0; i < rawData.size(); i++)
+            allRaw += i + 1 + ". " + rawData.get(i) + "\n\n";
 
-			Log.i("MY",
-					"PROFILE TABLE CREATE + KEYWORDS TABLE CREATE + EXTRA TABLE CREATE");
-			db.execSQL(PROFILE_TABLE_CREATE);
-			db.execSQL(KEYWORDS_TABLE_CREATE);
-			db.execSQL(EXTRA_TABLE_CREATE);
-		}
+        open();
+        String check = "CREATE TABLE IF NOT EXISTS "
+                + TABLE_EXTRA_RAW_CREATE.replace("CREATE TABLE ", "");
+        Log.d("MY", check);
 
-		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			// Called when the database needs to be upgraded. The implementation
-			// should use this method to drop tables, add tables, or do anything
-			// else it needs to upgrade to the new schema version.
+        mDb.execSQL(check);
 
-			if (db.getVersion() == oldVersion) {
-				db.setVersion(newVersion);
+        ContentValues values = new ContentValues();
 
-				db.execSQL("drop table if exists " + TABLE_PROFILE);
-				db.execSQL("drop table if exists " + TABLE_KEYWORDS);
+        values.put(TABLE_EXTRA_RAW_PARENTID, parentId);
+        values.put(TABLE_EXTRA_RAW_ENTRY, allRaw);
 
-				db.execSQL(PROFILE_TABLE_CREATE);
-				db.execSQL(KEYWORDS_TABLE_CREATE);
-			}
-		}
+        numberOfRowsInserted = mDb.update(TABLE_EXTRA_RAW, values, TABLE_EXTRA_RAW_PARENTID + "="
+                + parentId, null);
 
-	}
+        if (numberOfRowsInserted == 0)
+            numberOfRowsInserted = mDb.insert(TABLE_EXTRA_RAW, null, values);
+
+        close();
+
+        return numberOfRowsInserted;
+
+    }
+
+    public String getPremiumRawData(int parentId) {
+
+        String result = "-";
+        open();
+
+        String check = "CREATE TABLE IF NOT EXISTS "
+                + TABLE_EXTRA_RAW_CREATE.replace("CREATE TABLE ", "");
+        Log.d("MY", check);
+        mDb.execSQL(check);
+
+        Cursor cur = mDb.query(TABLE_EXTRA_RAW, null, TABLE_EXTRA_RAW_PARENTID + "=" + parentId,
+                null, null,
+                null, null);
+
+        cur.moveToFirst();
+
+        result = cur.getString(cur.getColumnIndex(TABLE_EXTRA_RAW_ENTRY));
+
+        close();
+
+        return result;
+
+    }
+
+    private static class DatabaseHelper extends SQLiteOpenHelper {
+
+        DatabaseHelper(Context context) {
+            super(context, DATABASE_NAME, null, 2);
+        }
+
+        public DatabaseHelper(Context context, String name,
+                CursorFactory factory, int version) {
+            super(context, name, factory, version);
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            // Called when the database is created for the first time. This is
+            // where the creation of tables and the initial population of the
+            // tables should happen.
+
+            Log.i("MY",
+                    "PROFILE TABLE CREATE + KEYWORDS TABLE CREATE + EXTRA TABLE CREATE");
+            db.execSQL(PROFILE_TABLE_CREATE);
+            db.execSQL(KEYWORDS_TABLE_CREATE);
+            db.execSQL(EXTRA_TABLE_CREATE);
+            db.execSQL(TABLE_EXTRA_RAW_CREATE);
+
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            // Called when the database needs to be upgraded. The implementation
+            // should use this method to drop tables, add tables, or do anything
+            // else it needs to upgrade to the new schema version.
+
+            if (db.getVersion() == oldVersion) {
+                db.setVersion(newVersion);
+
+                db.execSQL("drop table if exists " + TABLE_PROFILE);
+                db.execSQL("drop table if exists " + TABLE_KEYWORDS);
+
+                db.execSQL(PROFILE_TABLE_CREATE);
+                db.execSQL(KEYWORDS_TABLE_CREATE);
+            }
+        }
+
+    }
 
 }
