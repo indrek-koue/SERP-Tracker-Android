@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.flurry.android.FlurryAgent;
 import com.google.ads.AdView;
-import com.inc.im.serptracker.R;
+import com.inc.im.serptrackerpremium.R;
 import com.inc.im.serptracker.adapters.DbAdapter;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.UserProfile;

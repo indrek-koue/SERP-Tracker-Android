@@ -4,7 +4,7 @@ import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 import com.google.ads.AdView;
 import com.inc.im.serptracker.InsertWebsiteActivity;
-import com.inc.im.serptracker.R;
+import com.inc.im.serptrackerpremium.R;
 //import com.inc.im.serptracker.data.access.AsyncDownloaderInhouseAds;
 
 import android.app.Activity;
