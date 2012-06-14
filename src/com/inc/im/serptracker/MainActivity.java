@@ -23,7 +23,7 @@ import com.flurry.android.FlurryAgent;
 import com.google.ads.AdView;
 import com.inc.im.serptracker.util.MainActivityHelper;
 import com.inc.im.serptracker.util.Util;
-import com.inc.im.serptracker.R;
+import com.inc.im.serptrackerpremium.R;
 
 public class MainActivity extends Activity {
 
