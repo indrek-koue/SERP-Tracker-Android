@@ -16,7 +16,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
-import com.inc.im.serptrackerpremium.R;
+import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.access.Download;
 
@@ -56,7 +56,7 @@ public class Parser {
         ArrayList<String> allAnchors = new ArrayList<String>();
         ArrayList<String> allResults = new ArrayList<String>();
 
-        for (int j = 1; j < 11; j++) {
+        for (int j = 0; j < 10; j++) {
             Log.i("MY", "LOOP NR: " + j);
 
             Document doc = Download.downloadAndGetH3FirstA(a, keyword, j, ua);
