@@ -62,12 +62,16 @@ public class Premium {
                 final Keyword k = selectedUser.keywords.get(arg2);
 
                 // if there isn't anchor/url to show, don't open dialog
-                if (k.url.equals("error getExtraUrlById"))
+                if (k.url.equals("error getExtraUrlById")) {
+                    Toast.makeText(a, "No extra data to display for selected keyword",
+                            Toast.LENGTH_LONG).show();
                     return;
+
+                }
 
                 // new minimalistic look
                 final CharSequence[] items = {
-                        "Title: " + k.anchorText, "Link"
+                        "Title: " + k.anchorText, "Go to website", "Raw ranking data"
                 };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(a);
@@ -77,40 +81,29 @@ public class Premium {
                     public void onClick(DialogInterface dialog, int item) {
 
                         // REMOVED VERIFY RANKING
-                        item++;
-                        if (item == 1) {
+                        // item++;
+                        if (item == 0) {
 
                             // start custom dialog with textbox with anchor
                             // inside
-                            customDialogWithTextboxToShowAnchor(k.anchorText);
+                            textboxToShowAnchor(a, k.anchorText);
 
-                        } else if (item == 2) {
+                        } else if (item == 1) {
                             // third reserved for visit url
                             a.startActivity(new Intent(
                                     Intent.ACTION_VIEW,
                                     Uri.parse("http://www.google.com/url?q="
                                             + selectedUser.keywords.get(arg2).url)));
                         }
+                        else if (item == 2) {
+
+                            // Toast.makeText(a, "Coming soon!",
+                            // Toast.LENGTH_LONG).show();
+                            textboxToShowRawData(k.id, a);
+                        }
 
                     }
 
-                    private void customDialogWithTextboxToShowAnchor(
-                            String anchorText) {
-
-                        Dialog dialog = new Dialog(a);
-
-                        dialog.setContentView(R.layout.premium_dialog_textbox);
-                        dialog.setTitle(a
-                                .getString(R.string.premium_show_anchor_dialog_title));
-
-                        EditText et = (EditText) dialog
-                                .findViewById(R.id.editText1);
-
-                        et.setText(anchorText);
-
-                        dialog.show();
-
-                    }
                 });
                 AlertDialog alert = builder.create();
 
@@ -118,6 +111,46 @@ public class Premium {
 
             }
         });
+    }
+
+    private static void textboxToShowAnchor(Activity a,
+            String anchorText) {
+
+        Dialog dialog = new Dialog(a);
+
+        dialog.setContentView(R.layout.premium_dialog_textbox);
+        dialog.setTitle(a
+                .getString(R.string.premium_show_anchor_dialog_title));
+
+        EditText et = (EditText) dialog
+                .findViewById(R.id.editText1);
+
+        et.setText(anchorText);
+
+        dialog.show();
+
+    }
+
+    private static void textboxToShowRawData(int parentId, Activity a) {
+
+        Dialog dialog = new Dialog(a);
+
+        dialog.setContentView(R.layout.premium_dialog_textbox);
+        dialog.setTitle("Raw Ranking Data");
+
+        EditText et = (EditText) dialog
+                .findViewById(R.id.editText1);
+
+        // String rawData =
+        // PreferenceManager.getDefaultSharedPreferences(a).getString("rawData",
+        // "-");
+
+        String rawData = new DbAdapter(a).getPremiumRawData(parentId);
+
+        et.setText(rawData);
+
+        dialog.show();
+
     }
 
     public static void showBuyPremiumDialog(String msg, final Activity a) {
