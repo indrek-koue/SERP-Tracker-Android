@@ -1,47 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:scrollbars="none" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:background="@drawable/app_bg">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/app_bg"
+    android:scrollbars="none" >
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
 
+        <!-- ADMOB -->
 
-	<LinearLayout android:orientation="vertical"
-		android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/admob_banner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical" >
+        </LinearLayout>
 
-		<!-- ADMOB -->
-		<LinearLayout android:layout_height="wrap_content"
-			android:id="@+id/admob_banner" android:layout_width="fill_parent"
-			android:orientation="vertical" android:gravity="center">
-		</LinearLayout>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dip"
+            android:text="@string/about_title_news_and_updates"
+            android:textColor="@color/white"
+            android:textSize="25dip"
+            android:textStyle="bold" >
+        </TextView>
 
-		<TextView android:text="@string/about_title_news_and_updates"
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </ProgressBar>
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dip"
+            android:textColor="@color/lgray"
+            android:textSize="20dip" >
+        </TextView>
+
+        <!--
+     		<Button android:text="@string/report_wrong_ranking" android:id="@+id/btnReportWrongRanking"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:textSize="25dip" android:textStyle="bold" android:textColor="@color/white"
-			android:layout_marginBottom="5dip"></TextView>
-		<ProgressBar android:id="@+id/progressBar1"
-			android:layout_width="wrap_content" style="?android:attr/progressBarStyleSmall"
-			android:layout_height="wrap_content"></ProgressBar>
+			android:background="@drawable/cancle_button" style="@style/ButtonText"></Button>
+        -->
 
-		<TextView android:id="@+id/textView1" android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:textSize="20dip"
-			android:textColor="@color/lgray" android:layout_marginBottom="25dip"></TextView>
+        <Button
+            android:id="@+id/btnBuy"
+            style="@style/ButtonText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/cancle_button"
+            android:text="GET PREMIUM VERSION" >
+        </Button>
 
-<!-- 		<Button android:text="@string/report_wrong_ranking" android:id="@+id/btnReportWrongRanking"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:background="@drawable/cancle_button" style="@style/ButtonText"></Button> -->
+        <Button
+            android:id="@+id/button1"
+            style="@style/ButtonText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ok_button"
+            android:text="@string/send_email_to_dev" >
+        </Button>
 
-		<Button android:text="@string/send_email_to_dev" android:id="@+id/button1"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:background="@drawable/ok_button" style="@style/ButtonText"></Button>
-		<Button android:text="@string/legal_information" android:id="@+id/btn_legal"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:background="@drawable/back_button" style="@style/ButtonText"></Button>
+        <Button
+            android:id="@+id/btn_legal"
+            style="@style/ButtonText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/back_button"
+            android:text="@string/legal_information" >
+        </Button>
 
-		<Button android:text="@string/back" android:id="@+id/button4"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:background="@drawable/back_button" style="@style/ButtonText"></Button>
-
-	</LinearLayout>
+        <Button
+            android:id="@+id/button4"
+            style="@style/ButtonText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/back_button"
+            android:text="@string/back" >
+        </Button>
+    </LinearLayout>
 
 </ScrollView>
