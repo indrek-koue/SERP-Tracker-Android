@@ -34,12 +34,12 @@ public class PreferencesActivity extends PreferenceActivity implements
         // bindSelectSearchEngine();
         bindSelectRegion();
         bindSelectUserAgent();
-        bingSelectMode();
+        bindSelectMode();
         bindDeleteAllDataButton();
 
     }
 
-    private void bingSelectMode() {
+    private void bindSelectMode() {
 
         ((ListPreference) getPreferenceManager().findPreference(PREF_MODE))
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {

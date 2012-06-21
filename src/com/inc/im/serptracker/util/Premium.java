@@ -18,8 +18,13 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -63,7 +68,7 @@ public class Premium {
 
                 // if there isn't anchor/url to show, don't open dialog
                 if (k.url.equals("error getExtraUrlById")) {
-                    Toast.makeText(a, "No extra data to display for selected keyword",
+                    Toast.makeText(a, R.string.no_extra_data_to_display_for_selected_keyword,
                             Toast.LENGTH_LONG).show();
                     return;
 
@@ -71,7 +76,8 @@ public class Premium {
 
                 // new minimalistic look
                 final CharSequence[] items = {
-                        "Title: " + k.anchorText, "Go to website", "Raw ranking data"
+                        "Title: " + k.anchorText,
+                        a.getString(R.string.premium_dialog_go_to_address), "Raw ranking data"
                 };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(a);
@@ -80,10 +86,7 @@ public class Premium {
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
 
-                        // REMOVED VERIFY RANKING
-                        // item++;
                         if (item == 0) {
-
                             // start custom dialog with textbox with anchor
                             // inside
                             textboxToShowAnchor(a, k.anchorText);
@@ -96,9 +99,6 @@ public class Premium {
                                             + selectedUser.keywords.get(arg2).url)));
                         }
                         else if (item == 2) {
-
-                            // Toast.makeText(a, "Coming soon!",
-                            // Toast.LENGTH_LONG).show();
                             textboxToShowRawData(k.id, a);
                         }
 
@@ -131,23 +131,42 @@ public class Premium {
 
     }
 
-    private static void textboxToShowRawData(int parentId, Activity a) {
+    private static void textboxToShowRawData(int parentId, final Activity a) {
 
         Dialog dialog = new Dialog(a);
 
-        dialog.setContentView(R.layout.premium_dialog_textbox);
-        dialog.setTitle("Raw Ranking Data");
+        dialog.setContentView(R.layout.premium_dialog_listview);
+        dialog.setTitle(R.string.raw_ranking_data_title);
 
-        EditText et = (EditText) dialog
-                .findViewById(R.id.editText1);
-
-        // String rawData =
-        // PreferenceManager.getDefaultSharedPreferences(a).getString("rawData",
-        // "-");
+        // EditText et = (EditText) dialog
+        // .findViewById(R.id.editText1);
 
         String rawData = new DbAdapter(a).getPremiumRawData(parentId);
 
-        et.setText(rawData);
+        // et.setText(rawData);
+
+        final String[] rawDataList = rawData.split("\n\n");
+
+        ListView lv = (ListView) dialog.findViewById(R.id.listView1);
+        lv.setAdapter(new ArrayAdapter<String>(a, R.layout.raw_data_list_item, R.id.TextView,
+                rawDataList));
+
+        lv.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+
+                try {
+                    if (arg2 < rawDataList.length)
+                        a.startActivity(new Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(rawDataList[arg2])));
+                } catch (Exception e) {
+                    Log.e("MY", e.toString());
+                }
+
+            }
+        });
 
         dialog.show();
 
