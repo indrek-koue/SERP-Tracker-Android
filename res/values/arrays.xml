@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string-array name="ModeKeys">
+        <item>@string/preferences_select_mode_option_accurate</item>
+        <item>@string/preferences_select_mode_option_fast</item>
+    </string-array>
+    
     <string-array name="UaKeys">
         <item>Google Chrome</item>
         <item>Firefox</item>

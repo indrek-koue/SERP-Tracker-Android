@@ -2,6 +2,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <ListPreference
+        android:entries="@array/ModeKeys"
+        android:entryValues="@array/ModeKeys"
         android:key="prefMode"
         android:summary="@string/preference_mode_summary"
         android:title="@string/preference_mode_title" >
@@ -25,6 +27,7 @@
         android:key="prefUa"
         android:summary="@string/preferences_browser_summary"
         android:title="@string/preference_header_browser" />
+
     <Preference
         android:key="prefTrunk"
         android:summary="@string/resets_all_application_internal_data"
