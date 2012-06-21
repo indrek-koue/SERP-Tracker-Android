@@ -92,7 +92,11 @@ public class Download {
 
         if (pageNum == 0) {
             httpQuery = generateEscapedQueryString(a, keyword);
-        } else {
+        }
+        else if (pageNum == -1) {
+            httpQuery = generateEscapedQueryString(a, keyword) + "&num=100";
+        }
+        else {
             httpQuery = generateEscapedQueryString(a, keyword) + "&start=" + pageNum * 10;
         }
         Log.i("MY", "QUERY: " + httpQuery);

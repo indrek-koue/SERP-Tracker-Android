@@ -12,12 +12,52 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 public class PreferencesActivity extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
+
+    // public static String MODE_ACCURATE = "1";
+    // public static String MODE_FAST = "2";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        addPreferencesFromResource(R.xml.app_preferences_layout);
+
+        bindDeleteAllDataButton();
+        // bindSelectSearchEngine();
+        bindSelectRegion();
+        bindSelectUserAgent();
+
+        bindMode();
+
+    }
+
+    private void bindMode() {
+        ListPreference lp = (ListPreference) getPreferenceManager().findPreference("prefMode");
+
+//        lp.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+//
+//            @Override
+//            public boolean onPreferenceClick(Preference preference) {
+//                Toast.makeText(PreferencesActivity.this,
+//                        PreferencesActivity.this.getString(R.string.preference_mode_summary),
+//                        Toast.LENGTH_LONG).show();
+//                return false;
+//            }
+//        });
+
+        String[] values = new String[] {
+                getString(R.string.preferences_select_mode_option_accurate),
+                getString(R.string.preferences_select_mode_option_fast)
+        };
+        lp.setEntries(values);
+        lp.setEntryValues(values);
+    }
 
     @Override
     public void onStart() {
@@ -37,18 +77,6 @@ public class PreferencesActivity extends PreferenceActivity implements
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.app_preferences_layout);
-
-        bindDeleteAllDataButton();
-        // bindSelectSearchEngine();
-        bindSelectRegion();
-        bindSelectUserAgent();
-
-    }
-
-    @Override
     protected void onResume() {
 
         getPreferenceScreen().getSharedPreferences()
@@ -58,9 +86,14 @@ public class PreferencesActivity extends PreferenceActivity implements
                 PreferenceManager.getDefaultSharedPreferences(getBaseContext())
                         .getString("prefLocalize", "Google.com"));
 
-        findPreference("prefUa").setSummary(
-                PreferenceManager.getDefaultSharedPreferences(getBaseContext())
-                        .getString("prefUa", "Google Chrome"));
+//        findPreference("prefUa").setSummary(
+//                PreferenceManager.getDefaultSharedPreferences(getBaseContext())
+//                        .getString("prefUa", "Google Chrome"));
+//
+//        findPreference("prefMode").setSummary(
+//                PreferenceManager.getDefaultSharedPreferences(getBaseContext())
+//                        .getString("prefMode",
+//                                getString(R.string.preferences_select_mode_option_accurate)));
 
         super.onResume();
     }
@@ -112,6 +145,21 @@ public class PreferencesActivity extends PreferenceActivity implements
 
                             }
                         });
+
+//        getPreferenceManager().findPreference("prefUa").setOnPreferenceClickListener(
+//                new OnPreferenceClickListener() {
+//
+//                    @Override
+//                    public boolean onPreferenceClick(Preference preference) {
+//                        Toast.makeText(
+//                                PreferencesActivity.this,
+//                                PreferencesActivity.this.getString(
+//                                        R.string.preferences_browser_summary),
+//                                Toast.LENGTH_LONG).show();
+//                        return false;
+//                    }
+//                });
+
     }
 
     public void bindSelectRegion() {

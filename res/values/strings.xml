@@ -4,7 +4,8 @@
     <!-- README::DO NOT TRANSLATE THIS -->
     <!-- Background story: SEO SERP Tracker is smarthphone application which allows you to check -->
     <!-- how your website ranks in Google for selected keyword. For example www.cnn.com is first for keyword "news" -->
-    
+
+
     <!--
     TUTORIAL FOR TRANSLATING: for example:  <string name="profile_edit_page_delete">Delete</string> you have to translate ONLY 
     the part inside <string..></string> so for given example you have to translate the "delete" word only to given language. This 
@@ -64,5 +65,13 @@
     <string name="free_version_supports_only_">Free version supports only </string> <!-- this message is combined with next one (_websites_would ...), EXAMPLE: Free version supports only {number} websites. Would you like to buy the premium version to remove this limitation? -->
     <string name="_websites_would_you_like_to_buy_the_premium_version_to_remove_this_limitation_"> websites. Would you like to buy the premium version to remove this limitation?</string>
     <string name="anchor">ANCHOR</string>
+    <string name="preferences_select_mode_option_accurate">Accurate</string>
+    <string name="preferences_select_mode_option_fast">Fast</string>
+    <string name="preferences_select_browser_unavailable">Unavailable</string>
+    <string name="preferences_select_browser_empty">Empty</string>
+    <string name="preference_header_browser">Browser</string>
+    <string name="preferences_browser_summary">Request results as using selected client</string>
+    <string name="preference_mode_summary">Slow &amp; accurate OR fast &amp; inaccurate</string>
+    <string name="preference_mode_title">Mode</string>
 
 </resources>
