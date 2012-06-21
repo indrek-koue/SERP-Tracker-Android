@@ -60,7 +60,20 @@ public class Parser {
         for (int j = 0; j < 10; j++) {
             Log.i("MY", "LOOP NR: " + j);
 
-            Document doc = Download.downloadAndGetH3FirstA(a, keyword, j, ua);
+            Document doc = null;
+
+            String prefValue = PreferenceManager.getDefaultSharedPreferences(a).getString(
+                    "prefMode", "");
+
+            if (prefValue.equals(a.getString(R.string.preferences_select_mode_option_fast))) {
+                doc = Download.downloadAndGetH3FirstA(a, keyword, -1, "");
+                // end loop
+                j = 10;
+                Log.i("MY", "FAST MODE");
+            }
+            else {
+                doc = Download.downloadAndGetH3FirstA(a, keyword, j, ua);
+            }
 
             if (doc != null) {
                 Elements allResultsE = doc.select(a
