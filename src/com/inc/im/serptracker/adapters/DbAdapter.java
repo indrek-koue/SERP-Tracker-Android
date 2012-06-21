@@ -487,12 +487,12 @@ public class DbAdapter {
         long numberOfRowsInserted = 0;
 
         for (int i = 0; i < rawData.size(); i++)
-            allRaw += i + 1 + ". " + rawData.get(i) + "\n\n";
+            allRaw += rawData.get(i) + "\n\n";
 
         open();
         String check = "CREATE TABLE IF NOT EXISTS "
                 + TABLE_EXTRA_RAW_CREATE.replace("CREATE TABLE ", "");
-        Log.d("MY", check);
+       // Log.d("MY", check);
 
         mDb.execSQL(check);
 

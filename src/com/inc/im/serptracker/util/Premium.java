@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 import com.flurry.android.FlurryAgent;
 import com.inc.im.serptrackerpremium.R;
 import com.inc.im.serptracker.adapters.DbAdapter;
+import com.inc.im.serptracker.adapters.RawDataAdapter;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.UserProfile;
 
@@ -99,7 +101,7 @@ public class Premium {
                                             + selectedUser.keywords.get(arg2).url)));
                         }
                         else if (item == 2) {
-                            textboxToShowRawData(k.id, a);
+                            textboxToShowRawData(k.id, a, k.oldRank-1);
                         }
 
                     }
@@ -131,26 +133,19 @@ public class Premium {
 
     }
 
-    private static void textboxToShowRawData(int parentId, final Activity a) {
+    private static void textboxToShowRawData(int parentId, final Activity a, int rank) {
 
         Dialog dialog = new Dialog(a);
 
         dialog.setContentView(R.layout.premium_dialog_listview);
         dialog.setTitle(R.string.raw_ranking_data_title);
 
-        // EditText et = (EditText) dialog
-        // .findViewById(R.id.editText1);
-
         String rawData = new DbAdapter(a).getPremiumRawData(parentId);
-
-        // et.setText(rawData);
-
         final String[] rawDataList = rawData.split("\n\n");
 
         ListView lv = (ListView) dialog.findViewById(R.id.listView1);
-        lv.setAdapter(new ArrayAdapter<String>(a, R.layout.raw_data_list_item, R.id.TextView,
-                rawDataList));
-
+        lv.setAdapter(new RawDataAdapter(rawDataList, a.getBaseContext(), rank));
+        lv.setSelection(rank);
         lv.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
