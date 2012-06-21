@@ -9,10 +9,9 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="6dip"
-        android:paddingTop="6dip"
+        android:padding="5dip"
         android:text="@string/error"
-        android:textColor="@android:color/holo_blue_light"
+        android:textColor="@color/green"
         android:textSize="22dip" >
     </TextView>
 
