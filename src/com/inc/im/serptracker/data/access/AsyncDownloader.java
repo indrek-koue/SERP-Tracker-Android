@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -55,15 +56,17 @@ public class AsyncDownloader extends
 	@Override
 	protected void onPreExecute() {
 
+		SharedPreferences prefM = PreferenceManager
+				.getDefaultSharedPreferences(a);
+
 		Toast.makeText(
 				a,
-				PreferenceManager.getDefaultSharedPreferences(a).getString(
-						PreferencesActivity.PREF_LOCALIZE, "Google.com")
+				prefM.getString(PreferencesActivity.PREF_LOCALIZE, "Google.com")
 						+ " - "
-						+ PreferenceManager.getDefaultSharedPreferences(a)
-								.getString(PreferencesActivity.PREF_LOCALIZE,
-										"Google Chrome"), Toast.LENGTH_LONG)
-				.show();
+						+ prefM.getString(
+								PreferencesActivity.PREF_MODE,
+								a.getString(R.string.preferences_select_mode_option_fast)),
+				Toast.LENGTH_LONG).show();
 
 		progressDialog = ProgressDialog.show(a,
 				a.getString(R.string.inspect_dialog_title),
