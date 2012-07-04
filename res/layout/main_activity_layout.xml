@@ -48,7 +48,8 @@
         <Spinner
             android:id="@+id/spinner_profile"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:background="@drawable/spinner_background_holo_dark" >
         </Spinner>
     </LinearLayout>
 

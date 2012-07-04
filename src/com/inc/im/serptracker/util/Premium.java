@@ -77,9 +77,10 @@ public class Premium {
 				}
 
 				// new minimalistic look
-				final CharSequence[] items = { "Title: " + k.anchorText,
+				final CharSequence[] items = {
+						a.getString(R.string.premium_view_website_title),
 						a.getString(R.string.premium_dialog_go_to_address),
-						"Raw ranking data" };
+						a.getString(R.string.premium_full_ranking_data) };
 
 				AlertDialog.Builder builder = new AlertDialog.Builder(a);
 
@@ -123,8 +124,6 @@ public class Premium {
 			}
 		});
 	}
-	
-	
 
 	private static void textboxToShowAnchor(Activity a, String anchorText) {
 
@@ -147,7 +146,7 @@ public class Premium {
 		Dialog dialog = new Dialog(a);
 
 		dialog.setContentView(R.layout.premium_dialog_listview);
-		dialog.setTitle(R.string.raw_ranking_data_title);
+		dialog.setTitle(R.string.premium_full_ranking_data);
 
 		String rawData = new DbAdapter(a).getPremiumRawData(parentId);
 		final String[] rawDataList = rawData.split("\n\n");

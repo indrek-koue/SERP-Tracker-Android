@@ -159,6 +159,8 @@ public class AsyncDownloader extends
 			if (!new DbAdapter(a).updateKeywordRank(k, k.newRank))
 				Log.e("MY", k.keyword + " save to db update failed");
 
+		progressDialog.dismiss();
+
 	}
 
 	@Override
