@@ -4,8 +4,6 @@ package com.inc.im.serptracker;
 /* Switching between premium - free
  * 
  * Rename package
- * Rename gen package
- * change manifest package
  * change config: name and isPremium
  * 
  */
