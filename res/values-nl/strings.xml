@@ -65,4 +65,21 @@
     <string name="_websites_would_you_like_to_buy_the_premium_version_to_remove_this_limitation_"> websites. Wilt u de premium versie kopen om deze limitatie op te heffen?</string>
     <string name="anchor">ANKER</string>
     
+    <!-- 2.60 new lang  -->
+    <string name="preferences_select_mode_option_accurate">"Nauwkeurig"</string>
+    <string name="preferences_select_mode_option_fast">"Snel"</string>
+    <string name="preferences_select_browser_unavailable">"Niet beschikbaar"</string>
+    <string name="preferences_select_browser_empty">"Leeg"</string>
+    <string name="preference_header_browser">"Browser"</string>
+    <string name="preferences_browser_summary">"Verzoek resultaten als het gebruik van geselecteerde client"</string>
+    <string name="preference_mode_summary">"Slow &amp; accurate of snelle en onnauwkeurige"</string>
+    <string name="preference_mode_title">"Mode"</string>
+    <string name="raw_ranking_data_title">"Raw Ranking gegevens"</string>
+    <string name="premium_dialog_go_to_address">"Ga naar adres"</string>
+    <string name="no_extra_data_to_display_for_selected_keyword">"Geen extra gegevens om weer te geven voor geselecteerde trefwoord"</string>
+    <string name="preference_mode_select_warning">"! WAARSCHUWING! \ N \ nMode %1$s is 5 keer zo traag. \ n \ nGebruik mode %1$s alleen als je minder dan 10 trefwoorden (anders kan leiden tot twee uur tijdelijk verbod van Google) hebben . \ n \ n! WAARSCHUWING!"</string>
+    <string name="premium_view_website_title">"Bekijk website titel"</string>
+    <string name="premium_full_ranking_data">"De volledige rangschikking van gegevens"</string>
+    <string name="available_in_the_premium_version_would_you_like_to_buy_the_premium_version_">"Deze functie is avilable in de premie verion. Wilt u de premium versie kopen om deze beperking te verwijderen?"</string>
+    
 </resources>

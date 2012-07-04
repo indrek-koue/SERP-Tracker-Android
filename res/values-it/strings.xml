@@ -79,5 +79,23 @@ websites. Would you like to buy the premium version to remove this limitation?
     <string name="_websites_would_you_like_to_buy_the_premium_version_to_remove_this_limitation_"> siti web. Vorreste comprare la versione premium per rimuovere questo limite?</string>
 
     <string name="anchor">ANCHOR</string>
+    
+    
+    <!-- 2.60 new lang  -->
+    <string name="preferences_select_mode_option_accurate">"Accurato"</string>
+    <string name="preferences_select_mode_option_fast">"Veloce"</string>
+    <string name="preferences_select_browser_unavailable">"Non disponibile"</string>
+    <string name="preferences_select_browser_empty">"Vuoto"</string>
+    <string name="preference_header_browser">"Browser"</string>
+    <string name="preferences_browser_summary">"Alla richiesta Risultati esempio usando client selezionato"</string>
+    <string name="preference_mode_summary">"Slow &amp; accurate o veloce e imprecisa"</string>
+    <string name="preference_mode_title">"Modalità"</string>
+    <string name="raw_ranking_data_title">"Dati grezzi Classifica"</string>
+    <string name="premium_dialog_go_to_address">"Vai a indirizzo"</string>
+    <string name="no_extra_data_to_display_for_selected_keyword">"Non ci sono dati aggiuntivi da mostrare per parola chiave selezionata"</string>
+    <string name="preference_mode_select_warning">"! ATTENZIONE! \ N \ nMode %1$s è 5 volte più lento. \ n \ nUsa modalità %1$s solo se hai meno di 10 parole chiave (in caso contrario potrebbe verificarsi in 2 ore ban temporaneo da Google) . \ n \ n! ATTENZIONE!"</string>
+    <string name="premium_view_website_title">"Visualizza title sito"</string>
+    <string name="premium_full_ranking_data">"Tutti i dati ranking"</string>
+    <string name="available_in_the_premium_version_would_you_like_to_buy_the_premium_version_">"Questa funzione è avilable nella versione in premium. Vuoi acquistare la versione premium per rimuovere questa limitazione?"</string>
 
 </resources>
