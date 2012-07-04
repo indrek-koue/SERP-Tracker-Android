@@ -27,7 +27,7 @@ import com.inc.im.serptracker.AboutActivity;
 import com.inc.im.serptracker.InsertWebsiteActivity;
 import com.inc.im.serptracker.ManageWebsitesActivity;
 import com.inc.im.serptracker.PreferencesActivity;
-import com.inc.im.serptrackerpremium.R;
+import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.adapters.DbAdapter;
 import com.inc.im.serptracker.adapters.MainActivityListAdapter;
 import com.inc.im.serptracker.data.Keyword;

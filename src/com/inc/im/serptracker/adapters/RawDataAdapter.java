@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.inc.im.serptrackerpremium.R;
+import com.inc.im.serptracker.R;
 
 public class RawDataAdapter extends BaseAdapter {
 
