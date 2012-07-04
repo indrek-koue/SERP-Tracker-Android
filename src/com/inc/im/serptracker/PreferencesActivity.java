@@ -1,7 +1,7 @@
 package com.inc.im.serptracker;
 
 import com.flurry.android.FlurryAgent;
-import com.inc.im.serptrackerpremium.R;
+import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.adapters.DbAdapter;
 import com.inc.im.serptracker.util.Premium;
 
