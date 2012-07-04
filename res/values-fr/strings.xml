@@ -64,5 +64,20 @@
     <string name="free_version_supports_only_">La version gratuite supporte seulement</string> <!-- this message is combined with next one (_websites_would ...), EXAMPLE: Free version supports only {number} websites. Would you like to buy the premium version to remove this limitation? -->
     <string name="_websites_would_you_like_to_buy_the_premium_version_to_remove_this_limitation_"> sites Web. Aimeriez-vous acheter la verion premium et débloquer cette option</string>
     <string name="anchor">ANCHOR</string>
-
+<!-- 2.60 new lang  -->
+    <string name="preferences_select_mode_option_accurate">"Précis"</string>
+    <string name="preferences_select_mode_option_fast">"Rapide"</string>
+    <string name="preferences_select_browser_unavailable">"Non disponible"</string>
+    <string name="preferences_select_browser_empty">"VIDE"</string>
+    <string name="preference_header_browser">"Navigateur"</string>
+    <string name="preferences_browser_summary">"Demande de résultats que l'utilisation de client sélectionné"</string>
+    <string name="preference_mode_summary">"Lente ou rapide et précis et imprécis"</string>
+    <string name="preference_mode_title">"Clavier"</string>
+    <string name="raw_ranking_data_title">"Les données brutes Classement"</string>
+    <string name="premium_dialog_go_to_address">"Aller à l'adresse"</string>
+    <string name="no_extra_data_to_display_for_selected_keyword">"Pas de données supplémentaires à afficher pour mot-clé sélectionné"</string>
+    <string name="preference_mode_select_warning">"! AVERTISSEMENT! \ N \ nMode %1$s est 5 fois plus lent. \ n \ Mode nUtilisez %1$s que si vous avez moins de 10 mots-clés (sinon il peut en résulter en 2 heures interdiction temporaire de Google) . \ n \ n! AVERTISSEMENT!"</string>
+    <string name="premium_view_website_title">"Voir titre du site"</string>
+    <string name="premium_full_ranking_data">"Les données complètes de classement"</string>
+    <string name="available_in_the_premium_version_would_you_like_to_buy_the_premium_version_">"Cette fonctionnalité est avilable dans le verion premium. Voulez-vous acheter la version premium de supprimer cette limitation?"</string>
 </resources>

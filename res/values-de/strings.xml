@@ -64,5 +64,22 @@
     <string name="free_version_supports_only_">Gratis-Version unterstützt nur </string> <!-- this message is combined with next one (_websites_would ...), EXAMPLE: Free version supports only {number} websites. Would you like to buy the premium version to remove this limitation? -->
     <string name="_websites_would_you_like_to_buy_the_premium_version_to_remove_this_limitation_"> Webseiten. Möchten Sie die Premium-Version kaufen, um diese Einschränkung aufzuheben?</string>
     <string name="anchor">ANKER</string>
+    
+    <!-- 2.60 new lang  -->
+    <string name="preferences_select_mode_option_accurate">"Präzise"</string>
+    <string name="preferences_select_mode_option_fast">"Schnell"</string>
+    <string name="preferences_select_browser_unavailable">"Nicht verfügbar"</string>
+    <string name="preferences_select_browser_empty">"Leer"</string>
+    <string name="preference_header_browser">"Browser"</string>
+    <string name="preferences_browser_summary">"Anfordern Ergebnisse als mit ausgewählten Client"</string>
+    <string name="preference_mode_summary">"Langsam oder schnell &amp; präzise und ungenau"</string>
+    <string name="preference_mode_title">"Mode"</string>
+    <string name="raw_ranking_data_title">"Raw-Ranking Daten"</string>
+    <string name="premium_dialog_go_to_address">"Zur Adresse"</string>
+    <string name="no_extra_data_to_display_for_selected_keyword">"Keine Extra-Daten für ausgewählte Keyword anzuzeigen"</string>
+    <string name="preference_mode_select_warning">"! WARNUNG! \ N \ nMode %1$s ist 5 mal langsamer. \ n \ nBitte Modus %1$s nur, wenn Sie weniger als 10 Schlüsselwörter (sonst kann es in 2 Stunden vorübergehendes Verbot von Google zur Folge haben) haben . \ n \ n! WARNUNG!"</string>
+    <string name="premium_view_website_title">"Website-Titel anzeigen"</string>
+    <string name="premium_full_ranking_data">"Vollständige Rangliste Daten"</string>
+    <string name="available_in_the_premium_version_would_you_like_to_buy_the_premium_version_">"Diese Funktion ist avilable im Premium-verion. Möchten Sie die Premium-Version zu kaufen, um diese Einschränkung aufzuheben?"</string>
 
 </resources>

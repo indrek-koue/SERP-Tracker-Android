@@ -64,5 +64,22 @@
     <string name="free_version_supports_only_">Бесплатная версия поддерживает только </string> <!-- this message is combined with next one (_websites_would ...), EXAMPLE: Free version supports only {number} websites. Would you like to buy the premium version to remove this limitation? -->
     <string name="_websites_would_you_like_to_buy_the_premium_version_to_remove_this_limitation_"> вебсайтов. Хотели бы вы убрать это ограничение?</string>
     <string name="anchor">ЯКОРЬ</string>
+    
+    <!-- 2.60 new lang  -->
+    <string name="preferences_select_mode_option_accurate">"Точно"</string>
+    <string name="preferences_select_mode_option_fast">"Fast Ethernet"</string>
+    <string name="preferences_select_browser_unavailable">"Недоступно"</string>
+    <string name="preferences_select_browser_empty">"Пустая"</string>
+    <string name="preference_header_browser">"Браузер"</string>
+    <string name="preferences_browser_summary">"Запрос результатов использования выбранного клиентом"</string>
+    <string name="preference_mode_summary">"Медленные и быстрые точные или неточные и"</string>
+    <string name="preference_mode_title">"Режим"</string>
+    <string name="raw_ranking_data_title">"Сырые данные рейтинга"</string>
+    <string name="premium_dialog_go_to_address">"Гузар. ба суроға"</string>
+    <string name="no_extra_data_to_display_for_selected_keyword">"Никаких дополнительных данных для отображения для выбранных ключевых слов"</string>
+    <string name="preference_mode_select_warning">"! ВНИМАНИЕ! \ П \ nMode %1$s в 5 раз медленнее. \ п \ nИспользуйте режиме %1$s , только если у вас менее 10 ключевых слов (в противном случае это может привести в 2 часа временный запрет на Google) . \ п \ п! ВНИМАНИЕ!"</string>
+    <string name="premium_view_website_title">"Просмотр веб-сайте название"</string>
+    <string name="premium_full_ranking_data">"Полный рейтинг данных"</string>
+    <string name="available_in_the_premium_version_would_you_like_to_buy_the_premium_version_">"Эта функция Особенности строения в премиум verion. Хотите купить премиум-версию, чтобы удалить это ограничение?"</string>
 
 </resources>

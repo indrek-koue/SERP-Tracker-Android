@@ -64,5 +64,22 @@
     <string name="free_version_supports_only_">Compatible sólo con versión gratuita </string> <!-- this message is combined with next one (_websites_would ...), EXAMPLE: Free version supports only {number} websites. Would you like to buy the premium version to remove this limitation? -->
     <string name="_websites_would_you_like_to_buy_the_premium_version_to_remove_this_limitation_"> sitios web. æTe gustarķa comprar la versión premium para eliminar esta limitación?</string>
     <string name="anchor">ANCLA</string>
+    
+    <!-- 2.60 new lang  -->
+    <string name="preferences_select_mode_option_accurate">"Preciso "</string>
+    <string name="preferences_select_mode_option_fast">"Rápido:"</string>
+    <string name="preferences_select_browser_unavailable">"No Disponible"</string>
+    <string name="preferences_select_browser_empty">"Vacío"</string>
+    <string name="preference_header_browser">"navegador"</string>
+    <string name="preferences_browser_summary">"Solicita como el uso de cliente seleccionado"</string>
+    <string name="preference_mode_summary">"Lento o rápido y preciso y inexacta"</string>
+    <string name="preference_mode_title">"MODO"</string>
+    <string name="raw_ranking_data_title">"Ranking de Primas de datos"</string>
+    <string name="premium_dialog_go_to_address">"Ir a dirección"</string>
+    <string name="no_extra_data_to_display_for_selected_keyword">"No hay datos para mostrar adicionales para la palabra clave seleccionada"</string>
+    <string name="preference_mode_select_warning">"! ¡ATENCION! \ N \ nModo %1$s es 5 veces más lento. \ n \ n ¿Desea utilizar el modo de %1$s sólo si tiene menos de 10 palabras clave (de lo contrario puede resultar en la prohibición temporal de 2 horas de Google) . \ n \ n! ¡ATENCION!"</string>
+    <string name="premium_view_website_title">"Ver página web del título"</string>
+    <string name="premium_full_ranking_data">"Todos los datos de clasificación"</string>
+    <string name="available_in_the_premium_version_would_you_like_to_buy_the_premium_version_">"Esta característica es avilable en la versión alemana de alta calidad. ¿Te gustaría comprar la versión de pago para eliminar esta limitación?"</string>
 
 </resources>

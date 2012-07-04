@@ -65,4 +65,21 @@
     <string name="_websites_would_you_like_to_buy_the_premium_version_to_remove_this_limitation_"> strony. Czy chcesz zakupić wersję premium aby usunąć to ograniczenie?</string>
     <string name="anchor">KOTWICA</string>
 
+    <!-- 2.60 new lang  -->
+    <string name="preferences_select_mode_option_accurate">"Dokładność"</string>
+    <string name="preferences_select_mode_option_fast">"Szybko"</string>
+    <string name="preferences_select_browser_unavailable">"Niedostępne"</string>
+    <string name="preferences_select_browser_empty">"Puste"</string>
+    <string name="preference_header_browser">"Przeglądarka"</string>
+    <string name="preferences_browser_summary">"Wyniki request o użyciu wybranego klienta"</string>
+    <string name="preference_mode_summary">"Powolne i dokładne lub szybkie i niedokładne"</string>
+    <string name="preference_mode_title">"Tryb"</string>
+    <string name="raw_ranking_data_title">"Surowe Ranking danych"</string>
+    <string name="premium_dialog_go_to_address">"Idź do adresu"</string>
+    <string name="no_extra_data_to_display_for_selected_keyword">"Bez dodatkowych danych do wyświetlenia dla wybranych słów kluczowych"</string>
+    <string name="preference_mode_select_warning">"! UWAGA! \ N \ nMode %1$s jest 5 razy wolniej. \ n \ tryb nUżyj %1$s tylko jeśli masz mniej niż 10 słów kluczowych (w przeciwnym razie może to spowodować 2 godzinnego zakazu tymczasowego od Google) . \ n \ n! UWAGA!"</string>
+    <string name="premium_view_website_title">"Zobacz Tytuł strony"</string>
+    <string name="premium_full_ranking_data">"Pełne dane rankingowe"</string>
+    <string name="available_in_the_premium_version_would_you_like_to_buy_the_premium_version_">"Funkcja ta jest avilable w niemieckiej wersji premium. Chcesz kupić wersji Premium do usunięcia tego ograniczenia?"</string>
+    
 </resources>
