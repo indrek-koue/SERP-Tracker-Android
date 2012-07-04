@@ -63,7 +63,7 @@
     <string name="premium_dialog_title">Extra Information</string>
     <string name="premium_show_anchor_dialog_title">Ranking Link Text (anchor)</string>
     <string name="available_in_the_premium_version_would_you_like_to_buy_the_premium_version_">This feature is avilable in the premium verion. Would you like to buy the premium version to remove this limitation?</string>
-    <string name="free_version_supports_only_">Free version supports only </string> <!-- this message is combined with next one (_websites_would ...), EXAMPLE: Free version supports only {number} websites. Would you like to buy the premium version to remove this limitation? -->
+    <string name="free_version_supports_only_">Free version supports only </string> 
     <string name="_websites_would_you_like_to_buy_the_premium_version_to_remove_this_limitation_"> websites. Would you like to buy the premium version to remove this limitation?</string>
     <string name="anchor">ANCHOR</string>
     <string name="preferences_select_mode_option_accurate">Accurate</string>
@@ -78,5 +78,7 @@
     <string name="premium_dialog_go_to_address">Go to address</string>
     <string name="no_extra_data_to_display_for_selected_keyword">No extra data to display for selected keyword</string>
     <string name="preference_mode_select_warning">!!!WARNING!!!\n\nMode %1$s is 5 times slower.\n\nUse mode %1$s only if you have less than 10 keywords (otherwise it may result in 2 hour temporary ban from Google).\n\n!!!WARNING!!!</string>
+    <string name="premium_view_website_title">View website title</string>
+    <string name="premium_full_ranking_data">Full ranking data</string>
 
 </resources>
