@@ -58,6 +58,7 @@
     <string name="error">Error</string>
     <string name="region">Region</string>
     <string name="yes">Yes</string>
+    <string name="OK">OK</string>
     <string name="premium_view_live_ranking">View Live Ranking</string>
     <string name="premium_dialog_title">Extra Information</string>
     <string name="premium_show_anchor_dialog_title">Ranking Link Text (anchor)</string>
@@ -76,5 +77,6 @@
     <string name="raw_ranking_data_title">Raw Ranking Data</string>
     <string name="premium_dialog_go_to_address">Go to address</string>
     <string name="no_extra_data_to_display_for_selected_keyword">No extra data to display for selected keyword</string>
+    <string name="preference_mode_select_warning">!!!WARNING!!!\n\nMode %1$s is 5 times slower.\n\nUse mode %1$s only if you have less than 10 keywords (otherwise it may result in 2 hour temporary ban from Google).\n\n!!!WARNING!!!</string>
 
 </resources>

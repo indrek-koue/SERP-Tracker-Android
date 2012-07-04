@@ -26,7 +26,9 @@
         </activity>
         <activity android:name="com.inc.im.serptracker.InsertWebsiteActivity" >
         </activity>
-        <activity android:name="com.inc.im.serptracker.PreferencesActivity" >
+        <activity
+            android:name="com.inc.im.serptracker.PreferencesActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation" >
         </activity>
         <activity android:name="com.inc.im.serptracker.ManageWebsitesActivity" >
         </activity>

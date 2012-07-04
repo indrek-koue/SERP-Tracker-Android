@@ -5,7 +5,7 @@
         android:entries="@array/ModeKeys"
         android:entryValues="@array/ModeKeys"
         android:key="prefMode"
-        android:summary="@string/preference_mode_summary"
+        android:summary="@string/preferences_select_mode_option_fast"
         android:title="@string/preference_mode_title" >
     </ListPreference>
     <ListPreference

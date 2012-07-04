@@ -1,9 +1,14 @@
-
 package com.inc.im.serptracker.data.access;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ListView;
@@ -11,6 +16,7 @@ import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.inc.im.serptrackerpremium.R;
+import com.inc.im.serptracker.PreferencesActivity;
 import com.inc.im.serptracker.adapters.DbAdapter;
 import com.inc.im.serptracker.adapters.MainActivityListAdapter;
 import com.inc.im.serptracker.data.Keyword;
@@ -29,150 +35,167 @@ import java.util.HashMap;
 // -2 - error getting data
 
 public class AsyncDownloader extends
-        AsyncTask<ArrayList<Keyword>, Integer, ArrayList<Keyword>> {
+		AsyncTask<ArrayList<Keyword>, Integer, ArrayList<Keyword>> {
 
-    private Activity a;
-    public ListView lv;
-    private final String WEBSITE;
-    private ProgressDialog progressDialog;
-    public static boolean banned = false;
+	private Activity a;
+	public ListView lv;
+	private final String WEBSITE;
+	private ProgressDialog progressDialog;
+	public static boolean banned = false;
 
-    private int itemCount;
-    private long start;
+	private int itemCount;
+	private long start;
 
-    public AsyncDownloader(Activity a, ListView lv, String searchable) {
-        this.a = a;
-        this.lv = lv;
-        this.WEBSITE = Parser.removePrefix(searchable);
-    }
+	public AsyncDownloader(Activity a, ListView lv, String searchable) {
+		this.a = a;
+		this.lv = lv;
+		this.WEBSITE = Parser.removePrefix(searchable);
+	}
 
-    @Override
-    protected void onPreExecute() {
+	@Override
+	protected void onPreExecute() {
 
-        Toast.makeText(
-                a,
-                PreferenceManager.getDefaultSharedPreferences(a)
-                        .getString("prefLocalize", "Google.com") + " - "
-                        + PreferenceManager.getDefaultSharedPreferences(a)
-                                .getString("prefUa", "Google Chrome"), Toast.LENGTH_LONG).show();
+		Toast.makeText(
+				a,
+				PreferenceManager.getDefaultSharedPreferences(a).getString(
+						PreferencesActivity.PREF_LOCALIZE, "Google.com")
+						+ " - "
+						+ PreferenceManager.getDefaultSharedPreferences(a)
+								.getString(PreferencesActivity.PREF_LOCALIZE,
+										"Google Chrome"), Toast.LENGTH_LONG)
+				.show();
 
-        progressDialog = ProgressDialog.show(a,
-                a.getString(R.string.inspect_dialog_title),
-                a.getString(R.string.inspect_dialog_fist_msg), true, true);
+		progressDialog = ProgressDialog.show(a,
+				a.getString(R.string.inspect_dialog_title),
+				a.getString(R.string.inspect_dialog_fist_msg), true, true);
 
-        start = System.currentTimeMillis();
+		start = System.currentTimeMillis();
 
-    }
+	}
 
-    @Override
-    protected ArrayList<Keyword> doInBackground(ArrayList<Keyword>... keywords) {
+	@Override
+	protected ArrayList<Keyword> doInBackground(ArrayList<Keyword>... keywords) {
 
-        banned = false;
+		banned = false;
 
-        if (keywords == null || keywords.length == 0)
-            return null;
+		if (keywords == null || keywords.length == 0)
+			return null;
 
-        // count items for the load screen
-        itemCount = keywords[0].size();
-        ArrayList<Keyword> result = new ArrayList<Keyword>();
+		// count items for the load screen
+		itemCount = keywords[0].size();
+		ArrayList<Keyword> result = new ArrayList<Keyword>();
 
-        for (int counter = 0; counter < keywords[0].size(); counter++) {
+		for (int counter = 0; counter < keywords[0].size(); counter++) {
 
-            if (banned == true)
-                return null;
+			if (banned == true)
+				return null;
 
-            publishProgress(counter + 1);
+			publishProgress(counter + 1);
 
-            if (counter != 0)
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+			if (counter != 0)
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 
-            Keyword keyword = keywords[0].get(counter);
+			Keyword keyword = keywords[0].get(counter);
 
-            if (!progressDialog.isShowing())
-                return null;
+			if (!progressDialog.isShowing())
+				return null;
 
-            // download and parse h3first
-            result.add(Parser.downloadAndParse(a, keyword, WEBSITE));
+			// download and parse h3first
+			result.add(Parser.downloadAndParse(a, keyword, WEBSITE));
 
-        }
+		}
 
-        flurryLogging(result);
+		flurryLogging(result);
 
-        return result;
+		return result;
 
-    }
+	}
 
-    @Override
-    protected void onPostExecute(ArrayList<Keyword> input) {
+	@Override
+	protected void onPostExecute(ArrayList<Keyword> input) {
 
-        if (banned == true)
-            Toast.makeText(a, "You have been banned from google. Please try again later.",
-                    Toast.LENGTH_LONG).show();
+		// if progressdialog is canceled, dont show results
+		if (!progressDialog.isShowing())
+			return;
 
-        if (input == null)
-            return;
+		// show dialog == you banned
+		if (banned == true) {
 
-        // if progressdialog is canceled, dont show results
-        if (!progressDialog.isShowing())
-            return;
+			AlertDialog.Builder builder = new AlertDialog.Builder(a);
+			builder.setMessage(
+					"You have been temporarily banned from Google. Please try again in 2 hours with less keywords.")
+					.setCancelable(true)
+					.setPositiveButton(a.getString(R.string.OK),
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									dialog.dismiss();
+								}
+							});
 
-        lv.setAdapter(new MainActivityListAdapter(a, input));
+			AlertDialog alert = builder.create();
+			alert.show();
 
-        // save new ranks
-        for (Keyword k : input)
-            if (!new DbAdapter(a).updateKeywordRank(k, k.newRank))
-                Log.e("MY", k.keyword + " save to db update failed");
+			progressDialog.dismiss();
 
-        progressDialog.dismiss();
+			return;
+		}
 
-    }
+		if (input == null) {
+			progressDialog.dismiss();
 
-    @Override
-    protected void onProgressUpdate(Integer... values) {
+			Toast.makeText(a, "ERROR", Toast.LENGTH_LONG).show();
+			return;
+		}
 
-        String loaderValue = a.getString(R.string.keyword_) + " " + values[0]
-                + "/" + itemCount;
+		lv.setAdapter(new MainActivityListAdapter(a, input));
 
-        progressDialog.setMessage(loaderValue);
+		// save new ranks
+		for (Keyword k : input)
+			if (!new DbAdapter(a).updateKeywordRank(k, k.newRank))
+				Log.e("MY", k.keyword + " save to db update failed");
 
-    }
+	}
 
-    public void flurryLogging(ArrayList<Keyword> result) {
+	@Override
+	protected void onProgressUpdate(Integer... values) {
 
-        // ver 1.31 fix
-        if (result == null)
-            return;
+		String loaderValue = a.getString(R.string.keyword_) + " " + values[0]
+				+ "/" + itemCount;
 
-        String values = "";
-        for (Keyword k : result)
-            values += k.newRank + ":";
+		progressDialog.setMessage(loaderValue);
 
-        HashMap<String, String> parameters = new HashMap<String, String>();
-        parameters.put("num of keywords", String.valueOf(itemCount));
-        parameters.put("total time",
-                String.valueOf(System.currentTimeMillis() - start));
+	}
 
-        // ver 1.31 fix
-        if ((System.currentTimeMillis() - start) != 0 && itemCount != 0)
-            parameters.put(
-                    "avg time per keyword",
-                    String.valueOf((System.currentTimeMillis() - start)
-                            / itemCount));
+	public void flurryLogging(ArrayList<Keyword> result) {
 
-        parameters.put("results", values);
+		// ver 1.31 fix
+		if (result == null)
+			return;
 
-        FlurryAgent.onEvent("download", parameters);
-    }
+		String values = "";
+		for (Keyword k : result)
+			values += k.newRank + ":";
 
-    // public String removePrefix(String searchable) {
-    //
-    // String result = searchable.replace("http://", "").replace("www.", "");
-    //
-    // return result;
-    // }
+		HashMap<String, String> parameters = new HashMap<String, String>();
+		parameters.put("num of keywords", String.valueOf(itemCount));
+		parameters.put("total time",
+				String.valueOf(System.currentTimeMillis() - start));
+
+		// ver 1.31 fix
+		if ((System.currentTimeMillis() - start) != 0 && itemCount != 0)
+			parameters.put(
+					"avg time per keyword",
+					String.valueOf((System.currentTimeMillis() - start)
+							/ itemCount));
+
+		parameters.put("results", values);
+
+		FlurryAgent.onEvent("download", parameters);
+	}
 
 }

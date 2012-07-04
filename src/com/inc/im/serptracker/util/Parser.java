@@ -1,4 +1,3 @@
-
 package com.inc.im.serptracker.util;
 
 import java.net.MalformedURLException;
@@ -17,6 +16,7 @@ import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
 import com.inc.im.serptrackerpremium.R;
+import com.inc.im.serptracker.PreferencesActivity;
 import com.inc.im.serptracker.adapters.DbAdapter;
 import com.inc.im.serptracker.data.Keyword;
 import com.inc.im.serptracker.data.access.Download;
@@ -29,243 +29,255 @@ import com.inc.im.serptracker.data.access.Download;
 
 public class Parser {
 
-    // private static ArrayList<String> allAnchors;
-    // private static ArrayList<String> allResults;
+	// private static ArrayList<String> allAnchors;
+	// private static ArrayList<String> allResults;
 
-    private final static String CHROME = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6";
-    private final static String FIREFOX = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20120427 Firefox/15.0a1";
-    private final static String EXPLORER = "Mozilla/5.0 (compatible; MSIE 10.6; Windows NT 6.1; Trident/5.0; InfoPath.2; SLCC1; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET CLR 2.0.50727) 3gpp-gba UNTRUSTED/1.0";
-    private final static String OPERA = "Opera/9.80 (Windows NT 6.1; U; es-ES) Presto/2.9.181 Version/12.00";
-    private final static String SAFARI = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/534.55.3 (KHTML, like Gecko) Version/5.1.3 Safari/534.53.10";
-    private final static String UNAVAILABLE = "Apache-HttpClient/UNAVAILABLE (java 1.4)";
-    private final static String EMPTY = "";
+	private final static String CHROME = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6";
+	private final static String FIREFOX = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20120427 Firefox/15.0a1";
+	private final static String EXPLORER = "Mozilla/5.0 (compatible; MSIE 10.6; Windows NT 6.1; Trident/5.0; InfoPath.2; SLCC1; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET CLR 2.0.50727) 3gpp-gba UNTRUSTED/1.0";
+	private final static String OPERA = "Opera/9.80 (Windows NT 6.1; U; es-ES) Presto/2.9.181 Version/12.00";
+	private final static String SAFARI = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/534.55.3 (KHTML, like Gecko) Version/5.1.3 Safari/534.53.10";
+	private final static String UNAVAILABLE = "Apache-HttpClient/UNAVAILABLE (java 1.4)";
+	private final static String EMPTY = "";
 
-    private final static int DCOUNT = 100;
+	private final static int DCOUNT = 100;
 
-    /**
-     * Gets h3 > a from Document and removes not valid urls
-     * 
-     * @param keyword - if parse fails save newrank -2
-     * @param doc - find h3 > a in here
-     * @return
-     * @return Elements of results
-     */
-    public static Keyword downloadAndParse(Activity a, Keyword keyword, String WEBSITE) {
+	/**
+	 * Gets h3 > a from Document and removes not valid urls
+	 * 
+	 * @param keyword
+	 *            - if parse fails save newrank -2
+	 * @param doc
+	 *            - find h3 > a in here
+	 * @return
+	 * @return Elements of results
+	 */
+	public static Keyword downloadAndParse(Activity a, Keyword keyword,
+			String WEBSITE) {
 
-        String ua = getUserAgentStringFromPref(a);
+		String ua = getUserAgentStringFromPref(a);
 
-        ArrayList<String> allAnchors = new ArrayList<String>();
-        ArrayList<String> allResults = new ArrayList<String>();
+		ArrayList<String> allAnchors = new ArrayList<String>();
+		ArrayList<String> allResults = new ArrayList<String>();
 
-        for (int j = 0; j < 10; j++) {
-            Log.i("MY", "LOOP NR: " + j);
+		for (int j = 0; j < 10; j++) {
+			Log.i("MY", "LOOP NR: " + j);
 
-            Document doc = null;
+			Document doc = null;
 
-            String prefValue = PreferenceManager.getDefaultSharedPreferences(a).getString(
-                    "prefMode", "");
+			String prefValue = PreferenceManager.getDefaultSharedPreferences(a)
+					.getString(PreferencesActivity.PREF_MODE, "");
 
-            if (prefValue.equals(a.getString(R.string.preferences_select_mode_option_fast))) {
-                doc = Download.downloadAndGetH3FirstA(a, keyword, -1, "");
-                // end loop
-                j = 10;
-                Log.i("MY", "FAST MODE");
-            }
-            else {
-                doc = Download.downloadAndGetH3FirstA(a, keyword, j, ua);
-            }
+			if (prefValue
+					.equals(a
+							.getString(R.string.preferences_select_mode_option_accurate))) {
+				doc = Download.downloadAndGetH3FirstA(a, keyword, j, ua);
 
-            if (doc != null) {
-                Elements allResultsE = doc.select(a
-                        .getString(R.string.googleResultParseRule));
+			} else {
+				Log.i("MY", "FAST MODE");
 
-                for (int i = 0; i < allResultsE.size(); i++) {
-                    Element e = allResultsE.get(i);
+				// exit loop
+				j = 10;
 
-                    // Log.i("MY", e.attr("href").replace("/url?q=", ""));
-                    allResults.add(e.attr("href").replace("/url?q=", ""));
-                    allAnchors.add(e.text());
+				doc = Download.downloadAndGetH3FirstA(a, keyword, -1, "");
 
-                }
-            }
-        }
+			}
 
-        allResults = removeNotValidUrls(allResults);
+			if (doc != null) {
+				Elements allResultsE = doc.select(a
+						.getString(R.string.googleResultParseRule));
 
-        // print out for logging
-        int i = 0;
-        for (String s : allResults)
-            Log.i("MY", i++ + ". " + s);
-        Log.i("MY", keyword.keyword + " RESULTS: " + allResults.size());
+				for (int i = 0; i < allResultsE.size(); i++) {
+					Element e = allResultsE.get(i);
 
-        long numOfRowsInserted = new DbAdapter(a).insertRawData(keyword.id, allResults);
+					allResults.add(e.attr("href").replace("/url?q=", ""));
+					allAnchors.add(e.text());
 
-        Log.i("MY", "number of extra raw rows inserted (note: 100urls per 1 row): "
-                + numOfRowsInserted);
+				}
+			}
+		}
 
-        if (allResults.size() == 0) {
-            Log.e("MY", "downloaded allResults h3 first a is null");
-            keyword.newRank = -2;
-            return keyword;
-        }
+		allResults = removeNotValidUrls(allResults);
 
-        // removeNotValidUrls();
+		// print out for logging
+		int i = 0;
+		for (String s : allResults)
+			Log.i("MY", i++ + ". " + s);
+		Log.i("MY", keyword.keyword + " RESULTS: " + allResults.size());
 
-        Keyword updatedKeyword = Parser.getRanking(keyword, WEBSITE,
-                allResults, allAnchors);
+		long numOfRowsInserted = new DbAdapter(a).insertRawData(keyword.id,
+				allResults);
 
-        if (updatedKeyword != null) {
-            return updatedKeyword;
-        } else {
-            // nothing found = add old back
-            return keyword;
-        }
+		Log.i("MY",
+				"number of extra raw rows inserted (note: 100urls per 1 row): "
+						+ numOfRowsInserted);
 
-    }
+		if (allResults.size() == 0) {
+			Log.e("MY", "downloaded allResults h3 first a is null");
+			keyword.newRank = -2;
+			return keyword;
+		}
 
-    private static String getUserAgentStringFromPref(Activity a) {
+		// removeNotValidUrls();
 
-        String uaSelector = PreferenceManager.getDefaultSharedPreferences(a)
-                .getString("prefUa", "Google Chrome");
+		Keyword updatedKeyword = Parser.getRanking(keyword, WEBSITE,
+				allResults, allAnchors);
 
-        String ua = CHROME;
-        if (uaSelector.equals("Firefox"))
-            ua = FIREFOX;
-        else if (uaSelector.equals("Internet Explorer"))
-            ua = EXPLORER;
-        else if (uaSelector.equals("Opera"))
-            ua = OPERA;
-        else if (uaSelector.equals("Safari"))
-            ua = SAFARI;
-        else if (uaSelector.equals("Unavailable"))
-            ua = UNAVAILABLE;
-        else if (uaSelector.equals("Empty"))
-            ua = EMPTY;
+		if (updatedKeyword != null) {
+			return updatedKeyword;
+		} else {
+			// nothing found = add old back
+			return keyword;
+		}
 
-        Log.i("MY", "UA: " + ua);
+	}
 
-        return ua;
+	private static String getUserAgentStringFromPref(Activity a) {
 
-    }
+		String uaSelector = PreferenceManager.getDefaultSharedPreferences(a)
+				.getString("prefUa", "Google Chrome");
 
-    /**
-     * @param allResults where to find
-     * @param WEBSITE what to find
-     */
-    public static Keyword getRanking(Keyword keyword, String WEBSITE, ArrayList<String> allResults,
-            ArrayList<String> allAnchors) {
+		String ua = CHROME;
+		if (uaSelector.equals("Firefox"))
+			ua = FIREFOX;
+		else if (uaSelector.equals("Internet Explorer"))
+			ua = EXPLORER;
+		else if (uaSelector.equals("Opera"))
+			ua = OPERA;
+		else if (uaSelector.equals("Safari"))
+			ua = SAFARI;
+		else if (uaSelector.equals("Unavailable"))
+			ua = UNAVAILABLE;
+		else if (uaSelector.equals("Empty"))
+			ua = EMPTY;
 
-        if (keyword == null || allResults == null)
-            return null;
+		Log.i("MY", "UA: " + ua);
 
-        int numOfResults = allResults.size();
+		return ua;
 
-        Keyword result = new Keyword(keyword.keyword);
-        result.oldRank = keyword.oldRank;
-        result.id = keyword.id;
+	}
 
-        for (int i = 0; i < numOfResults; i++) {
+	/**
+	 * @param allResults
+	 *            where to find
+	 * @param WEBSITE
+	 *            what to find
+	 */
+	public static Keyword getRanking(Keyword keyword, String WEBSITE,
+			ArrayList<String> allResults, ArrayList<String> allAnchors) {
 
-            if (result.newRank != 0)
-                return result;
+		if (keyword == null || allResults == null)
+			return null;
 
-            String singleResultUrlModified = removePrefix(allResults.get(i));
+		int numOfResults = allResults.size();
 
-            // second boolean is for subdomains. For example when person
-            // searches for wikipedia he probably wants to get the
-            // en.wikipedia.org etc
-            if (singleResultUrlModified.startsWith(WEBSITE + "/")
-                    || singleResultUrlModified.contains("." + WEBSITE + "/")) {
+		Keyword result = new Keyword(keyword.keyword);
+		result.oldRank = keyword.oldRank;
+		result.id = keyword.id;
 
-                if (numOfResults <= DCOUNT) {
-                    result.newRank = i + 1;
-                } else {
+		for (int i = 0; i < numOfResults; i++) {
 
-                    // WE HAVE TO JUSTIFY RANK
-                    // there is a authority site with sub links somewhere
-                    // probably
+			if (result.newRank != 0)
+				return result;
 
-                    int overTheNormal = numOfResults - DCOUNT;
-                    int newRank = i + 1 - overTheNormal;
+			String singleResultUrlModified = removePrefix(allResults.get(i));
 
-                    if (newRank <= 0)
-                        newRank = 1;
+			// second boolean is for subdomains. For example when person
+			// searches for wikipedia he probably wants to get the
+			// en.wikipedia.org etc
+			if (singleResultUrlModified.startsWith(WEBSITE + "/")
+					|| singleResultUrlModified.contains("." + WEBSITE + "/")) {
 
-                    result.newRank = newRank;
-                }
+				if (numOfResults <= DCOUNT) {
+					result.newRank = i + 1;
+				} else {
 
-                result.anchorText = allAnchors.get(i);
-                result.url = allResults.get(i);
+					// WE HAVE TO JUSTIFY RANK
+					// there is a authority site with sub links somewhere
+					// probably
 
-            }
+					int overTheNormal = numOfResults - DCOUNT;
+					int newRank = i + 1 - overTheNormal;
 
-            // flurry loging
-            // if (numOfResults <= 95 || numOfResults >= 105) {
-            //
-            // Map<String, Integer> data = new HashMap<String, Integer>();
-            //
-            // data.put("result count", numOfResults);
-            //
-            // FlurryAgent.logEvent("DEBUG: parse count after invalid delete",
-            // data);
-            // }
+					if (newRank <= 0)
+						newRank = 1;
 
-        } // for links in keyword
+					result.newRank = newRank;
+				}
 
-        // not ranked
-        if (result.newRank == 0)
-            result.newRank = -1;
+				result.anchorText = allAnchors.get(i);
+				result.url = allResults.get(i);
 
-        return result;
+			}
 
-    }
+			// flurry loging
+			// if (numOfResults <= 95 || numOfResults >= 105) {
+			//
+			// Map<String, Integer> data = new HashMap<String, Integer>();
+			//
+			// data.put("result count", numOfResults);
+			//
+			// FlurryAgent.logEvent("DEBUG: parse count after invalid delete",
+			// data);
+			// }
 
-    /**
-     * Removes advertisements links, meaning all local links meaning all links
-     * starting with /
-     * 
-     * @param allResults
-     */
-    public static ArrayList<String> removeNotValidUrls(ArrayList<String> allResults) {
+		} // for links in keyword
 
-        for (int i = 0; i < allResults.size(); i++) {
+		// not ranked
+		if (result.newRank == 0)
+			result.newRank = -1;
 
-            if (allResults.get(i).startsWith("/")) {
-                Log.i("MY", "removed: " + allResults.get(i));
+		return result;
 
-                allResults.remove(i);
-                i--;
-            }
+	}
 
-        }
+	/**
+	 * Removes advertisements links, meaning all local links meaning all links
+	 * starting with /
+	 * 
+	 * @param allResults
+	 */
+	public static ArrayList<String> removeNotValidUrls(
+			ArrayList<String> allResults) {
 
-        if (allResults.size() != 100)
-            Log.w("MY",
-                    "WARNING: results after internal link delete != 100, instead:"
-                            + allResults.size());
+		for (int i = 0; i < allResults.size(); i++) {
 
-        return allResults;
+			if (allResults.get(i).startsWith("/")) {
+				Log.i("MY", "removed: " + allResults.get(i));
 
-    }
+				allResults.remove(i);
+				i--;
+			}
 
-    /**
-     * Removes http, https and www. from the beginning and converts to lowercase
-     * 
-     * @param searchable
-     * @return
-     */
-    public static String removePrefix(String searchable) {
+		}
 
-        if (searchable == null)
-            return "";
+		if (allResults.size() != 100)
+			Log.w("MY",
+					"WARNING: results after internal link delete != 100, instead:"
+							+ allResults.size());
 
-        String result = searchable.replace("https://", "").replace("http://",
-                "");
+		return allResults;
 
-        if (result.startsWith("www."))
-            result = result.replace("www.", "");
+	}
 
-        return result.toLowerCase();
-    }
+	/**
+	 * Removes http, https and www. from the beginning and converts to lowercase
+	 * 
+	 * @param searchable
+	 * @return
+	 */
+	public static String removePrefix(String searchable) {
+
+		if (searchable == null)
+			return "";
+
+		String result = searchable.replace("https://", "").replace("http://",
+				"");
+
+		if (result.startsWith("www."))
+			result = result.replace("www.", "");
+
+		return result.toLowerCase();
+	}
 
 }

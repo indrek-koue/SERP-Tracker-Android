@@ -195,7 +195,7 @@ public class MainActivityHelper {
             lv.setAdapter(new MainActivityListAdapter(a.getBaseContext(),
                     selectedUser.keywords));
 
-            if (Boolean.parseBoolean(a.getString(R.string.isPremium)))
+            //if (Boolean.parseBoolean(a.getString(R.string.isPremium)))
                 Premium.addPremiumOnClick(a, spinnerSelectedItemIndex);
 
         } else {
