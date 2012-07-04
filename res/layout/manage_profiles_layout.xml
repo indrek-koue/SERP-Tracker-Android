@@ -1,64 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:scrollbars="none" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:background="@drawable/app_bg">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/app_bg"
+    android:scrollbars="none" >
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
 
+        <!-- ADMOB -->
 
-	<LinearLayout android:orientation="vertical"
-		android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/admob_banner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical" >
+        </LinearLayout>
 
-		<!-- ADMOB -->
-		<LinearLayout android:layout_height="wrap_content"
-			android:id="@+id/admob_banner" android:layout_width="fill_parent"
-			android:orientation="vertical" android:gravity="center">
-		</LinearLayout>
+        <!-- CHOOSE WEBSITE SPINNER -->
 
-		<!-- CHOOSE WEBSITE SPINNER -->
-		<Spinner android:id="@+id/spinner1" android:layout_height="wrap_content"
-			android:layout_width="fill_parent" android:layout_marginBottom="10dip">
-		</Spinner>
+        <Spinner
+            android:id="@+id/spinner1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:background="@drawable/spinner_background_holo_dark" >
+        </Spinner>
 
-		<!-- WEBSITE ADDRESS -->
-		<TextView android:text="@string/address_of_your_website"
-			android:id="@+id/textView1" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:textSize="18dip"></TextView>
-		<EditText android:id="@+id/editText1" android:layout_height="wrap_content"
-			android:layout_width="fill_parent" android:inputType="textUri"
-			android:singleLine="true" android:hint="@string/address"
-			android:layout_marginBottom="10dip">
-			<requestFocus></requestFocus>
-		</EditText>
+        <!-- WEBSITE ADDRESS -->
 
-		<!-- WEBSITE KEYWORDS -->
-		<TextView android:text="@string/keywords_to_track"
-			android:id="@+id/textView2" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:textSize="18dip"></TextView>
-		<EditText android:id="@+id/editText2" android:layout_height="wrap_content"
-			android:layout_width="fill_parent" android:inputType="textMultiLine"
-			android:gravity="top" android:hint="\n\n\n"></EditText>
+        <TextView
+            android:id="@+id/textView1"
+            style="@style/myTitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/address_of_your_website" >
+        </TextView>
 
-		<!-- SAVE/DELETE BUTTON -->
-		<LinearLayout android:layout_height="wrap_content"
-			android:id="@+id/linearLayout1" android:layout_width="fill_parent"
-			android:layout_marginTop="10dip" android:gravity="center"
-			android:layout_marginBottom="10dip">
-			<Button android:text="@string/save" android:layout_height="wrap_content"
-				android:id="@+id/button1" android:layout_width="fill_parent"
-				android:layout_weight="1" android:background="@drawable/ok_button"
-				style="@style/ButtonText" android:layout_margin="3dip"></Button>
-			<Button android:text="@string/profile_edit_page_delete"
-				android:layout_height="wrap_content" android:id="@+id/button3"
-				android:layout_width="fill_parent" android:layout_weight="1"
-				android:layout_margin="3dip" android:background="@drawable/cancle_button"
-				style="@style/ButtonText"></Button>
-		</LinearLayout>
+        <EditText
+            android:id="@+id/editText1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:hint="@string/address"
+            android:inputType="textUri"
+            android:singleLine="true" >
 
-		<!-- BACK BUTTON -->
-		<Button android:text="@string/back" android:layout_height="wrap_content"
-			android:id="@+id/button2" android:layout_width="fill_parent"
-			android:background="@drawable/back_button" style="@style/ButtonText"></Button>
+            <requestFocus>
+            </requestFocus>
+        </EditText>
 
-	</LinearLayout>
+        <!-- WEBSITE KEYWORDS -->
+
+        <TextView
+            android:id="@+id/textView2"
+            style="@style/myTitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/keywords_to_track" >
+        </TextView>
+
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:hint="\n\n\n"
+            android:inputType="textMultiLine" >
+        </EditText>
+
+        <!-- SAVE/DELETE BUTTON -->
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="10dip"
+            android:gravity="center" >
+
+            <Button
+                android:id="@+id/button1"
+                style="@style/ButtonText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dip"
+                android:layout_weight="1"
+                android:background="@drawable/ok_button"
+                android:text="@string/save" >
+            </Button>
+
+            <Button
+                android:id="@+id/button3"
+                style="@style/ButtonText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dip"
+                android:layout_weight="1"
+                android:background="@drawable/cancle_button"
+                android:text="@string/profile_edit_page_delete" >
+            </Button>
+        </LinearLayout>
+
+        <!-- BACK BUTTON -->
+
+        <Button
+            android:id="@+id/button2"
+            style="@style/ButtonText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/back_button"
+            android:text="@string/back" >
+        </Button>
+    </LinearLayout>
+
 </ScrollView>

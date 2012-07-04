@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:layout_margin="10dip"
     android:background="@android:color/black"
-    android:gravity="center"
+    android:gravity="center_vertical|left"
     android:orientation="horizontal"
     android:paddingBottom="10dip"
     android:paddingTop="10dip" >
@@ -22,7 +22,7 @@
         android:id="@+id/TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="http://www.aadress.com"
+        android:text="http://www"
         android:textColor="@android:color/white"
         android:textSize="18dip" />
 
