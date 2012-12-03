@@ -4,9 +4,9 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry exported="true" kind="lib" path="FlurryAgent.jar"/>
-	<classpathentry exported="true" kind="lib" path="GoogleAdMobAdsSdk-4.1.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="jsoup-1.6.1.jar"/>
 	<classpathentry kind="lib" path="libs/bugsense-trace.jar"/>
+	<classpathentry kind="lib" path="libs/FlurryAgent.jar"/>
+	<classpathentry kind="lib" path="libs/GoogleAdMobAdsSdk-4.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/jsoup-1.6.1.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

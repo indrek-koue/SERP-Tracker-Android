@@ -1,12 +1,10 @@
 
 package com.inc.im.serptracker.data.access;
 
-import java.io.IOException;
 import java.net.URLEncoder;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.jsoup.helper.HttpConnection.Response;
 import org.jsoup.nodes.Document;
 import android.app.Activity;
 import android.preference.PreferenceManager;

@@ -3,7 +3,6 @@ package com.inc.im.serptracker.util;
 import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 import com.google.ads.AdView;
-import com.inc.im.serptracker.InsertWebsiteActivity;
 import com.inc.im.serptracker.R;
 //import com.inc.im.serptracker.data.access.AsyncDownloaderInhouseAds;
 
@@ -15,7 +14,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 /**
  * Variety of helper functions which doesn't belong to any group.
