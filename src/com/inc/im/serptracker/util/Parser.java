@@ -1,11 +1,6 @@
 package com.inc.im.serptracker.util;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -14,7 +9,6 @@ import android.app.Activity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.flurry.android.FlurryAgent;
 import com.inc.im.serptracker.R;
 import com.inc.im.serptracker.PreferencesActivity;
 import com.inc.im.serptracker.adapters.DbAdapter;
