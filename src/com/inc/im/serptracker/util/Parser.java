@@ -23,6 +23,12 @@ import com.inc.im.serptracker.data.access.Download;
 
 public class Parser {
 
+<<<<<<< HEAD
+=======
+	// private static ArrayList<String> allAnchors;
+	// private static ArrayList<String> allResults;
+
+>>>>>>> 41f4f0c8712d2cd9dc91c026fc2cf45d4f8254a3
 	private final static String CHROME = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6";
 	private final static String FIREFOX = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20120427 Firefox/15.0a1";
 	private final static String EXPLORER = "Mozilla/5.0 (compatible; MSIE 10.6; Windows NT 6.1; Trident/5.0; InfoPath.2; SLCC1; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET CLR 2.0.50727) 3gpp-gba UNTRUSTED/1.0";
@@ -201,6 +207,20 @@ public class Parser {
 
 			}
 
+<<<<<<< HEAD
+=======
+			// flurry loging
+			// if (numOfResults <= 95 || numOfResults >= 105) {
+			//
+			// Map<String, Integer> data = new HashMap<String, Integer>();
+			//
+			// data.put("result count", numOfResults);
+			//
+			// FlurryAgent.logEvent("DEBUG: parse count after invalid delete",
+			// data);
+			// }
+
+>>>>>>> 41f4f0c8712d2cd9dc91c026fc2cf45d4f8254a3
 		} // for links in keyword
 
 		// not ranked
